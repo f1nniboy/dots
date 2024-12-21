@@ -1,0 +1,33 @@
+#!/bin/sh -e
+
+# freeze the screen
+#wayfreeze --hide-cursor & PID=$!
+#sleep .1
+
+# path of where to save the screenshot
+image_path="$(xdg-user-dir PICTURES)/scr/$(date +'%Y-%m-%d_%H-%M-%S.png')"
+
+dimensions="$(slurp)"
+
+# take a screenshot & unfreeze the screen
+grim -g "$dimensions" "$image_path"
+#kill $PID
+
+# copy the screenshot to clipboard
+wl-copy < $image_path
+
+action=$(notify-send -a screenshot -A "delete=delete from disk" -A "edit=edit image" -A "open=open in viewer" -u low "screenshot copied to clipboard" --icon="$image_path")
+
+case $action in
+	"open")
+		imv "$image_path"
+		;;
+
+	"edit")
+		satty --filename "$image_path"
+		;;
+
+	"delete")
+		rm -f "$image_path"
+		;;
+esac

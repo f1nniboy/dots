@@ -1,0 +1,2 @@
+# prevent gtk from starting at-spi2* processes
+export NO_AT_BRIDGE=1

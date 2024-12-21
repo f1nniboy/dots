@@ -1,0 +1,13 @@
+#!/bin/sh
+# handle notifications by mako
+
+# for notifications which only have the default action (e.g. discord message pings),
+# don't show a menu & directly execute the default action
+has_default="$(makoctl list | jq '.data[0].[0].actions.data|has("default")')"
+
+[ "$has_default" = "true" ] && {
+	makoctl invoke default && makoctl dismiss
+	exit
+}
+
+/home/var/bin/menu --placeholder-text "execute an action ..."

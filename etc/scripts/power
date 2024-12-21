@@ -1,0 +1,21 @@
+#!/bin/sh -e
+
+action="$(printf "lock\nsleep\nrestart\nshutdown" | menu)"
+
+case $action in
+	"lock")
+		swaylock
+		;;
+
+	"sleep")
+		systemctl suspend
+		;;
+
+	"restart")
+		reboot
+		;;
+
+	"shutdown")
+		poweroff
+		;;
+esac

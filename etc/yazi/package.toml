@@ -1,0 +1,5 @@
+[plugin]
+deps = [{ use = "Ape/mediainfo", rev = "c69314e" }, { use = "yazi-rs/plugins:chmod", rev = "7afba3a" }]
+
+[flavor]
+deps = []

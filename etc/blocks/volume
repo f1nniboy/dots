@@ -1,0 +1,4 @@
+#!/bin/sh
+
+volume=$(wpctl get-volume $1 | awk -F": " '{print $2 * 100}')
+echo "^us(/home/etc/scripts/volume $1 +)^ds(/home/etc/scripts/volume $1 -)$volume%^us()^ds()"

@@ -1,0 +1,2 @@
+#!/bin/sh
+flatpak run dev.vencord.Vesktop --command=startvesktop --disable-features=WebRtcAllowInputVolumeAdjustment

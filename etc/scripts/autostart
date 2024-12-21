@@ -1,0 +1,36 @@
+#!/bin/sh
+# programs to autostart with wayland session
+
+# bar status
+/home/dev/personal/someblocks/someblocks | /home/dev/personal/dwlb/dwlb -status-stdin all &
+
+# mpris watcher
+/home/etc/scripts/watch-mpris &
+
+# osd
+/home/etc/scripts/osd &
+
+# wallpaper daemon
+swww-daemon &
+
+# persist clipboard entries
+#wl-clip-persist --clipboard regular &
+
+# idle daemon
+#swayidle &
+
+# clipboard history
+wl-paste --watch cliphist store &
+
+# xdg portal stuff
+dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP &
+
+# bar
+exec /home/dev/personal/dwlb/dwlb -ipc \
+	-hide-vacant-tags -no-active-color-title \
+	-font "Fira Code Nerd Font:size=12" -vertical-padding 5 \
+	-active-fg-color "#1e1e2e" -active-bg-color "#f38ba8" \
+	-occupied-fg-color "#cdd6f4" -occupied-bg-color "#1e1e2e" \
+	-middle-bg-color "#1e1e2e" -middle-bg-color-selected "#1e1e2e" \
+	-urgent-fg-color "#1e1e2e" -urgent-bg-color "#fab387" \
+	-inactive-fg-color "#cdd6f4" -inactive-bg-color "#1e1e2e"

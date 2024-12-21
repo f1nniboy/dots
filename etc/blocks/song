@@ -1,0 +1,17 @@
+#!/bin/sh -e
+# show the currently playing song using playerctl
+
+# which player to use, leave empty to use first available
+#player="-p spotify_player"
+player=""
+
+status=$(playerctl status $player 2> /dev/null)
+format="$(playerctl metadata $player -f '{{ artist }} - {{ title }}' 2> /dev/null)"
+
+if [ "$status" == "Playing" ]; then 
+	icon="󰐊"
+else
+	icon="󰏤"
+fi
+
+echo "^lm(/home/etc/scripts/player play-pause)$icon $format^lm()"

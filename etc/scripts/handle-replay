@@ -1,0 +1,21 @@
+#!/bin/sh -e
+# handler for when a replay gets saved with gpu-screen-recorder
+
+# new path for the video, with the current application name + date
+#app_name="$(/home/etc/scripts/windowname)"
+
+file_ext="${1##*.}"
+video_path="$(xdg-user-dir VIDEOS)/replays/$(date +"%Y-%m-%d_%H-%M-%S.$file_ext")"
+mv "$1" "$video_path"
+
+action=$(notify-send -a replay -A "delete=delete from disk" -A "open=view replay" -u low "replay" "clip saved")
+
+case $action in
+	"open")
+		mpv "$video_path"
+		;;
+
+	"delete")
+		rm -f "$video_path"
+		;;
+esac

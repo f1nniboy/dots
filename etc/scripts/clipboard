@@ -1,0 +1,20 @@
+#!/bin/sh
+
+list=$(cliphist list) # original list for reuse in lookup
+trimmed=$(printf "%s" "$list" | cut -f2-)  # list without leading numbers
+index=$(printf "%s" "$trimmed" | menu --placeholder-text="$1 from clipboard history ..." --print-index=true)
+
+if [ -n "$index" ]; then
+	# use index to find correct line in original list
+	orig_line=$(printf "%s" "$list" | awk "NR==$index {print; quit}")
+
+	case $1 in
+		"copy")
+			printf "$orig_line" | cliphist decode | wl-copy
+			;;
+
+		"delete")
+			printf "$orig_line" | cliphist delete
+			;;
+	esac
+fi

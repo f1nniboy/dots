@@ -1,0 +1,25 @@
+font=Fira Code Nerd Font 12
+format=<b>%s</b>\n%b
+sort=-time
+layer=overlay
+text-color=#cdd6f4
+background-color=#181825
+width=300
+height=110
+padding=0,5,10
+border-size=2
+border-color=#f38ba8
+border-radius=0
+max-icon-size=64
+default-timeout=0
+ignore-timeout=1
+on-button-left=exec makoctl menu /home/etc/scripts/handle-notif
+
+[urgency=low]
+border-color=#89b4fa
+
+[urgency=normal]
+border-color=#fab387
+
+[urgency=high]
+border-color=#f38ba8

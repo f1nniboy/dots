@@ -1,0 +1,5 @@
+bindkey '^[[1;5D'	backward-word
+bindkey '^[[1;5C'	forward-word
+bindkey '^U'		kill-region
+bindkey '^H'		backward-kill-word
+bindkey '5~'		kill-word

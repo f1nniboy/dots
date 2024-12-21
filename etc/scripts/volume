@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# steps to modify volume by
+step=5
+
+wpctl set-volume $1 "$step"%"$2" -l 1
+
+# new volume after change
+vol=$(wpctl get-volume $1 | awk -F": " '{print $2 * 100}')
+echo $vol > $XDG_RUNTIME_DIR/wob.sock
+
+pkill -RTMIN+3 someblocks

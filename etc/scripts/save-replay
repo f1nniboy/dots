@@ -1,0 +1,4 @@
+#!/bin/sh -e
+# save a replay from gpu-screen-recorder
+
+killall -SIGUSR1 gpu-screen-recorder

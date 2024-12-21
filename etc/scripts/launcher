@@ -1,0 +1,8 @@
+#!/bin/sh
+
+apps="$(ls $XDG_CONFIG_HOME/apps)"
+app="$(echo "$apps" | menu)"
+
+if [ $? -eq 0 ]; then
+	"$XDG_CONFIG_HOME/apps/$app"
+fi

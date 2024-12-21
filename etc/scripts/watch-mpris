@@ -1,0 +1,7 @@
+#!/bin/sh
+# watch mpris for changes & update the status bar
+
+# play/pause
+while read -r line; do
+    pkill -RTMIN+4 someblocks
+done < <(playerctl metadata -f "{{ status }} {{ title }}" -F)

@@ -1,0 +1,14 @@
+#!/bin/sh
+
+wpctl set-mute $1 ${2:-toggle}
+pkill -RTMIN+3 someblocks
+
+raw_volume="$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@)"
+
+if echo "$raw_volume" | grep -q "MUTED"; then
+	vol=0
+else
+	vol=$(echo "$raw_volume" | awk -F": " '{print $2 * 100}')
+fi
+
+echo $vol > $XDG_RUNTIME_DIR/wob.sock

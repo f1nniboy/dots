@@ -1,0 +1,5 @@
+#!/bin/sh
+# osd for volume changes
+
+WOBSOCK=$XDG_RUNTIME_DIR/wob.sock
+rm -f $WOBSOCK && mkfifo $WOBSOCK && tail -f $WOBSOCK | wob

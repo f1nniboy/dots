@@ -1,0 +1,11 @@
+#!/bin/sh -e
+
+if wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | grep -q "MUTED"; then
+	icon="^fg(eba0ac)󰍭"
+else
+	icon="^fg(a6e3a1)󰍬"
+fi
+
+# get the volume using the generic volume block script
+volume=$($XDG_CONFIG_HOME/blocks/volume @DEFAULT_AUDIO_SOURCE@)
+echo "^lm(/home/etc/scripts/mute @DEFAULT_AUDIO_SOURCE@)$icon $volume^lm()"
