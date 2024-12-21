@@ -7,7 +7,7 @@
 # path of where to save the screenshot
 image_path="$(xdg-user-dir PICTURES)/scr/$(date +'%Y-%m-%d_%H-%M-%S.png')"
 
-dimensions="$(slurp)"
+dimensions="$(slurp -c f38ba8 -b 31324444 -w 2)"
 
 # take a screenshot & unfreeze the screen
 grim -g "$dimensions" "$image_path"

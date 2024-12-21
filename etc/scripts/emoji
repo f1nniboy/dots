@@ -1,0 +1,12 @@
+#!/bin/sh -e
+
+emoji_url="https://gist.githubusercontent.com/oliveratgithub/0bf11a9aff0d6da7b46f1490f86a71eb/raw/d8e4b78cfe66862cf3809443c1dba017f37b61db/emojis.json"
+emoji_path="$XDG_CACHE_HOME"/emojis.json
+
+# if the json file hasn't been downloaded yet, ...
+[ ! -f "$emoji_path" ] && curl "$emoji_url" -o "$emoji_path"
+
+index=$(jq -r '.emojis[] | "\(.emoji) \(.name)"' "$emoji_path" | menu --font="Fira Code Nerd Font" --placeholder-text="pick an emoji ..." --print-index=true)
+emoji=$(jq -r ".emojis[$index].emoji" "$emoji_path")
+
+wtype "$emoji"
