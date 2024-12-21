@@ -16,6 +16,6 @@ fi
 
 # hardcoded for spotify_player, because it doesnt
 # support relative volume control using playerctl
-echo "^lm(playerctl play-pause)^us(spotify_player playback volume --offset -- 10)^ds(spotify_player playback volume --offset -- -10)$icon $format^us()^ds()^lm()"
+echo "^fg(f9e2af)^lm(playerctl play-pause)^us(spotify_player playback volume --offset -- 10)^ds(spotify_player playback volume --offset -- -10)$icon $format^us()^ds()^lm()^fg()"
 
-#echo "^lm(playerctl play-pause)$icon $format^lm()"
+#echo "^fg(f9e2af)^lm(playerctl play-pause)$icon $format^lm()^fg()"
