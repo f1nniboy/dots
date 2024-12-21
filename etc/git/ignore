@@ -2,6 +2,7 @@
 etc/spotify-player/app.toml
 etc/git/config
 etc/obs-studio
+etc/vesktop
 etc/gnupg
 
 # games

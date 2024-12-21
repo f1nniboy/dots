@@ -1,2 +1,2 @@
 #!/bin/sh
-flatpak run dev.vencord.Vesktop --command=startvesktop --disable-features=WebRtcAllowInputVolumeAdjustment
+DISPLAY= vesktop --enable-features=UseOzonePlatform --ozone-platform=wayland
