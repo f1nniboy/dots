@@ -1,0 +1,16 @@
+# sensitive stuff
+etc/spotify-player/app.toml
+etc/git/config
+etc/obs-studio
+etc/gnupg
+
+# games
+etc/supertuxkart
+
+# just no
+etc/pulse
+etc/OpenRGB
+etc/dconf
+
+# gotta clean this up
+etc/nvim
