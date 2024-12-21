@@ -1,4 +1,14 @@
 #!/bin/sh
 
-volume=$(wpctl get-volume $1 | awk -F": " '{print $2 * 100}')
-echo "^us(/home/etc/scripts/volume $1 +)^ds(/home/etc/scripts/volume $1 -)$volume%^us()^ds()"
+device=$1
+unmuted_icon=$2
+muted_icon=$3
+
+if wpctl get-volume $device | grep -q "MUTED"; then
+	icon="$muted_icon"
+else
+	icon="$unmuted_icon"
+fi
+
+volume=$(wpctl get-volume $device | awk -F": " '{print $2 * 100}')
+echo "^us(/home/etc/scripts/volume $device +)^ds(/home/etc/scripts/volume $device -)^lm(/home/etc/scripts/mute $device)$icon $volume%^lm()^us()^ds()"

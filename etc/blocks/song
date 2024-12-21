@@ -14,4 +14,8 @@ else
 	icon="󰏤"
 fi
 
-echo "^lm(playerctl play-pause)$icon $format^lm()"
+# hardcoded for spotify_player, because it doesnt
+# support relative volume control using playerctl
+echo "^lm(playerctl play-pause)^us(spotify_player playback volume --offset -- 10)^ds(spotify_player playback volume --offset -- -10)$icon $format^us()^ds()^lm()"
+
+#echo "^lm(playerctl play-pause)$icon $format^lm()"

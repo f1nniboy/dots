@@ -3,7 +3,7 @@
 wpctl set-mute $1 ${2:-toggle}
 pkill -RTMIN+3 someblocks
 
-raw_volume="$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@)"
+raw_volume="$(wpctl get-volume $1)"
 
 if echo "$raw_volume" | grep -q "MUTED"; then
 	vol=0

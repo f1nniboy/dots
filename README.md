@@ -10,6 +10,7 @@
 - **image viewer**: [imv](https://sr.ht/~exec64/imv)
 - **wallpaper**: [swww](https://github.com/LGFae/swww)
 - **launcher**: [tofi](https://github.com/philj56/tofi)
+- **file manager**: [yazi](https://github.com/sxyazi/yazi)
 - **pdf reader**: [zathura](https://github.com/pwmt/zathura)
 - **color scheme**: [catppuccin](https://catppuccin.com)
 
