@@ -13,4 +13,5 @@
 - **color scheme**: [catppuccin](https://catppuccin.com)
 
 ## screenshots
-soon™
+![launcher + notifications + bg](etc/screenshots/1.png)
+![firefox + yazi + steam](etc/screenshots/2.png)

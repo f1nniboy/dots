@@ -8,10 +8,10 @@ player=""
 status=$(playerctl status $player 2> /dev/null)
 format="$(playerctl metadata $player -f '{{ artist }} - {{ title }}' 2> /dev/null)"
 
-if [ "$status" == "Playing" ]; then 
+if [ "$status" == "Playing" ]; then
 	icon="󰐊"
 else
 	icon="󰏤"
 fi
 
-echo "^lm(/home/etc/scripts/player play-pause)$icon $format^lm()"
+echo "^lm(playerctl play-pause)$icon $format^lm()"
