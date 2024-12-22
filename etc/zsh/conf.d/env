@@ -1,2 +1,5 @@
 # prevent gtk from starting at-spi2* processes
 export NO_AT_BRIDGE=1
+
+# fix pinentry not working in the terminal
+export GPG_TTY=$(tty)

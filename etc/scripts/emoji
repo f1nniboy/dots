@@ -6,7 +6,7 @@ emoji_path="$XDG_CACHE_HOME"/emojis.json
 # if the json file hasn't been downloaded yet, ...
 [ ! -f "$emoji_path" ] && curl "$emoji_url" -o "$emoji_path"
 
-index=$(jq -r '.emojis[] | "\(.emoji) \(.name)"' "$emoji_path" | menu --font="Fira Code Nerd Font" --placeholder-text="pick an emoji ..." --print-index=true)
-emoji=$(jq -r ".emojis[$index].emoji" "$emoji_path")
+index=$(jq -r '.emojis[] | "\(.emoji) \(.shortname) "' "$emoji_path" | menu --placeholder-text="pick an emoji ..." --print-index=true)
+emoji=$(jq -r ".emojis[$index-1].emoji" "$emoji_path")
 
 wtype "$emoji"
