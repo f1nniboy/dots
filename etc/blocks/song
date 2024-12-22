@@ -1,12 +1,8 @@
 #!/bin/sh -e
 # show the currently playing song using playerctl
 
-# which player to use, leave empty to use first available
-#player="-p spotify_player"
-player=""
-
-status=$(playerctl status $player 2> /dev/null)
-format="$(playerctl metadata $player -f '{{ artist }} - {{ title }}' 2> /dev/null)"
+status=$(/home/etc/scripts/player status 2> /dev/null)
+format="$(/home/etc/scripts/player metadata -f '{{ artist }} - {{ title }}' 2> /dev/null)"
 
 if [ "$status" == "Playing" ]; then
 	icon="󰐊"
@@ -16,6 +12,6 @@ fi
 
 # hardcoded for spotify_player, because it doesnt
 # support relative volume control using playerctl
-echo "^fg(f9e2af)^lm(playerctl play-pause)^us(spotify_player playback volume --offset -- 10)^ds(spotify_player playback volume --offset -- -10)$icon $format^us()^ds()^lm()^fg()"
+echo "^fg(f9e2af)^lm(/home/etc/scripts/player play-pause)^us(spotify_player playback volume --offset -- 10)^ds(spotify_player playback volume --offset -- -10)$icon $format^us()^ds()^lm()^fg()"
 
 #echo "^fg(f9e2af)^lm(playerctl play-pause)$icon $format^lm()^fg()"

@@ -1,4 +1,3 @@
-
 [Default Applications]
 text/html=firefox.desktop
 x-scheme-handler/http=firefox.desktop

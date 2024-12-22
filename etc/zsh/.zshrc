@@ -5,9 +5,11 @@ source /usr/share/zsh/share/antigen.zsh
 export STARSHIP_CONFIG=$XDG_CONFIG_HOME/starship.toml
 eval "$(starship init zsh)"
 
+# set up zoxide
+eval "$(zoxide init zsh)"
+
 # plugins
 antigen bundles <<EOBUNDLES
-  rupa/z@master                         # life depends on this
   desyncr/key-bindings
 
   zsh-users/zsh-syntax-highlighting

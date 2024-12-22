@@ -1,2 +1,2 @@
 #!/bin/sh
-DISPLAY= vesktop --enable-features=UseOzonePlatform --ozone-platform=wayland
+DISPLAY= vesktop --enable-features=UseOzonePlatform --ozone-platform=wayland --disable-features=WebRtcAllowInputVolumeAdjustment
