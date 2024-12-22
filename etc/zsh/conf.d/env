@@ -1,5 +1,9 @@
-# prevent gtk from starting at-spi2* processes
+# disable gtk3 accesibility stuff
 export NO_AT_BRIDGE=1
+export GTK_A11Y=none
+
+# make gtk work with xdg-desktop-portal-termfilechooser
+export GDK_DEBUG=portals
 
 # fix pinentry not working in the terminal
 export GPG_TTY=$(tty)
