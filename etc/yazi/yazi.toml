@@ -13,92 +13,96 @@ linemode       = "size"
 show_hidden    = false
 show_symlink   = true
 mouse_events   = [ "click", "scroll" ]
-title_format   = "Yazi: {cwd}"
+title_format   = "yazi: {cwd}"
 
 [preview]
-tab_size        = 2
+tab_size        = 4
 max_width       = 1000
 max_height      = 1500
 cache_dir       = "/home/tmp/yazi"
 image_filter    = "triangle"
 image_quality   = 90
 sixel_fraction  = 15
-ueberzug_scale  = 4
-ueberzug_offset = [ 0, 0, 0, 0 ]
 
 [opener]
 play = [
-	{ run = 'mpv "$@"', orphan = true },
+	{ run = 'mpv --force-window "$@"', desc = "play", orphan = true },
 ]
 view = [
-	{ run = 'imv "$@"', orphan = true },
+	{ run = 'imv "$@"', desc = "view", orphan = true },
 ]
 edit = [
-	{ run = 'nvim "$@"', block = true },
+	{ run = 'nvim "$@"', desc = "edit", block = true },
+]
+extract = [
+	{ run = 'ya pub extract --list "$@"', desc = "extract here" },
 ]
 open = [
-    { run = 'xdg-open "$@"', block = true },
+	{ run = 'xdg-open "$@"', desc = "open", block = true },
 ]
 
 [open]
 rules = [
-	{ mime = "video/*", use = "play" },
-	{ mime = "image/*", use = "view" },
-
-	{ name = "*", use = [ "edit" ] },
+	# Folder
 	{ name = "*/", use = [ "edit", "open", "reveal" ] },
+	# Text
+	{ mime = "text/*", use = [ "edit", "reveal" ] },
+	# Image
+	{ mime = "image/*", use = [ "open", "reveal" ] },
+	# Media
+	{ mime = "{audio,video}/*", use = [ "play", "reveal" ] },
+	# Archive
+	{ mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}", use = [ "extract", "reveal" ] },
+	# JSON
+	{ mime = "application/{json,ndjson}", use = [ "edit", "reveal" ] },
+	{ mime = "*/javascript", use = [ "edit", "reveal" ] },
+	# Empty file
+	{ mime = "inode/empty", use = [ "edit", "reveal" ] },
+	# Fallback
+	{ name = "*", use = [ "open", "edit", "reveal" ] },
 ]
-
-[tasks]
-micro_workers    = 10
-macro_workers    = 25
-bizarre_retry    = 5
-image_alloc      = 536870912  # 512MB
-image_bound      = [ 0, 0 ]
-suppress_preload = false
 
 [plugin]
-
 fetchers = [
-    # Mimetype
-    { id = "mime", name = "*", run = "mime", if = "!mime", prio = "high" },
+	# Mimetype
+	{ id = "mime", name = "*", run = "mime", if = "!mime", prio = "high" },
 ]
 preloaders = [
-    # Image
-    { mime = "image/{avif,hei?,jxl,svg+xml}", run = "magick" },
-    { mime = "image/*", run = "image" },
-    # Video
-    { mime = "video/*", run = "video" },
-    # PDF
-    { mime = "application/pdf", run = "pdf" },
-    # Font
-    { mime = "font/*", run = "font" },
-    { mime = "application/vnd.ms-opentype", run = "font" },
+	# Image
+	{ mime = "image/{avif,hei?,jxl,svg+xml}", run = "magick" },
+	{ mime = "image/*", run = "image" },
+	# Video
+	{ mime = "video/*", run = "video" },
+	# PDF
+	{ mime = "application/pdf", run = "pdf" },
+	# Font
+	{ mime = "font/*", run = "font" },
+	{ mime = "application/vnd.ms-opentype", run = "font" },
 ]
 previewers = [
-    { name = "*/", run = "folder", sync = true },
-    # Code
-    { mime = "text/*", run = "code" },
-    { mime = "*/{xml,javascript,x-wine-extension-ini}", run = "code" },
-    # JSON
-    { mime = "application/{json,x-ndjson}", run = "json" },
-    # Image
-    { mime = "image/{avif,hei?,jxl,svg+xml}", run = "magick" },
-    { mime = "image/*", run = "image" },
-    # Video
-    { mime = "video/*", run = "video" },
-    # PDF
-    { mime = "application/pdf", run = "pdf" },
-    # Archive
-    { mime = "application/{,g}zip", run = "archive" },
-    { mime = "application/x-{tar,bzip*,7z-compressed,xz,rar,iso9660-image}", run = "archive" },
-    # Font
-    { mime = "font/*", run = "font" },
-    { mime = "application/vnd.ms-opentype", run = "font" },
-    # Empty file
-    { mime = "inode/x-empty", run = "empty" },
-    # Fallback
-    { name = "*", run = "file" },
+	{ name = "*/", run = "folder", sync = true },
+	# Code
+	{ mime = "text/*", run = "code" },
+	{ mime = "*/{xml,javascript,x-wine-extension-ini}", run = "code" },
+	# JSON
+	{ mime = "application/{json,x-ndjson}", run = "json" },
+	# Image
+	{ mime = "image/{avif,hei?,jxl,svg+xml}", run = "magick" },
+	{ mime = "image/*", run = "image" },
+	# Video
+	{ mime = "video/*", run = "video" },
+	# PDF
+	{ mime = "application/pdf", run = "pdf" },
+	# Archive
+	{ mime = "application/{,g}zip", run = "archive" },
+	{ mime = "application/x-{tar,bzip*,7z-compressed,xz,rar,iso9660-image}", run = "archive" },
+	# Font
+	{ mime = "font/*", run = "font" },
+	{ mime = "application/vnd.ms-opentype", run = "font" },
+	# Empty file
+	{ mime = "inode/x-empty", run = "empty" },
+	# Fallback
+	{ name = "*", run = "file" },
 ]
 
 [input]
@@ -157,7 +161,7 @@ quit_title  = "{n} task{s} running, sure to quit? (y/N)"
 quit_origin = "top-center"
 quit_offset = [ 0, 2, 50, 3 ]
 
-[select]
+[pick]
 open_title  = "open with:"
 open_origin = "hovered"
 open_offset = [ 0, 1, 50, 7 ]

@@ -1,2 +1,2 @@
 #!/bin/sh
-flatpak run com.valvesoftware.Steam
+exec flatpak run com.valvesoftware.Steam

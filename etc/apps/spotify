@@ -1,2 +1,2 @@
 #!/bin/sh
-foot spotify_player
+exec foot spotify_player

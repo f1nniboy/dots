@@ -1,0 +1,29 @@
+#!/bin/sh -e
+
+# no arguments specified, ran from super+w keybind
+if [ -z $1 ]; then
+	list="orange\ncyan\npurple\nblack"
+	name=$(printf "$list" | tofi --placeholder-text "pick a color ...")
+
+# ran as a script, from swayidle or autostart
+else
+	if [ $1 = restore ]; then
+		cached=$(cat $XDG_CACHE_HOME/rgb)
+		name=${cached:-orange}
+	else
+		name=${1:-orange}
+	fi
+fi
+
+case $name in
+	orange)	color=ff3300 ;;
+	blue)	color=01fe2f ;;
+	purple)	color=7b01fe ;;
+	black)	color=000000 ;;
+	*)		color=$name  ;;
+esac
+
+[ -z $color ] && exit 1
+
+printf $name > $XDG_CACHE_HOME/rgb
+openrgb -c $color

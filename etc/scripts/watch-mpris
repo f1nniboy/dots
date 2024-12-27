@@ -4,4 +4,4 @@
 # play/pause
 while read -r line; do
     pkill -RTMIN+4 someblocks
-done < <(playerctl metadata -f "{{ status }} {{ title }}" -F)
+done < <(/home/etc/scripts/player metadata -f "{{ status }} {{ title }}" -F)

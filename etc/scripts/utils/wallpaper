@@ -1,0 +1,10 @@
+#!/bin/sh
+
+bg_path="$(xdg-user-dir PICTURES)/bg"
+name="$(printf "$(ls $bg_path)" | menu --placeholder-text "pick a wallpaper ...")"
+
+if [ $? -eq 0 ]; then
+	swww img "$bg_path/$name" \
+		--transition-type outer --transition-step 90 \
+		--transition-fps 255 --transition-duration 1
+fi

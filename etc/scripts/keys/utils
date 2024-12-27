@@ -1,0 +1,6 @@
+#!/bin/sh -e
+
+util_path="$XDG_CONFIG_HOME/scripts/utils"
+selected="$(echo "$(ls $util_path)" | menu --placeholder-text "pick a utility ...")"
+
+[ $? -eq 0 ] && "$util_path/$selected"

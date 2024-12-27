@@ -1,8 +1,8 @@
 ---@diagnostic disable: undefined-global
 
--- Sync yank clipboard across instances
+-- sync yank clipboard across instances
 require("session"):setup {
-	sync_yanked = true,
+	sync_yanked = true
 }
 
 -- Show the path of the currently hovered file in the header

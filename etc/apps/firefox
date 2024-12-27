@@ -1,2 +1,1 @@
-#!/bin/sh
-firefox
+/usr/bin/firefox

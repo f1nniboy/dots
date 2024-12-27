@@ -1,0 +1,2 @@
+#!/bin/sh
+dwl -s /home/etc/scripts/autostart

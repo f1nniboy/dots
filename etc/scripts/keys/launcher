@@ -1,0 +1,6 @@
+#!/bin/sh
+
+apps_path="$XDG_CONFIG_HOME/apps"
+selected="$(printf "$(ls $apps_path)" | menu)"
+
+[ $? -eq 0 ] && "$apps_path/$selected"

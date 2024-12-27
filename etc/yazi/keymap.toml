@@ -3,5 +3,4 @@ prepend_keymap = [
 	{ on = "<C-n>", run = "shell --confirm 'dragon-drop -x -i -T $1'", desc = "open this file with dragon" },
 	{ on = "<C-m>", run = "plugin chmod", desc = "chmod on the select files" },
 	{ on = "!", run = 'shell "$SHELL" --block', desc = "open shell here" },
-	{ on = "<Esc>", run = "close", desc = "cancel input" },
 ]

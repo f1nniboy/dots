@@ -1,4 +1,2 @@
 #!/bin/sh
-# playerctl that prefers spotify over all other players
-
-playerctl --player=spotify_player,%any "$@"
+playerctl --player=spotify_player "$@"

@@ -1,2 +1,2 @@
 #!/bin/sh
-flatpak run org.prismlauncher.PrismLauncher
+exec flatpak run org.prismlauncher.PrismLauncher

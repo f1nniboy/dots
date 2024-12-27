@@ -1,2 +1,2 @@
 #!/bin/sh
-flatpak run org.gnome.gitlab.somas.Apostrophe
+exec flatpak run org.gnome.gitlab.somas.Apostrophe

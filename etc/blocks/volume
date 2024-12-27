@@ -11,4 +11,4 @@ else
 fi
 
 volume=$(wpctl get-volume $device | awk -F": " '{print $2 * 100}')
-echo "^us(/home/etc/scripts/volume $device +)^ds(/home/etc/scripts/volume $device -)^lm(/home/etc/scripts/mute $device)$icon $volume%^lm()^us()^ds()"
+echo "^us(/home/etc/scripts/keys/volume $device +)^ds(/home/etc/scripts/keys/volume $device -)^lm(/home/etc/scripts/keys/mute $device)$icon $volume%^lm()^us()^ds()"

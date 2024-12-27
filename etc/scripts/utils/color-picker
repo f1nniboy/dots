@@ -1,0 +1,12 @@
+#!/bin/sh -e
+
+hex=$(hyprpicker --no-fancy --no-fractional)
+[ -z $hex ] && exit
+
+img_path=$XDG_CACHE_HOME/color.png
+img=$(magick -size 100x100 xc:$hex $img_path)
+
+notify-send "color copied to clipboard" -u low -i $img_path
+rm $img_path
+
+wl-copy $hex

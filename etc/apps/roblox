@@ -1,2 +1,2 @@
 #!/bin/sh
-flatpak run --env=OBS_VKCAPTURE=1 org.vinegarhq.Sober
+exec flatpak run --env=OBS_VKCAPTURE=1 org.vinegarhq.Sober
