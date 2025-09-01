@@ -1,0 +1,60 @@
+# hashed client secrets go here, and unhashed ones go in the client configurations
+
+identity_providers:
+  oidc:
+    clients:
+      # https://immich.app/docs/administration/oauth/
+      - client_name: "Immich"
+        client_id: {{ secret "/run/secrets/authelia-lab/oidc/immich/id" | mindent 10 "|" | msquote }}
+        client_secret: {{ secret "/run/secrets/lab/oidc/immich/secret-hash" | mindent 10 "|" | msquote }}
+        public: false
+        authorization_policy: "one_factor"
+        redirect_uris:
+            - "app.immich:///oauth-callback"
+            - "https://photo.f1nn.space/auth/login"
+            - "https://photo.f1nn.space/user-settings"
+        scopes:
+            - "openid"
+            - "profile"
+            - "email"
+
+      - client_name: "Miniflux"
+        client_id: {{ secret "/run/secrets/authelia-lab/oidc/miniflux/id" | mindent 10 "|" | msquote }}
+        client_secret: {{ secret "/run/secrets/lab/oidc/miniflux/secret-hash" | mindent 10 "|" | msquote }}
+        authorization_policy: "one_factor"
+        require_pkce: true
+        pkce_challenge_method: "S256"
+        redirect_uris:
+          - "https://news.f1nn.space/oauth2/oidc/callback"
+
+      # ... karakeep
+
+      - client_name: "Paperless"
+        client_id: {{ secret "/run/secrets/authelia-lab/oidc/paperless/id" | mindent 10 "|" | msquote }}
+        client_secret: {{ secret "/run/secrets/lab/oidc/paperless/secret-hash" | mindent 10 "|" | msquote }}
+        authorization_policy: "one_factor"
+        require_pkce: true
+        pkce_challenge_method: "S256"
+        redirect_uris:
+          - "https://paper.f1nn.space/accounts/oidc/authelia/login/callback/"
+
+      - client_name: "Forgejo"
+        client_id: {{ secret "/run/secrets/authelia-lab/oidc/forgejo/id" | mindent 10 "|" | msquote }}
+        client_secret: {{ secret "/run/secrets/lab/oidc/forgejo/secret-hash" | mindent 10 "|" | msquote }}
+        authorization_policy: "one_factor"
+        require_pkce: true
+        pkce_challenge_method: "S256"
+        scopes:
+          - 'openid'
+          - 'email'
+          - 'profile'
+          - 'groups'
+        response_types:
+          - 'code'
+        grant_types:
+          - 'authorization_code'
+        access_token_signed_response_alg: 'none'
+        userinfo_signed_response_alg: 'none'
+        token_endpoint_auth_method: 'client_secret_basic'
+        redirect_uris:
+          - "https://git.f1nn.space/user/oauth2/Authelia/callback"

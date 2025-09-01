@@ -1,0 +1,33 @@
+{ config, lib, ... }:
+with lib;
+let
+  cfg = config.custom.system.nix;
+in
+{
+  options.custom.system.nix = {
+    enable = mkEnableOption "NixOS configuration";
+  };
+
+  config = mkIf cfg.enable {
+    system.stateVersion = "25.05";
+
+    documentation.nixos.enable = false;
+    nixpkgs.config.allowUnfree = true;
+
+    nix = {
+      gc = {
+        automatic = true;
+        dates = "weekly";
+        options = "--delete-older-than 7d";
+      };
+      settings = {
+        allowed-users = [ "@wheel" ];
+        experimental-features = [
+          "nix-command"
+          "flakes"
+        ];
+        auto-optimise-store = true;
+      };
+    };
+  };
+}

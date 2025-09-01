@@ -1,0 +1,14 @@
+      - client_name: "Karakeep"
+        client_id: {{ secret "/run/secrets/authelia-lab/oidc/karakeep/id" | mindent 10 "|" | msquote }}
+        client_secret: {{ secret "/run/secrets/lab/oidc/karakeep/secret-hash" | mindent 10 "|" | msquote }}
+        public: false
+        claims_policy: "karakeep"
+        userinfo_signed_response_alg: "none"
+        token_endpoint_auth_method: "client_secret_basic"
+        authorization_policy: "one_factor"
+        redirect_uris:
+          - "https://keep.f1nn.space/api/auth/callback/custom"
+        scopes:
+            - "openid"
+            - "profile"
+            - "email"

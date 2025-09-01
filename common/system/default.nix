@@ -1,0 +1,19 @@
+{
+  imports = [
+    ./boot.nix
+    ./env.nix
+    ./flatpak.nix
+    ./fonts.nix
+    ./home.nix
+    ./ld.nix
+    ./locale.nix
+    ./nix.nix
+    ./packages.nix
+    ./persistence.nix
+    ./remote-unlock.nix
+    ./security.nix
+    ./sops.nix
+    ./user.nix
+    ./xdg.nix
+  ];
+}

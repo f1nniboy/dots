@@ -1,0 +1,84 @@
+{ config, lib, ... }:
+with lib;
+let
+  cfg = config.custom.services.forgejo;
+  port = 3000;
+  subdomain = "git";
+in
+{
+  options.custom.services.forgejo = {
+    enable = mkEnableOption "Lightweight Git software forge";
+  };
+
+  config = mkIf cfg.enable {
+    users.users.forgejo = {
+      extraGroups = [ "postgres" ];
+    };
+
+    services.forgejo = {
+      enable = true;
+      database = {
+        type = "postgres";
+      };
+      lfs.enable = true;
+      settings = {
+        server = {
+          DOMAIN    = "${subdomain}.${config.custom.services.caddy.domain}";
+          ROOT_URL  = "https://${subdomain}.${config.custom.services.caddy.domain}/";
+          HTTP_PORT = port;
+        };
+        service = {
+          DISABLE_REGISTRATION = true;
+        };
+        openid = {
+          ENABLE_OPENID_SIGNIN = true;
+          ENABLE_OPENID_SIGNUP = true;
+          WHITELISTED_URIS     = "auth.${config.custom.services.caddy.domain}";
+        };
+      };
+    };
+
+    # ensure admin account
+    systemd.services.forgejo.preStart = let 
+      adminCmd = "${lib.getExe config.services.forgejo.package} admin user";
+      pwd = config.sops.secrets."${config.networking.hostName}/forgejo/admin-password";
+      user = "finn";
+    in ''
+      ${adminCmd} create --admin --email "${config.custom.user.email}" --username ${user} --password "$(tr -d '\n' < ${pwd.path})" || true
+      ## uncomment this line to change an admin user which was already created
+      # ${adminCmd} change-password --username ${user} --password "$(tr -d '\n' < ${pwd.path})" || true
+    '';
+
+    custom.services.caddy.hosts = {
+      forgejo = {
+        subdomain = subdomain;
+        target = ":${toString port}";
+      };
+    };
+
+    environment.persistence."/nix/persist" = {
+      directories = [
+        {
+          directory = "/var/lib/forgejo";
+          user = "forgejo";
+          group = "forgejo";
+          mode = "0700";
+        }
+      ];
+    };
+
+    sops = {
+      secrets = {
+        "${config.networking.hostName}/forgejo/admin-password".owner = "forgejo";
+
+        "${config.networking.hostName}/oidc/forgejo/secret".owner = "forgejo";
+        "${config.networking.hostName}/oidc/forgejo/secret-hash".owner = "authelia-main";
+        "${config.networking.hostName}/oidc/forgejo/id".owner = "forgejo";
+        "authelia-${config.networking.hostName}/oidc/forgejo/id" = {
+          key = "${config.networking.hostName}/oidc/forgejo/id";
+          owner = "authelia-main";
+        };
+      };
+    };
+  };
+}

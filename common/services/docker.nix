@@ -1,0 +1,23 @@
+{ config, lib, ... }:
+with lib;
+let
+  cfg = config.custom.services.docker;
+in
+{
+  options.custom.services.docker = {
+    enable = mkEnableOption "Docker container support";
+  };
+
+  config = mkIf cfg.enable {
+    virtualisation.docker = {
+      enable = true;
+      autoPrune.enable = true;
+    };
+
+    virtualisation.oci-containers.backend = "docker";
+
+    environment.persistence."/nix/persist" = {
+      directories = [ "/var/lib/docker" ];
+    };
+  };
+}
