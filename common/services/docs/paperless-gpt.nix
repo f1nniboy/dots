@@ -24,7 +24,7 @@ in
     virtualisation.oci-containers.containers = {
       "paperless-gpt" = {
         image = "icereed/paperless-gpt:latest";
-        # TODO: level=fatal msg="Failed to create db directory: mkdir db: permission denied" 
+        # TODO: level=fatal msg="Failed to create db directory: mkdir db: permission denied"
         #user = "${toString config.users.users.paperless-gpt.uid}:${toString config.users.groups.paperless-gpt.gid}";
         volumes = [
           "/var/lib/paperless-gpt/prompts:/app/prompts"
@@ -42,9 +42,13 @@ in
           LISTEN_INTERFACE=:${toString port}
           PAPERLESS_BASE_URL=https://${config.custom.services.caddy.hosts.paperless.subdomain}.${config.custom.services.caddy.domain}
           PAPERLESS_PUBLIC_URL=https://${config.custom.services.caddy.hosts.paperless.subdomain}.${config.custom.services.caddy.domain}
-          
-          PAPERLESS_API_TOKEN=${config.sops.placeholder."${config.networking.hostName}/paperless-gpt/paperless-api-token"}
-          OPENAI_API_KEY=${config.sops.placeholder."${config.networking.hostName}/paperless-gpt/openai-api-key"}
+
+          PAPERLESS_API_TOKEN=${
+            config.sops.placeholder."${config.networking.hostName}/paperless-gpt/paperless-api-token"
+          }
+          OPENAI_API_KEY=${
+            config.sops.placeholder."${config.networking.hostName}/paperless-gpt/openai-api-key"
+          }
 
           MANUAL_TAG=ai
           AUTO_TAG=ai-auto

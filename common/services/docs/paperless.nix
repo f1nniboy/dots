@@ -37,6 +37,7 @@ in
         consumptionDir = "/fun/media/shares/paperless";
         database.createLocally = false;
         passwordFile = config.sops.secrets."${config.networking.hostName}/paperless/admin-password".path;
+        domain = ""; # only needed if services.paperless.configureNginx is enabled
         settings = {
           PAPERLESS_DBHOST = "/run/postgresql";
           PAPERLESS_REDIS = "redis+socket:///run/redis-paperless/redis.sock";
@@ -78,28 +79,28 @@ in
     sops = {
       templates.paperless-secrets = {
         content = ''
-          						PAPERLESS_SOCIALACCOUNT_PROVIDERS='{
-          								"openid_connect": {
-          										"OAUTH_PKCE_ENABLED": true,
-          										"APPS": [
-          												{
-          														"provider_id": "authelia",
-          														"name": "Authelia",
-          														"client_id": "${
-                          config.sops.placeholder."${config.networking.hostName}/oidc/paperless/id"
-                        }",
-          														"secret": "${
-                          config.sops.placeholder."${config.networking.hostName}/oidc/paperless/secret"
-                        }",
-          														"settings": {
-          																"server_url": "https://auth.${config.custom.services.caddy.domain}/.well-known/openid-configuration",
-          																"token_auth_method": "client_secret_basic"
-          														}
-          												}
-          										]
-          								}
-          						}'
-          					'';
+          PAPERLESS_SOCIALACCOUNT_PROVIDERS='{
+              "openid_connect": {
+                  "OAUTH_PKCE_ENABLED": true,
+                  "APPS": [
+                      {
+                          "provider_id": "authelia",
+                          "name": "Authelia",
+                          "client_id": "${
+                            config.sops.placeholder."${config.networking.hostName}/oidc/paperless/id"
+                          }",
+                          "secret": "${
+                            config.sops.placeholder."${config.networking.hostName}/oidc/paperless/secret"
+                          }",
+                          "settings": {
+                              "server_url": "https://auth.${config.custom.services.caddy.domain}/.well-known/openid-configuration",
+                              "token_auth_method": "client_secret_basic"
+                          }
+                      }
+                  ]
+              }
+          }'
+        '';
         owner = "paperless";
       };
       secrets = {

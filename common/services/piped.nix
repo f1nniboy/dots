@@ -38,7 +38,7 @@ in
         group = "piped";
         extraGroups = [ "postgres" ];
       };
-      groups.piped = {};
+      groups.piped = { };
     };
 
     systemd.services.piped-backend = {
