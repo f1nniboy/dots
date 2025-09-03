@@ -1,6 +1,5 @@
 keys:
   - &desktop age1d7l44trdac37hfx7yrtw4zf7re3k39tzjeav70z9t9xv9ur5wsmshge2pw
-  - &laptop age190svd3c2y9ymjhpq76gnyztefppzm3pld9lg9ypz0ax5rcff95tqa8l74d
   - &lab age19f8l20tkls4v0uh3wuucj44pxpsj9l85vj4q2rx03rnag0cpy39swmtyhm
   - &vps age1uc0cd80gkj3rar87845wl92ha98dpvjyrjqy92nq4w08rreekeuqdc37dx
 creation_rules:
@@ -8,6 +7,5 @@ creation_rules:
     key_groups:
       - age:
           - *desktop
-          - *laptop
           - *lab
           - *vps
