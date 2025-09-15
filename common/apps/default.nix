@@ -4,7 +4,6 @@
     ./cli
     ./crypto
     ./games
-    ./gui
     ./work
 
     ./easyeffects.nix
