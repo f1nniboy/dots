@@ -9,8 +9,8 @@ in
 
     whitelist = mkOption {
       type = types.listOf types.str;
-      default = [ "123.123.123.123" ];
       description = "IPs that can connect to the unrestricted node";
+      example = [ "123.123.123.123" ];
     };
   };
 

@@ -158,15 +158,15 @@ in
         };
         "org/gnome/shell/keybindings" = {
           # remove the default hotkeys for opening favorited applications
-          switch-to-application-1 = [ ];
-          switch-to-application-2 = [ ];
-          switch-to-application-3 = [ ];
-          switch-to-application-4 = [ ];
-          switch-to-application-5 = [ ];
-          switch-to-application-6 = [ ];
-          switch-to-application-7 = [ ];
-          switch-to-application-8 = [ ];
-          switch-to-application-9 = [ ];
+          switch-to-application-1  = [ ];
+          switch-to-application-2  = [ ];
+          switch-to-application-3  = [ ];
+          switch-to-application-4  = [ ];
+          switch-to-application-5  = [ ];
+          switch-to-application-6  = [ ];
+          switch-to-application-7  = [ ];
+          switch-to-application-8  = [ ];
+          switch-to-application-9  = [ ];
           switch-to-application-10 = [ ];
         };
         "org/gnome/mutter" = {

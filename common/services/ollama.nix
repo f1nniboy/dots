@@ -34,8 +34,7 @@ in
       inherit (cfg) port;
       acceleration = null;
       loadModels = [
-        "mannix/phi3-mini-4k"
-        "llava-phi3"
+        "mistral-nemo"
       ];
     };
 

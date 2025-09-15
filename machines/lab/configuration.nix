@@ -68,12 +68,14 @@
       paperless.enable = true;
       paperless-gpt.enable = true;
 
-      #muse.enable = true;
+      muse.enable = true;
       multi-scrobbler.enable = true;
       #tidarr.enable = true;
       #audiomuse.enable = true;
 
       #minecraft.enable = true;
+
+      i2pd.enable = true;
 
       forgejo.enable = true;
 

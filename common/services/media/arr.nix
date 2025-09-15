@@ -1,5 +1,4 @@
 {
-  inputs,
   config,
   lib,
   ...
@@ -7,7 +6,6 @@
 with lib;
 let
   cfg = config.custom.services.arr;
-  gitPkgs = import inputs.nixpkgs-git { system = "x86_64-linux"; };
 in
 {
 
@@ -35,26 +33,6 @@ in
       sonarr = {
         enable = true;
         group = "media";
-      };
-      lidarr = {
-        enable = false; # TRUE
-        group = "media";
-        package = gitPkgs.lidarr.overrideAttrs (
-          old:
-          let
-            os = "linux";
-            arch = "x64";
-            branch = "plugins";
-          in
-          {
-            inherit version;
-            src = gitPkgs.fetchurl {
-              url = "https://lidarr.servarr.com/v1/update/${branch}/updatefile?os=${os}&runtime=netcore&arch=${arch}";
-              name = "lidarr-netcore-${os}-${arch}.tar.gz";
-              sha256 = "sha256-g/Nmi4X/qlqqjY/zoG90iyP5Y5fse6Akr8exG5Spf08=";
-            };
-          }
-        );
       };
       recyclarr = {
         enable = true;
@@ -89,13 +67,6 @@ in
           SONARR__AUTH__METHOD = "External";
         };
       };
-      #lidarr = {
-      #  path = [ pkgs.ffmpeg ];
-      #  environment = {
-      #    LIDARR__AUTH__REQUIRED = "True";
-      #    LIDARR__AUTH__METHOD = "External";
-      #  };
-      #};
       recyclarr.serviceConfig.LoadCredential = [
         "radarr_api-key:${config.sops.secrets."recyclarr-${config.networking.hostName}/radarr/api-key".path}"
         "sonarr_api-key:${config.sops.secrets."recyclarr-${config.networking.hostName}/sonarr/api-key".path}"
@@ -117,11 +88,6 @@ in
         sonarr = {
           subdomain = "tv.media";
           target = ":${toString config.services.sonarr.settings.server.port}";
-          import = [ "auth" ];
-        };
-        lidarr = {
-          subdomain = "music.media";
-          target = ":${toString config.services.lidarr.settings.server.port}";
           import = [ "auth" ];
         };
       };
@@ -166,12 +132,6 @@ in
           group = "media";
           mode = "0700";
         }
-        {
-          directory = "/var/lib/lidarr";
-          user = "lidarr";
-          group = "media";
-          mode = "0700";
-        }
       ];
     };
 
@@ -179,7 +139,6 @@ in
       "/var/lib/prowlarr"
       "/var/lib/radarr"
       "/var/lib/sonarr"
-      "/var/lib/lidarr"
     ];
   };
 }

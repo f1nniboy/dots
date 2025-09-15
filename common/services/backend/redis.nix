@@ -10,10 +10,6 @@ in
       type = types.listOf types.str;
       default = [ ];
       description = "List of Redis server names to configure";
-      example = [
-        "server1"
-        "server2"
-      ];
     };
   };
 

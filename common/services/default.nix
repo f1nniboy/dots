@@ -16,7 +16,6 @@
     ./immich.nix
     ./karakeep.nix
     ./miniflux.nix
-    ./notesnook.nix
     ./ollama.nix
     ./openssh.nix
     ./piped.nix

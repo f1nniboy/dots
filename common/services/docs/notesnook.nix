@@ -18,10 +18,8 @@ let
     "IDENTITY_SERVER_PORT" = "8264";
     "IDENTITY_SERVER_URL" = "https://auth.note.${config.custom.services.caddy.domain}";
     "INSTANCE_NAME" = "${config.networking.hostName}";
-    "MINIO_ROOT_PASSWORD" = "n2QkzrlneGwi2eIj19w9itoXA4zDNThDlsXM994";
     "MINIO_ROOT_USER" = "admin";
     "MONOGRAPH_PUBLIC_URL" = "https://mono.note.${config.custom.services.caddy.domain}";
-    "NOTESNOOK_API_SECRET" = "uMjStaTahmHHZENDKd5TCKISIBkPZtM9w5BOkyE";
     "NOTESNOOK_APP_HOST" = "https://api.note.${config.custom.services.caddy.domain}";
     "NOTESNOOK_APP_PUBLIC_URL" = "https://api.note.${config.custom.services.caddy.domain}";
     "NOTESNOOK_SERVER_HOST" = "api";
@@ -31,6 +29,11 @@ let
     "SSE_SERVER_PORT" = "7264";
     "TZ" = config.time.timeZone;
     "MONGODB_CONNECTION_STRING" = "mongodb://db:27017/?replSet=rs0";
+
+    # TODO: figure out how to pass these secrets as files
+    "MINIO_ROOT_PASSWORD" = "n2QkzrlneGwi2eIj19w9itoXA4zDNThDlsXM994";
+    "NOTESNOOK_API_SECRET" = "uMjStaTahmHHZENDKd5TCKISIBkPZtM9w5BOkyE";
+    "S3_ACCESS_KEY" = "n2QkzrlneGwi2eIj19w9itoXA4zDNThDlsXM994";
   };
 
   commonServiceConfig = {
@@ -125,7 +128,6 @@ in
           env
           {
             "MONGODB_DATABASE_NAME" = "notesnook";
-            "S3_ACCESS_KEY" = "n2QkzrlneGwi2eIj19w9itoXA4zDNThDlsXM994";
             "S3_ACCESS_KEY_ID" = "admin";
             "S3_BUCKET_NAME" = "attachments";
             "S3_INTERNAL_BUCKET_NAME" = "attachments";

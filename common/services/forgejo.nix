@@ -51,7 +51,7 @@ in
 
     custom.services.caddy.hosts = {
       forgejo = {
-        subdomain = subdomain;
+        inherit subdomain;
         target = ":${toString port}";
       };
     };

@@ -22,7 +22,7 @@ in
     services.i2pd = {
       enable = true;
       inherit (cfg) address port;
-      bandwidth = 5000; # 5mb/s
+      bandwidth = 10000; # 10mb/s
       floodfill = true;
       nat = false;
       addressbook = {
@@ -45,7 +45,6 @@ in
         httpProxy = {
           enable = true;
           inherit (cfg) address;
-          #outproxy = "http://outproxy.bandura.i2p";
         };
       };
     };

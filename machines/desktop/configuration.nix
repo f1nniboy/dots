@@ -26,17 +26,16 @@
       luanti.enable = true;
       prismlauncher.enable = true;
 
-      # adb.enable = true;
-      #chromium.enable = true;
+      adb.enable = true;
 
       monero.enable = true;
-      #haveno.enable = true;
+      haveno.enable = true;
 
       tor.enable = true;
       mullvad-browser.enable = true;
 
       obs.enable = true;
-      #gimp.enable = true;
+      gimp.enable = true;
       easyeffects.enable = true;
     };
 
@@ -57,16 +56,15 @@
             "${homeDir}/source"
             "${homeDir}/bilder"
             "${homeDir}/dokumente"
-            #"${homeDir}/.local/share/Haveno-reto"
+            "${homeDir}/.local/share/Haveno-reto"
           ];
       };
 
       docker.enable = true;
-      audiomuse-worker.enable = false;
 
       xmrig = {
         enable = true;
-        cpuUsage = 50; # 50% of 16 threads = 8 threads
+        cpuUsage = 50;
       };
     };
 
@@ -76,7 +74,7 @@
 
     system = {
       persistence = {
-        userConfig.directories = [ "source" ];
+        userConfig.directories = [ "source" ".node-llama-cpp" ];
       };
       ld.enable = true;
     };

@@ -37,8 +37,8 @@ in
       }) cfg.users;
 
       authentication = pkgs.lib.mkOverride 10 ''
-                # TYPE  DATABASE  USER      ADDRESS   		METHOD
-                local   all       all                 		peer
+        # TYPE  DATABASE  USER      ADDRESS   		METHOD
+        local   all       all                 		peer
       '';
     };
 

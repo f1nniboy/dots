@@ -42,19 +42,19 @@ in
       serviceConfig.Type = "oneshot";
 
       script = with pkgs; ''
-        				# wait for tailscaled to settle
-        				sleep 2
+        # wait for tailscaled to settle
+        sleep 2
 
-        				# check if we are already authenticated to tailscale
-        				status="$(${tailscale}/bin/tailscale status -json | ${jq}/bin/jq -r .BackendState)"
-        				[ "$status" != "NeedsLogin" ] && exit 0
+        # check if we are already authenticated to tailscale
+        status="$(${tailscale}/bin/tailscale status -json | ${jq}/bin/jq -r .BackendState)"
+        [ "$status" != "NeedsLogin" ] && exit 0
 
-        				# otherwise authenticate with tailscale
-        				# timeout after 10 seconds to avoid hanging the boot process
-        				${coreutils}/bin/timeout 10 ${tailscale}/bin/tailscale up \
-        					--authkey=$(cat "${config.sops.secrets."common/tailscale/auth-key".path}") \
-        					--operator=${config.custom.user.name}
-        			'';
+        # otherwise authenticate with tailscale
+        # timeout after 10 seconds to avoid hanging the boot process
+        ${coreutils}/bin/timeout 10 ${tailscale}/bin/tailscale up \
+          --authkey=$(cat "${config.sops.secrets."common/tailscale/auth-key".path}") \
+          --operator=${config.custom.user.name}
+      '';
     };
 
     networking.firewall = {

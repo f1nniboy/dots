@@ -31,9 +31,9 @@ in
     sops = {
       templates.acme-porkbun-secrets = {
         content = ''
-          						PORKBUN_API_KEY=${config.sops.placeholder."common/acme/porkbun/api-key"}
-          						PORKBUN_SECRET_API_KEY=${config.sops.placeholder."common/acme/porkbun/api-secret-key"}
-          					'';
+          PORKBUN_API_KEY=${config.sops.placeholder."common/acme/porkbun/api-key"}
+          PORKBUN_SECRET_API_KEY=${config.sops.placeholder."common/acme/porkbun/api-secret-key"}
+        '';
         owner = "acme";
       };
       secrets = {

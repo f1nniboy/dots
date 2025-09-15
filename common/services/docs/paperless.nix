@@ -41,7 +41,7 @@ in
         settings = {
           PAPERLESS_DBHOST = "/run/postgresql";
           PAPERLESS_REDIS = "redis+socket:///run/redis-paperless/redis.sock";
-          PAPERLESS_URL = "https://paper.${config.custom.services.caddy.domain}";
+          PAPERLESS_URL = mkForce "https://paper.${config.custom.services.caddy.domain}";
           PAPERLESS_APPS = "allauth.socialaccount.providers.openid_connect";
           PAPERLESS_DISABLE_REGULAR_LOGIN = true;
           PAPERLESS_SOCIAL_AUTO_SIGNUP = true;
