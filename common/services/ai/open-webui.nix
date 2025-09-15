@@ -1,10 +1,10 @@
 { config, lib, ... }:
 with lib;
 let
-  cfg = config.custom.services.ollama;
+  cfg = config.custom.services.open-webui;
 in
 {
-  options.custom.services.ollama = {
+  options.custom.services.open-webui = {
     enable = mkEnableOption "Self-hosted AI platform";
     port = mkOption {
       type = types.port;
