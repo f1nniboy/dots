@@ -2,18 +2,18 @@
 with lib;
 let
   cfg = config.custom.services.vaultwarden;
-  port = 8222;
 in
 {
   options.custom.services.vaultwarden = {
     enable = mkEnableOption "Rust version of the Bitwarden password manager";
+
+    port = mkOption {
+      type = types.port;
+      default = 8222;
+    };
   };
 
   config = mkIf cfg.enable {
-    custom.services = {
-      postgresql.users = [ "vaultwarden" ];
-    };
-
     users.users.vaultwarden = {
       extraGroups = [ "postgres" ];
     };
@@ -24,15 +24,18 @@ in
       config = {
         DATABASE_URL = "postgresql://vaultwarden:@/vaultwarden";
         _ENABLE_SMTP = "false";
-        ROCKET_PORT = port;
+        ROCKET_PORT = cfg.port;
       };
     };
 
-    custom.services.caddy.hosts = {
-      vaultwarden = {
-        subdomain = "vault";
-        target = ":${toString port}";
+    custom.services = {
+      caddy.hosts = {
+          vaultwarden = {
+            subdomain = "vault";
+            target = ":${toString cfg.port}";
+          };
       };
+      postgresql.users = [ "vaultwarden" ];
     };
 
     environment.persistence."/nix/persist" = {

@@ -2,12 +2,16 @@
 with lib;
 let
   cfg = config.custom.services.forgejo;
-  port = 3000;
   subdomain = "git";
 in
 {
   options.custom.services.forgejo = {
     enable = mkEnableOption "Lightweight Git software forge";
+
+    port = mkOption {
+      type = types.port;
+      default = 3000;
+    };
   };
 
   config = mkIf cfg.enable {
@@ -25,7 +29,7 @@ in
         server = {
           DOMAIN    = "${subdomain}.${config.custom.services.caddy.domain}";
           ROOT_URL  = "https://${subdomain}.${config.custom.services.caddy.domain}/";
-          HTTP_PORT = port;
+          HTTP_PORT = cfg.port;
         };
         service = {
           DISABLE_REGISTRATION = true;
@@ -52,7 +56,7 @@ in
     custom.services.caddy.hosts = {
       forgejo = {
         inherit subdomain;
-        target = ":${toString port}";
+        target = ":${toString cfg.port}";
       };
     };
 

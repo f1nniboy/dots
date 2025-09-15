@@ -2,11 +2,15 @@
 with lib;
 let
   cfg = config.custom.services.tidarr;
-  port = 8484;
 in
 {
   options.custom.services.tidarr = {
     enable = mkEnableOption "Tidarr music downloader";
+
+    port = mkOption {
+      type = types.port;
+      default = 8484;
+    };
   };
 
   config = mkIf cfg.enable {
@@ -22,7 +26,7 @@ in
       "tidarr" = {
         image = "cstaelen/tidarr:latest";
         ports = [
-          "${toString port}:${toString port}"
+          "${toString cfg.port}:${toString cfg.port}"
         ];
         volumes = [
           "/var/lib/tidarr:/home/app/standalone/shared"
@@ -40,7 +44,7 @@ in
     custom.services.caddy.hosts = {
       tidarr = {
         subdomain = "tidal.media";
-        target = ":${toString port}";
+        target = ":${toString cfg.port}";
         import = [ "auth" ];
       };
     };

@@ -156,13 +156,13 @@ in
         # snippet that can be imported to enable authelia in front of a service
         # ref: https://www.authelia.com/integration/proxies/caddy/#subdomain
         extraConfig = ''
-          					(auth) {
-          							forward_auth :${toString cfg.port} {
-          									uri /api/authz/forward-auth
-          									copy_headers Remote-User Remote-Groups Remote-Email Remote-Name
-          							}
-          					}
-          				'';
+          (auth) {
+              forward_auth :${toString cfg.port} {
+                  uri /api/authz/forward-auth
+                  copy_headers Remote-User Remote-Groups Remote-Email Remote-Name
+              }
+          }
+        '';
       };
     };
 

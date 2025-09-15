@@ -2,11 +2,15 @@
 with lib;
 let
   cfg = config.custom.services.paperless-gpt;
-  port = 8088;
 in
 {
   options.custom.services.paperless-gpt = {
     enable = mkEnableOption "Scrobble plays from multiple sources to multiple clients";
+
+    port = mkOption {
+      type = types.port;
+      default = 8088;
+    };
   };
 
   config = mkIf cfg.enable {
@@ -39,7 +43,7 @@ in
     sops = {
       templates.paperless-gpt-env = {
         content = ''
-          LISTEN_INTERFACE=:${toString port}
+          LISTEN_INTERFACE=:${toString cfg.port}
           PAPERLESS_BASE_URL=https://${config.custom.services.caddy.hosts.paperless.subdomain}.${config.custom.services.caddy.domain}
           PAPERLESS_PUBLIC_URL=https://${config.custom.services.caddy.hosts.paperless.subdomain}.${config.custom.services.caddy.domain}
 
@@ -68,7 +72,7 @@ in
     custom.services.caddy.hosts = {
       paperless-gpt = {
         subdomain = "ai.${config.custom.services.caddy.hosts.paperless.subdomain}";
-        target = ":${toString port}";
+        target = ":${toString cfg.port}";
         import = [ "auth" ];
       };
     };

@@ -2,11 +2,15 @@
 with lib;
 let
   cfg = config.custom.services.multi-scrobbler;
-  port = 9078;
 in
 {
   options.custom.services.multi-scrobbler = {
     enable = mkEnableOption "Scrobble plays from multiple sources to multiple clients";
+
+    port = mkOption {
+      type = types.port;
+      default = 9078;
+    };
   };
 
   config = mkIf cfg.enable {
@@ -40,7 +44,7 @@ in
     custom.services.caddy.hosts = {
       multi-scrobbler = {
         subdomain = "scrobbler";
-        target = ":${toString port}";
+        target = ":${toString cfg.port}";
         import = [ "auth" ];
       };
     };
