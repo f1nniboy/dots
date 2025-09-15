@@ -71,9 +71,10 @@
       muse.enable = true;
       multi-scrobbler.enable = true;
       #tidarr.enable = true;
-      #audiomuse.enable = true;
 
       #minecraft.enable = true;
+
+      open-webui.enable = true;
 
       i2pd.enable = true;
 

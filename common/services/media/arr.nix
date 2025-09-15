@@ -26,7 +26,6 @@ in
         enable = true;
       };
       radarr = {
-        package = gitPkgs.radarr;
         enable = true;
         group = "media";
       };

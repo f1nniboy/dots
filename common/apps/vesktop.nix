@@ -17,7 +17,7 @@ in
     environment.systemPackages = [ pkgs.vesktop ];
 
     custom.system.persistence.userConfig = {
-      directories = [ ".config/vesktop/sessionData" ];
+      directories = [ ".config/vesktop" ];
     };
 
     custom.system.home = {

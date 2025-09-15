@@ -1,5 +1,6 @@
 {
   imports = [
+    ./ai
     ./anon
     ./auth
     ./backend
@@ -16,7 +17,6 @@
     ./immich.nix
     ./karakeep.nix
     ./miniflux.nix
-    ./ollama.nix
     ./openssh.nix
     ./piped.nix
     ./printing.nix
