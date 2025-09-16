@@ -39,7 +39,7 @@
     };
 
     hardware = {
-      galaxybook.enable = true;
+      fingerprint.enable = true;
     };
   };
 }
