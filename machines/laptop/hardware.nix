@@ -42,12 +42,12 @@
       ];
     };
     "/boot" = {
-      device = "/dev/disk/by-label/boot";
+      device = "/dev/disk/by-partlabel/disk-main-boot";
       fsType = "vfat";
       options = [ "umask=0077" ];
     };
     "/nix" = {
-      device = "/dev/disk/by-label/nix";
+      device = "/dev/disk/by-partlabel/disk-main-nix";
       fsType = "ext4";
     };
   };
