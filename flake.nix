@@ -70,8 +70,9 @@
     in
     {
       nixosConfigurations = {
-        lab = mkNixOSConfig ./machines/lab/configuration.nix;
         desktop = mkNixOSConfig ./machines/desktop/configuration.nix;
+        laptop = mkNixOSConfig ./machines/laptop/configuration.nix;
+        lab = mkNixOSConfig ./machines/lab/configuration.nix;
         iso = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = { inherit inputs outputs vars; };
