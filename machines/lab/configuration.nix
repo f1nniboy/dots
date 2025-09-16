@@ -10,8 +10,6 @@
   networking.hostName = "lab";
 
   custom = {
-    inherit (vars) user;
-
     apps = {
       # cli
       yazi.enable = true;
@@ -97,6 +95,13 @@
     };
 
     system = {
+      user = {
+        fullName = "Finn";
+        name = "me";
+        email = "me@f1nn.space";
+      };
+      inherit (vars) ssh;
+
       nix.enable = true;
       boot.enable = true;
       env.enable = true;

@@ -8,6 +8,10 @@ in
     name = mkOption { type = types.str; };
     fullName = mkOption { type = types.str; };
     email = mkOption { type = types.str; };
+    sshPublicKey = mkOption {
+      type = lib.types.nullOr types.str;
+      default = null;
+    };
   };
 
   config = {
@@ -18,6 +22,9 @@ in
       isNormalUser = true;
       extraGroups = [ "wheel" ];
       hashedPasswordFile = config.sops.secrets."common/user/hashed-password".path;
+      openssh.authorizedKeys.keys = lib.optionals (cfg.sshPublicKey != null) [
+        cfg.sshPublicKey
+      ];
     };
   };
 }

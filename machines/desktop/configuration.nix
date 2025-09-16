@@ -48,7 +48,7 @@
         };
         paths =
           let
-            homeDir = config.users.users."${config.custom.user.name}".home;
+            homeDir = config.users.users."${config.custom.system.user.name}".home;
           in
           [
             "${homeDir}/source"
@@ -71,7 +71,14 @@
     };
 
     system = {
-      inherit (vars) user ssh;
+      user = {
+        fullName = "Finn";
+        name = "me";
+        email = "me@f1nn.space";
+        sshPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBK67b6pvKUWVH/lflBvW7TI6DTXy7xT7iM8xpvHvbi0";
+      };
+      inherit (vars) ssh;
+
       ld.enable = true;
       persistence = {
         userConfig.directories = [ "source" ".node-llama-cpp" ];

@@ -56,7 +56,7 @@ in
         "/etc/ssh/ssh_host_rsa_key.pub"
         "/etc/ssh/ssh_host_rsa_key"
       ];
-      users.${config.custom.user.name} = {
+      users.${config.custom.system.user.name} = {
         inherit (cfg.userConfig) directories files;
       };
     };

@@ -53,7 +53,7 @@ in
         # timeout after 10 seconds to avoid hanging the boot process
         ${coreutils}/bin/timeout 10 ${tailscale}/bin/tailscale up \
           --authkey=$(cat "${config.sops.secrets."common/tailscale/auth-key".path}") \
-          --operator=${config.custom.user.name}
+          --operator=${config.custom.system.user.name}
       '';
     };
 

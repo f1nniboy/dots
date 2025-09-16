@@ -18,7 +18,7 @@ in
       pkgs.android-udev-rules
     ];
 
-    users.users.${config.custom.user.name} = {
+    users.users.${config.custom.system.user.name} = {
       extraGroups = [ "adbusers" ];
     };
 

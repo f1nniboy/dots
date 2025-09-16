@@ -48,7 +48,7 @@ in
       pwd = config.sops.secrets."${config.networking.hostName}/forgejo/admin-password";
       user = "finn";
     in ''
-      ${adminCmd} create --admin --email "${config.custom.user.email}" --username ${user} --password "$(tr -d '\n' < ${pwd.path})" || true
+      ${adminCmd} create --admin --email "${config.custom.system.user.email}" --username ${user} --password "$(tr -d '\n' < ${pwd.path})" || true
       ## uncomment this line to change an admin user which was already created
       # ${adminCmd} change-password --username ${user} --password "$(tr -d '\n' < ${pwd.path})" || true
     '';

@@ -1,9 +1,4 @@
 {
-  user = {
-    fullName = "Finn";
-    name = "me";
-    email = "me@f1nn.space";
-  };
   ssh = {
     authorizedKeys = [
       # desktop

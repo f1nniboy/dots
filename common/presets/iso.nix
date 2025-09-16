@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  vars,
   ...
 }:
 with lib;
@@ -29,7 +28,7 @@ in
     users.users.nixos = {
       isNormalUser = true;
       extraGroups = [ "wheel" ];
-      openssh.authorizedKeys.keys = [ vars.user.sshPublicKey ];
+      openssh.authorizedKeys.keys = config.custom.ssh.authorizedKeys;
     };
 
     security.sudo.wheelNeedsPassword = false;

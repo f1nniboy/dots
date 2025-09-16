@@ -13,8 +13,8 @@ in
   config = {
     users.mutableUsers = false;
 
-    users.users.${cfg.name} = {
-      openssh.authorizedKeys.keys = config.custom.system.ssh.authorizedKeys;
+    users.users.${config.custom.system.user.name} = {
+      openssh.authorizedKeys.keys = cfg.authorizedKeys;
     };
   };
 }

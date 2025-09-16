@@ -72,7 +72,6 @@ in
 
     services.caddy = {
       enable = true;
-      inherit (config.custom.user) email;
 
       package = pkgs.caddy.withPlugins {
         plugins = [ "github.com/caddy-dns/porkbun@v0.3.1" ];
