@@ -10,12 +10,12 @@
             boot = {
               size = "512M";
               type = "EF00";
-              label = "boot";
               content = {
                 type = "filesystem";
                 format = "vfat";
                 mountpoint = "/boot";
                 mountOptions = [ "umask=0077" ];
+                extraArgs = [ "-n" "boot" ];
               };
             };
             nix = {
