@@ -23,6 +23,7 @@
     ./radicale.nix
     ./restic.nix
     ./samba.nix
+    ./tlp.nix
     ./vaultwarden.nix
   ];
 }

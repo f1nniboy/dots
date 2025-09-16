@@ -21,7 +21,7 @@
 
     services = {
       mullvad.enable = true;
-      openssh.enable = true;
+      tlp.enable = true;
     };
 
     system = {
