@@ -22,9 +22,9 @@ in
       isNormalUser = true;
       extraGroups = [ "wheel" ];
       hashedPasswordFile = config.sops.secrets."common/user/hashed-password".path;
-      openssh.authorizedKeys.keys = lib.optionals (cfg.sshPublicKey != null) [
+      /*openssh.authorizedKeys.keys = lib.optionals (cfg.sshPublicKey != null) [
         cfg.sshPublicKey
-      ];
+      ];*/
     };
   };
 }
