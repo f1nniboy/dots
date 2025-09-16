@@ -39,7 +39,7 @@
     };
 
     hardware = {
-      #galaxybook.enable = true;
+      galaxybook.enable = true;
     };
   };
 }

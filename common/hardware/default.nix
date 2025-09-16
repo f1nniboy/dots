@@ -4,7 +4,7 @@
 
     ./audio.nix
     ./bluetooth.nix
-    #./galaxybook.nix
+    ./galaxybook.nix
     ./networking.nix
     ./wheel.nix
   ];
