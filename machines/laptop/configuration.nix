@@ -21,7 +21,6 @@
 
     services = {
       mullvad.enable = true;
-      tlp.enable = true;
     };
 
     system = {
