@@ -12,7 +12,6 @@ in
     environment.systemPackages = [ pkgs.fprintd ];
     services.fprintd = {
       enable = true;
-      tod.enable = true;
     };
   };
 }
