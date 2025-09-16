@@ -10,7 +10,6 @@
     flatpaks.url = "github:in-a-dil-emma/declarative-flatpak/stable-v3";
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
     piped.url = "github:squalus/piped-flake";
-    clipper.url = "/home/me/source/clipper";
 
     home-manager = {
       url = "github:nix-community/home-manager/master";
@@ -39,7 +38,6 @@
       nixpkgs,
       sops-nix,
       piped,
-      clipper,
       declarative-jellyfin,
       nix-minecraft,
       ...
@@ -60,7 +58,6 @@
             nix-minecraft.nixosModules.minecraft-servers
             sops-nix.nixosModules.sops
             piped.nixosModules.default
-            clipper.nixosModules.default
             declarative-jellyfin.nixosModules.default
             path
             (dirOf path + "/hardware.nix")
