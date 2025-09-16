@@ -15,9 +15,17 @@ in
       networkmanager = {
         enable = true;
         dhcp = "internal";
+
+        # disable NetworkManager's internal DNS resolution
+        dns = "none";
       };
 
-      firewall.enable = true;
+      nameservers = [
+        "1.1.1.1"
+        "1.0.0.1"
+        "8.8.8.8"
+        "8.8.4.4"
+      ];
     };
 
     # ref: https://github.com/NixOS/nixpkgs/issues/180175

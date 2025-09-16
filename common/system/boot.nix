@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 with lib;
 let
   cfg = config.custom.system.boot;
@@ -10,6 +10,7 @@ in
 
   config = mkIf cfg.enable {
     boot = {
+      kernelPackages = pkgs.linuxPackages_latest;
       loader = {
         systemd-boot = {
           enable = true;

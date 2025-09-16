@@ -50,7 +50,6 @@ in
         security.enable = true;
         flatpak.enable = true;
         persistence.enable = true;
-        networking.enable = true;
 
         xdg = {
           enable = true;
