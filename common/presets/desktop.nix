@@ -24,7 +24,6 @@ in
         ptyxis.enable = true;
         vesktop.enable = true;
         vscode.enable = true;
-        #thunderbird.enable = true;
         spicetify.enable = true;
 
         # cli
@@ -34,7 +33,7 @@ in
       };
 
       services = {
-        #printing.enable = true;
+        printing.enable = true;
         #openssh.enable = true;
         #tailscale.enable = true;
       };
@@ -51,6 +50,7 @@ in
         security.enable = true;
         flatpak.enable = true;
         persistence.enable = true;
+        networking.enable = true;
 
         xdg = {
           enable = true;
