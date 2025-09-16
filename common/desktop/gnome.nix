@@ -48,7 +48,6 @@ in
 
         celluloid
         resources
-        valuta
         impression
         papers
         errands
@@ -74,7 +73,11 @@ in
 
     custom.system.home.extraOptions = {
       dconf.settings = let
-        bgPath = "file:///run/current-system/sw/share/backgrounds";
+        bgPath = "file:///run/current-system/sw/share/backgrounds/gnome";
+        bg = {
+          light = "${bgPath}/amber-l.jxl";
+          dark = "${bgPath}/amber-d.jxl";
+        };
       in {
         "org/gnome/shell" = {
           favorite-apps = [
@@ -85,7 +88,7 @@ in
           ];
           disable-user-extensions = false;
 
-          # `gnome-extensions list` for a list
+          # `gnome-extensions list`
           enabled-extensions = [
             "appindicatorsupport@rgcjonas.gmail.com"
             "blur-my-shell@aunetx"
@@ -95,12 +98,12 @@ in
           ];
         };
         "org/gnome/desktop/background" = {
-          picture-uri = "${bgPath}/gnome/amber-l.jxl";
-          picture-uri-dark = "${bgPath}/gnome/amber-d.jxl";
+          picture-uri = bg.light;
+          picture-uri-dark = bg.dark;
         };
         "org/gnome/desktop/screensaver" = {
-          picture-uri = "${bgPath}/gnome/amber-l.jxl";
-          picture-uri-dark = "${bgPath}/gnome/amber-d.jxl";
+          picture-uri = bg.light;
+          picture-uri-dark = bg.dark;
         };
         "org/gnome/shell/extensions/just-perfection" = {
           search = false;
@@ -116,8 +119,8 @@ in
           icon-saturation = 1.0;
         };
         "org/gnome/shell/extensions/clipboard-indicator" = {
-          history-size = 500;
-          cache-size = 25;
+          history-size = 250;
+          cache-size = 10;
         };
         "org/gnome/GWeather4" = {
           temperature-unit = "centigrade";
