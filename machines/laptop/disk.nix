@@ -10,6 +10,7 @@
             boot = {
               size = "512M";
               type = "EF00";
+              label = "boot";
               content = {
                 type = "filesystem";
                 format = "vfat";
@@ -28,6 +29,7 @@
                 content = {
                   type = "filesystem";
                   format = "ext4";
+                  extraArgs = "-L nix";
                 };
               };
             };
