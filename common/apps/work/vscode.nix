@@ -50,9 +50,9 @@ in
             "files.autoSave" = "afterDelay";
             "security.workspace.trust.enabled" = false;
             "window.autoDetectColorScheme" = true;
+            "chat.disableAIFeatures" = true;
           };
         };
-
       };
     };
   };
