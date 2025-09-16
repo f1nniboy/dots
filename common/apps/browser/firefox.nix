@@ -100,6 +100,10 @@ let
     "dom.security.https_only_mode" = true;
 
     "layout.spellcheckDefault" = 0; # 0 = disabled, 1 = multi-line, 2 = single and multi-line
+
+    # theme
+    "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+    "svg.context-properties.content.enabled" = true;
   };
 in
 {
