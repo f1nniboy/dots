@@ -1,14 +1,13 @@
 { config, lib, ... }:
 with lib;
 let
-  cfg = config.custom.user;
+  cfg = config.custom.system.user;
 in
 {
-  options.custom.user = {
+  options.custom.system.user = {
     name = mkOption { type = types.str; };
     fullName = mkOption { type = types.str; };
     email = mkOption { type = types.str; };
-    sshPublicKey = mkOption { type = types.str; };
   };
 
   config = {
@@ -18,7 +17,6 @@ in
       description = cfg.fullName;
       isNormalUser = true;
       extraGroups = [ "wheel" ];
-      openssh.authorizedKeys.keys = [ cfg.sshPublicKey ];
       hashedPasswordFile = config.sops.secrets."common/user/hashed-password".path;
     };
   };

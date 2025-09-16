@@ -17,8 +17,6 @@
   custom = {
     presets.desktop.enable = true;
 
-    inherit (vars) user;
-
     apps = {
       # games
       sober.enable = true;
@@ -73,10 +71,11 @@
     };
 
     system = {
+      inherit (vars) user ssh;
+      ld.enable = true;
       persistence = {
         userConfig.directories = [ "source" ".node-llama-cpp" ];
       };
-      ld.enable = true;
     };
   };
 }

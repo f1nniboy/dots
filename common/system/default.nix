@@ -14,6 +14,7 @@
     ./remote-unlock.nix
     ./security.nix
     ./sops.nix
+    ./ssh.nix
     ./user.nix
     ./xdg.nix
   ];
