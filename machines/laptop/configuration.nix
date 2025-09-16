@@ -25,10 +25,6 @@
       mullvad.enable = true;
     };
 
-    hardware = {
-      wheel.enable = true;
-    };
-
     system = {
       persistence = {
         userConfig.directories = [ "source" ];
