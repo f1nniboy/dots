@@ -35,9 +35,6 @@ in
         gnomeExtensions.clipboard-indicator
         gnomeExtensions.just-perfection
 
-        gnomeExtensions.tailscale-qs
-        gnomeExtensions.easyeffects-preset-selector
-
         nautilus
         decibels
         loupe
@@ -94,7 +91,6 @@ in
             "blur-my-shell@aunetx"
             "clipboard-indicator@tudmotu.com"
             "just-perfection-desktop@just-perfection"
-            "tailscale@joaophi.github.com"
           ];
         };
         "org/gnome/desktop/background" = {
