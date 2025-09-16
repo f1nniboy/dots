@@ -101,6 +101,14 @@ let
 
     "layout.spellcheckDefault" = 0; # 0 = disabled, 1 = multi-line, 2 = single and multi-line
 
+    # new tab
+    "browser.startup.page" = 0;
+    "browser.startup.homepage" = "about:blank";
+    "browser.newtabpage.enabled" = false;
+    "browser.newtabpage.activity-stream.showSponsored" = false;
+    "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
+    "browser.newtabpage.activity-stream.default.sites" = "";
+
     # theme
     "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
     "svg.context-properties.content.enabled" = true;
@@ -118,44 +126,31 @@ in
     custom.system.persistence.userConfig = {
       directories = [
         "${baseDir}/firefox/default/extensions/"
-        # Extension data is stored here, but also IndexedDB data for random websites
-        # See https://github.com/BryceBeagle/nixos-config/issues/151
+        # extension data is stored here, but also IndexedDB data for random websites
+        # see https://github.com/BryceBeagle/nixos-config/issues/151
         "${baseDir}/firefox/default/storage/default/"
       ];
       files = [
         "${baseDir}/firefox/default/cookies.sqlite"
         "${baseDir}/firefox/default/favicons.sqlite"
-        # Permissions and zoom levels for each site
+        # permissions and zoom levels for each site
         "${baseDir}/firefox/default/permissions.sqlite"
         "${baseDir}/firefox/default/content-prefs.sqlite"
-        # Browser history and bookmarks
+        # browser history and bookmarks
         "${baseDir}/firefox/default/places.sqlite"
-        # Contains extension GUIDs that need to match entries in
+        # contains extension GUIDs that need to match entries in
         # ${baseDir}/firefox/default/storage/default (persisted above)
         "${baseDir}/firefox/default/prefs.js"
-        # I guess this is useful?
+        # i guess this is useful?
         # https://bugzilla.mozilla.org/show_bug.cgi?id=1511384
         # https://developer.mozilla.org/en-US/docs/Web/API/Storage_API/Storage_quotas_and_eviction_criteria
         "${baseDir}/firefox/default/storage.sqlite"
-        # Extension configuration
-        #"${baseDir}/firefox/default/extension-settings.json"
       ];
     };
 
     programs.firefox = {
       enable = true;
       languagePacks = [ "en-US" ];
-
-      package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
-        extraPolicies = {
-          EnableTrackingProtection = {
-            Value = true;
-            Locked = true;
-            Cryptomining = true;
-            Fingerprinting = true;
-          };
-        };
-      };
 
       # about:policies#documentation
       policies = {
@@ -178,11 +173,11 @@ in
         NetworkPrediction = false;
         SearchSuggestEnabled = false;
 
-        # check about:support for extension/add-on ID strings.
+        # check about:support for extension/add-on ID strings
         # valid strings for installation_mode are:
         # - "allowed", "blocked", "force_installed", "normal_installed"
         ExtensionSettings = {
-          "*".installation_mode = "allowed"; # blocks all addons except the ones specified below
+          "*".installation_mode = "allowed";y
           # ublock origin
           #"uBlock0@raymondhill.net" = {
           #	install_url = "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi";
@@ -236,90 +231,7 @@ in
             userChrome = ''@import "firefox-gnome-theme/userChrome.css";'';
             userContent = ''@import "firefox-gnome-theme/userContent.css";'';
 
-            settings = mkMerge [
-              baseSettings
-              {
-                # layout
-                "browser.uiCustomization.state" = builtins.toJSON {
-                  currentVersion = 22;
-                  newElementCount = 2;
-                  dirtyAreaCache = [
-                    "nav-bar"
-                    "vertical-tabs"
-                    "PersonalToolbar"
-                    "unified-extensions-area"
-                    "toolbar-menubar"
-                    "TabsToolbar"
-                  ];
-                  placements = {
-                    PersonalToolbar = [ "personal-bookmarks" ];
-                    TabsToolbar = [
-                      "tabbrowser-tabs"
-                      "new-tab-button"
-                      "alltabs-button"
-                    ];
-                    nav-bar = [
-                      "back-button"
-                      "forward-button"
-                      "stop-reload-button"
-                      "urlbar-container"
-                      "downloads-button"
-                      "ublock0_raymondhill_net-browser-action"
-                      "reset-pbm-toolbar-button"
-                      "unified-extensions-button"
-                    ];
-                    toolbar-menubar = [ "menubar-items" ];
-                    unified-extensions-area = [
-                      "_446900e4-71c2-419f-a6a7-df9c091e268b_-browser-action"
-                      "_762f9885-5a13-4abd-9c77-433dcd38b8fd_-browser-action"
-                    ];
-                    vertical-tabs = [ ];
-                    widget-overflow-fixed-list = [ ];
-                  };
-                  seen = [
-                    "reset-pbm-toolbar-button"
-                    "developer-button"
-                    "jid1-mnnxcxisbpnsxq_jetpack-browser-action"
-                    "sponsorblocker_ajay_app-browser-action"
-                    "_762f9885-5a13-4abd-9c77-433dcd38b8fd_-browser-action"
-                    "ublock0_raymondhill_net-browser-action"
-                    "_446900e4-71c2-419f-a6a7-df9c091e268b_-browser-action"
-                  ];
-                };
-              }
-            ];
-          }
-        ];
-        profiles.i2p = mkMerge [
-          baseProfile
-          {
-            id = 1;
-            name = "i2p";
-            isDefault = false;
-
-            settings =
-              let
-                # ip of the i2p proxy
-                host = "100.100.10.10";
-              in
-              mkMerge [
-                baseSettings
-                {
-                  "network.proxy.type" = 1;
-                  "network.proxy.share_proxy_settings" = true;
-
-                  "network.proxy.http" = host;
-                  "network.proxy.ssl" = host;
-                  "network.proxy.socks" = host;
-
-                  "network.proxy.http_port" = 4444;
-                  "network.proxy.ssl_port" = 4444;
-                  "network.proxy.socks_port" = 4447;
-
-                  # i2p is already encrypted, no need for certs
-                  "dom.security.https_only_mode" = mkForce false;
-                }
-              ];
+            settings = baseSettings;
           }
         ];
       };

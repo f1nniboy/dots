@@ -23,10 +23,10 @@ in
       files = [
         "${baseDir}/firefox/${profileName}/cookies.sqlite"
         "${baseDir}/firefox/${profileName}/favicons.sqlite"
-        # Permissions and zoom levels for each site
+        # permissions and zoom levels for each site
         "${baseDir}/firefox/${profileName}/permissions.sqlite"
         "${baseDir}/firefox/${profileName}/content-prefs.sqlite"
-        # I guess this is useful?
+        # i guess this is useful?
         # https://bugzilla.mozilla.org/show_bug.cgi?id=1511384
         # https://developer.mozilla.org/en-US/docs/Web/API/Storage_API/Storage_quotas_and_eviction_criteria
         "${baseDir}/firefox/${profileName}/storage.sqlite"
@@ -46,7 +46,7 @@ in
             IsRelative=1
             Name=${profileName}
             Path=${profileName}
-            					'';
+          '';
         };
       };
     };
