@@ -17,8 +17,8 @@ log_error()   { echo -e "${RED}${BOLD}>>>${NC} $1" >&2; exit 1; }
 run_task() {
     local task_name="$1"
     shift
-    log_info "Starting: $task_name"
-    "$@" && log_success "Completed: $task_name" || log_error "Failed: $task_name"
+    log_info "${BOLD}Starting${NC}: $task_name"
+    "$@" && log_success "${BOLD}Completed${NC}: $task_name" || log_error "Failed: $task_name"
 }
 
 undo_changes() {

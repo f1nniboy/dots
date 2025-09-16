@@ -12,12 +12,11 @@
   boot = {
     initrd = {
       availableKernelModules = [
-        "nvme"
         "xhci_pci"
-        "ahci"
+        "thunderbolt"
+        "nvme"
         "usb_storage"
         "sd_mod"
-        "r8169"
       ];
       luks = {
         reusePassphrases = true;
@@ -54,5 +53,5 @@
 
   networking.useDHCP = lib.mkDefault true;
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }

@@ -1,11 +1,11 @@
 keys:
   - &desktop age1d7l44trdac37hfx7yrtw4zf7re3k39tzjeav70z9t9xv9ur5wsmshge2pw
+  - &laptop age1ltvx94ykjvp7m8rfs4la8fmp7w3le3tpxuaj3d6gqfu22v58790qat2chu
   - &lab age19f8l20tkls4v0uh3wuucj44pxpsj9l85vj4q2rx03rnag0cpy39swmtyhm
-  - &vps age1uc0cd80gkj3rar87845wl92ha98dpvjyrjqy92nq4w08rreekeuqdc37dx
 creation_rules:
   - path_regex: secrets/[^/]+(\.(yaml|json|env|ini|conf))?$
     key_groups:
       - age:
           - *desktop
+          - *laptop
           - *lab
-          - *vps
