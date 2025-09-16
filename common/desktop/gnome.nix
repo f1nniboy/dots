@@ -50,6 +50,8 @@ in
         resources
         valuta
         impression
+        papers
+        errands
 
         wl-clipboard
       ];

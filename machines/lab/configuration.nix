@@ -19,7 +19,7 @@
     };
 
     services = {
-      tailscale.enable = true;
+      #tailscale.enable = true;
       openssh.enable = true;
 
       restic = {

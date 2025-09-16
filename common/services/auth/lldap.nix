@@ -61,7 +61,7 @@ in
     custom.services = {
       caddy.hosts = {
         lldap = {
-          subdomain = "users";
+          subdomain = "ldap";
           target = ":${toString cfg.ports.http}";
         };
       };

@@ -2,7 +2,7 @@
 with lib;
 let
   cfg = config.custom.services.forgejo;
-  subdomain = "git";
+  subdomain = "code";
 in
 {
   options.custom.services.forgejo = {

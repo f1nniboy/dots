@@ -36,7 +36,7 @@ in
       services = {
         #printing.enable = true;
         #openssh.enable = true;
-        tailscale.enable = true;
+        #tailscale.enable = true;
       };
 
       system = {
