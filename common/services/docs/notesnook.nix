@@ -29,11 +29,6 @@ let
     "SSE_SERVER_PORT" = "7264";
     "TZ" = config.time.timeZone;
     "MONGODB_CONNECTION_STRING" = "mongodb://db:27017/?replSet=rs0";
-
-    # TODO: figure out how to pass these secrets as files
-    "MINIO_ROOT_PASSWORD" = "n2QkzrlneGwi2eIj19w9itoXA4zDNThDlsXM994";
-    "NOTESNOOK_API_SECRET" = "uMjStaTahmHHZENDKd5TCKISIBkPZtM9w5BOkyE";
-    "S3_ACCESS_KEY" = "n2QkzrlneGwi2eIj19w9itoXA4zDNThDlsXM994";
   };
 
   commonServiceConfig = {
@@ -145,6 +140,9 @@ in
           "--network-alias=api"
           "--network=notesnook"
         ];
+        environmentFiles = [
+          config.sops.templates.notesnook-secrets.path
+        ];
       };
       "notesnook-auth" = {
         image = "streetwriters/identity:latest";
@@ -163,6 +161,9 @@ in
           "--network-alias=auth"
           "--network=notesnook"
         ];
+        environmentFiles = [
+          config.sops.templates.notesnook-secrets.path
+        ];
       };
       "notesnook-mono" = {
         image = "streetwriters/monograph:latest";
@@ -180,6 +181,9 @@ in
           "--network-alias=mono"
           "--network=notesnook"
         ];
+        environmentFiles = [
+          config.sops.templates.notesnook-secrets.path
+        ];
       };
       "notesnook-sse" = {
         image = "streetwriters/sse:latest";
@@ -192,6 +196,9 @@ in
         extraOptions = [
           "--network-alias=sse"
           "--network=notesnook"
+        ];
+        environmentFiles = [
+          config.sops.templates.notesnook-secrets.path
         ];
       };
 
@@ -214,6 +221,9 @@ in
           "--network-alias=db"
           "--network=notesnook"
         ];
+        environmentFiles = [
+          config.sops.templates.notesnook-secrets.path
+        ];
       };
       "notesnook-s3" = {
         image = "minio/minio:latest";
@@ -234,6 +244,9 @@ in
         extraOptions = [
           "--network-alias=s3"
           "--network=notesnook"
+        ];
+        environmentFiles = [
+          config.sops.templates.notesnook-secrets.path
         ];
       };
 
@@ -325,6 +338,22 @@ in
       # root service
       targets."docker-compose-notesnook-root" = {
         wantedBy = [ "multi-user.target" ];
+      };
+    };
+
+    sops = {
+      templates.notesnook-secrets = {
+        content = ''
+          MINIO_ROOT_PASSWORD=${config.sops.placeholder."${config.networking.hostName}/notesnook/minio-password"}
+          NOTESNOOK_API_SECRET=${config.sops.placeholder."${config.networking.hostName}/notesnook/api-secret"}
+          S3_ACCESS_KEY=${config.sops.placeholder."${config.networking.hostName}/notesnook/s3-access-key"}
+        '';
+        owner = "notesnook";
+      };
+      secrets = {
+        "${config.networking.hostName}/notesnook/minio-password".owner = "notesnook";
+        "${config.networking.hostName}/notesnook/s3-access-key".owner = "notesnook";
+        "${config.networking.hostName}/notesnook/api-secret".owner = "notesnook";
       };
     };
 

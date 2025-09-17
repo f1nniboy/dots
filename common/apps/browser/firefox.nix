@@ -173,11 +173,22 @@ in
         NetworkPrediction = false;
         SearchSuggestEnabled = false;
 
+        # extension settings
+        "3rdparty" = {
+          Extensions = {
+            "{446900e4-71c2-419f-a6a7-df9c091e268b}" = {
+              environment = {
+                base = "https://vault.f1nn.space";
+              };
+            };
+          };
+        };
+
         # check about:support for extension/add-on ID strings
         # valid strings for installation_mode are:
         # - "allowed", "blocked", "force_installed", "normal_installed"
         ExtensionSettings = {
-          "*".installation_mode = "allowed";
+          "*".installation_mode = "blocked";
           # ublock origin
           #"uBlock0@raymondhill.net" = {
           #	install_url = "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi";
@@ -214,9 +225,9 @@ in
 
     custom.system.home.extraOptions = {
       home.file = {
-        "${baseDir}/firefox/default/chrome/firefox-gnome-theme" = {
-          source = inputs.firefox-gnome-theme;
-        };
+          "${baseDir}/firefox/default/chrome/firefox-gnome-theme" = {
+            source = inputs.firefox-gnome-theme;
+          };
       };
 
       programs.firefox = {

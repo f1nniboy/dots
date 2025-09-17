@@ -39,17 +39,17 @@ in
     };
 
     # make mullvad work simultaneously with tailscale
-    #networking.nftables = {
-    #  enable = true;
-    #  ruleset = ''
-    #    table inet mullvad_tailscale {
-    #      chain output {
-    #        type route hook output priority 0; policy accept;
-    #        ip daddr 100.64.0.0/10 ct mark set 0x00000f41 meta mark set 0x6d6f6c65;
-    #      }
-    #    }
-    #  '';
-    #};
+    networking.nftables = {
+      enable = true;
+      ruleset = ''
+        table inet mullvad_tailscale {
+          chain output {
+            type route hook output priority 0; policy accept;
+            ip daddr 100.64.0.0/10 ct mark set 0x00000f41 meta mark set 0x6d6f6c65;
+          }
+        }
+      '';
+    };
 
     custom.system.home = {
       configFile = {

@@ -35,6 +35,8 @@
       obs.enable = true;
       gimp.enable = true;
       easyeffects.enable = true;
+
+      bitwarden.enable = true;
     };
 
     services = {

@@ -35,6 +35,7 @@ in
         gnomeExtensions.clipboard-indicator
         gnomeExtensions.just-perfection
         gnomeExtensions.rounded-corners
+        gnomeExtensions.tailscale-qs
 
         nautilus
         decibels
@@ -93,6 +94,7 @@ in
             "clipboard-indicator@tudmotu.com"
             "just-perfection-desktop@just-perfection"
             "Rounded_Corners@lennart-k"
+            "tailscale@joaophi.github.com"
           ];
         };
         "org/gnome/desktop/background" = {

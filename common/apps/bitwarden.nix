@@ -16,14 +16,8 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.bitwarden-desktop ];
 
-    custom.system.home = {
-      configFile = {
-        "Bitwarden/data.json" = {
-          text = import ./config/bitwarden.nix {
-            inherit config;
-          };
-        };
-      };
+    custom.system.persistence.userConfig = {
+      directories = [ ".config/Bitwarden" ];
     };
   };
 }
