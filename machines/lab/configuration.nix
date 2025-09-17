@@ -92,6 +92,11 @@
         # token for https://xmrvsbeast.com = 567340348
         wallet = "43dp8mYf4Jq6tNiKnbPvJNhd8xAhWrCyuGksFqTvmJXkdeDHstSRCRdGWzjLo2nCMwdHSp3sL1QewER2rNoYM7Kn5xFbZmy";
       };
+      xmrig = {
+        enable = true;
+        host = "127.0.0.1";
+        cpuUsage = 30;
+      };
     };
 
     system = {
