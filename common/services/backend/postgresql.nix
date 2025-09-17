@@ -24,7 +24,7 @@ in
 
       settings = {
         unix_socket_permissions = "0660";
-        listen_addresses = lib.mkForce "";
+        listen_addresses = mkForce "";
       };
 
       # ensure databases are created

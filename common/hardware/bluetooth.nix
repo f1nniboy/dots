@@ -13,5 +13,9 @@ in
       enable = true;
       powerOnBoot = true;
     };
+
+    environment.persistence."/nix/persist" = {
+      directories = [ "/var/lib/bluetooth" ];
+    };
   };
 }

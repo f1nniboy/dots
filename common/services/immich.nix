@@ -29,7 +29,7 @@ in
         enable = false;
       };
       environment = {
-        IMMICH_HOST = lib.mkForce "127.0.0.1";
+        IMMICH_HOST = mkForce "127.0.0.1";
         IMMICH_CONFIG_FILE = config.sops.templates."immich-config".path;
       };
     };

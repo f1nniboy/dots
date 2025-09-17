@@ -23,7 +23,7 @@ in
 
     systemd.services.ollama = {
       serviceConfig = {
-        DynamicUser = lib.mkForce false;
+        DynamicUser = mkForce false;
         User = "ollama";
         Group = "ollama";
       };

@@ -32,7 +32,7 @@ in
           HOST = "127.0.0.1";
         };
         serviceConfig = {
-          DynamicUser = lib.mkForce false;
+          DynamicUser = mkForce false;
           User = "jellyseerr";
           Group = "media";
         };

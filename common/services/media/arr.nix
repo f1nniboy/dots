@@ -45,7 +45,7 @@ in
     systemd.services = {
       prowlarr = {
         serviceConfig = {
-          DynamicUser = lib.mkForce false;
+          DynamicUser = mkForce false;
           User = "prowlarr";
           Group = "media";
         };

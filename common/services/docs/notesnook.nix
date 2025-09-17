@@ -152,7 +152,7 @@ in
         environment = lib.mkMerge [
           env
           {
-            "MONGODB_CONNECTION_STRING" = lib.mkForce "mongodb://db:27017/identity?replSet=rs0";
+            "MONGODB_CONNECTION_STRING" = mkForce "mongodb://db:27017/identity?replSet=rs0";
             "MONGODB_DATABASE_NAME" = "identity";
           }
         ];

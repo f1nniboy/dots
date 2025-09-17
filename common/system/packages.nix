@@ -14,7 +14,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.defaultPackages = lib.mkForce [ ];
+    environment.defaultPackages = mkForce [ ];
 
     environment.systemPackages = with pkgs; [
       efibootmgr

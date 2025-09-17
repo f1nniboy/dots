@@ -48,7 +48,6 @@ in
         }
         "/var/log"
         "/var/lib/nixos"
-        "/etc/NetworkManager/system-connections"
       ];
       files = [
         "/etc/machine-id"

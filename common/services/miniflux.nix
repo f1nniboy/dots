@@ -56,7 +56,7 @@ in
       {
         requires = deps;
         after = deps;
-        serviceConfig.DynamicUser = lib.mkForce false;
+        serviceConfig.DynamicUser = mkForce false;
       };
 
     custom.services = {

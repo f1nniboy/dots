@@ -23,7 +23,7 @@ in
 
     systemd.services.open-webui = {
       serviceConfig = {
-        DynamicUser = lib.mkForce false;
+        DynamicUser = mkForce false;
         User = "open-webui";
         Group = "open-webui";
       };

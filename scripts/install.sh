@@ -66,7 +66,7 @@ main() {
 
     echo -e "\n${BOLD}Next steps:${NC}"
     echo -e "${BOLD}- Add the machine's public host key to SOPS configuration${NC}"
-    echo -e "${BOLD}- Install NixOS with: just deploy $device_name${NC}"
+    echo -e "${BOLD}- Install NixOS with: sudo nixos-install --no-root-passwd --root /mnt --flake ${PWD}#${device_name}${NC}"
 }
 
 main "$@"

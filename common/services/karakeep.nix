@@ -27,7 +27,7 @@ in
     systemd.services = {
       karakeep-browser = {
         serviceConfig = {
-          DynamicUser = lib.mkForce false;
+          DynamicUser = mkForce false;
           User = "karakeep";
           Group = "karakeep";
         };
