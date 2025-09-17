@@ -17,6 +17,12 @@
     presets.desktop.enable = true;
 
     apps = {
+      # games
+      luanti.enable = true;
+      prismlauncher.enable = true;
+      supertux.enable = true;
+
+      bitwarden.enable = true;
     };
 
     services = {

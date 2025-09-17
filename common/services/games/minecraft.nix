@@ -33,7 +33,7 @@ in
             max-players = 10;
             motd = "ok";
 
-            level-seed = "7557800777349911221";
+            level-seed = "4353181439174722661";
             spawn-protection = 0;
             enable-lan-visibility = false;
 

@@ -60,7 +60,7 @@ in
       serviceConfig = {
         User = "p2pool";
         Group = "p2pool";
-        ExecStart = "${pkgs.p2pool}/bin/p2pool --p2p 0.0.0.0:${toString cfg.ports.p2p} --mini --wallet ${cfg.wallet} --stratum 0.0.0.0:${toString cfg.ports.stratum} --no-upnp --data-dir /var/lib/p2pool";
+        ExecStart = "${pkgs.p2pool}/bin/p2pool --p2p 0.0.0.0:${toString cfg.ports.p2p} --mini --wallet ${cfg.wallet} --stratum 0.0.0.0:${toString cfg.ports.stratum} --no-upnp --no-randomx --light-mode --data-dir /var/lib/p2pool";
         Restart = "always";
       };
     };

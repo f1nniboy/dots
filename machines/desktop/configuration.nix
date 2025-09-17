@@ -23,6 +23,7 @@
       steam.enable = true;
       luanti.enable = true;
       prismlauncher.enable = true;
+      supertux.enable = true;
 
       adb.enable = true;
 

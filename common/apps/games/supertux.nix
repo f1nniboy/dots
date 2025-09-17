@@ -14,7 +14,7 @@ in
     ];
 
     custom.system.persistence.userConfig = {
-    #  directories = [ ".minetest" ];
+      directories = [ ".local/share/supertux2" ];
     };
   };
 }

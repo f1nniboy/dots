@@ -70,7 +70,7 @@
       multi-scrobbler.enable = true;
       #tidarr.enable = true;
 
-      #minecraft.enable = true;
+      minecraft.enable = true;
 
       open-webui.enable = true;
 
