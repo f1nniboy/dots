@@ -4,5 +4,6 @@
     ./prismlauncher.nix
     ./sober.nix
     ./steam.nix
+    ./supertux.nix
   ];
 }
