@@ -60,6 +60,7 @@ in
       hardware = {
         network.enable = true;
         audio.enable = true;
+        bluetooth.enable = true;
       };
     };
   };

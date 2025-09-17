@@ -19,6 +19,9 @@ in
         efi.canTouchEfiVariables = true;
         timeout = 10;
       };
+      tmp = {
+        cleanOnBoot = true;
+      };
     };
   };
 }

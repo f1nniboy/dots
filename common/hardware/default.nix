@@ -5,7 +5,7 @@
     ./audio.nix
     ./bluetooth.nix
     ./fingerprint.nix
-    ./networking.nix
+    ./network.nix
     ./wheel.nix
   ];
 }
