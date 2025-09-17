@@ -27,6 +27,11 @@
 
     services = {
       mullvad.enable = true;
+
+      xmrig = {
+        enable = true;
+        cpuUsage = 30;
+      };
     };
 
     system = {
