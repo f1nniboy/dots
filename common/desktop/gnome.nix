@@ -129,6 +129,7 @@ in
           color-scheme = "prefer-dark";
           accent-color = "purple";
           gtk-enable-primary-paste = false;
+          show-battery-percentage = true;
         };
         "org/gnome/desktop/peripherals/touchpad" = {
           disable-while-typing = false;
