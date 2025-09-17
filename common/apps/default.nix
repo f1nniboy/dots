@@ -6,6 +6,7 @@
     ./games
     ./work
 
+    ./bitwarden.nix
     ./easyeffects.nix
     ./obs.nix
     ./ptyxis.nix
