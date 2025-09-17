@@ -10,8 +10,13 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.fprintd ];
+
     services.fprintd = {
       enable = true;
+    };
+
+    environment.persistence."/nix/persist" = {
+      directories = [ "/var/lib/fprint" ];
     };
   };
 }

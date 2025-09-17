@@ -34,6 +34,7 @@ in
         gnomeExtensions.blur-my-shell
         gnomeExtensions.clipboard-indicator
         gnomeExtensions.just-perfection
+        gnomeExtensions.rounded-corners
 
         nautilus
         decibels
@@ -91,6 +92,7 @@ in
             "blur-my-shell@aunetx"
             "clipboard-indicator@tudmotu.com"
             "just-perfection-desktop@just-perfection"
+            "Rounded_Corners@lennart-k"
           ];
         };
         "org/gnome/desktop/background" = {
