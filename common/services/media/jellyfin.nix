@@ -75,11 +75,6 @@ in
           }
           baseLibrarySettings
         ];
-        #Musik = {
-        #  enabled = true;
-        #  contentType = "music";
-        #  pathInfos = [ "/fun/media/htpc/library/music" ];
-        #};
       };
 
       users = {
@@ -142,6 +137,8 @@ in
     sops.secrets = {
       "${config.networking.hostName}/jellyfin/server-id".owner = "jellyfin";
       "${config.networking.hostName}/jellyfin/users/Finn".owner = "jellyfin";
+
+      # api keys
       "jellyfin-${config.networking.hostName}/jellyfin/api-keys/jellyseerr" = {
         key = "${config.networking.hostName}/jellyfin/api-keys/jellyseerr";
         owner = "jellyfin";

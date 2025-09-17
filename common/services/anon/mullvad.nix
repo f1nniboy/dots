@@ -6,6 +6,9 @@ let
     name = "mullvad-vpn";
     package = pkgs.mullvad-vpn;
   };
+  mullvad-settings = pkgs.writeText "mullvad-settings" (
+    import ../config/mullvad.nix {}
+  );
 in
 {
   options.custom.services.mullvad = {
@@ -26,6 +29,12 @@ in
     systemd = {
       services."mullvad-daemon" = {
         environment.MULLVAD_SETTINGS_DIR = "/var/lib/mullvad-vpn";
+      };
+      tmpfiles.settings."10-mullvad-settings"."/var/lib/mullvad-vpn/settings.json"."C+" = {
+        user = "root";
+        group = "root";
+        mode = "0700";
+        argument = "${mullvad-settings}";
       };
     };
 
@@ -59,13 +68,6 @@ in
           };
         };
       };
-    };
-
-    tmpfiles.settings."10-mullvad-settings"."/var/lib/mullvad-vpn/settings.json"."C+" = {
-      user = "root";
-      group = "root";
-      mode = "0700";
-      argument = import ../config/mullvad.nix;
     };
 
     environment.persistence."/nix/persist" = {

@@ -126,10 +126,5 @@ in
         }
       ];
     };
-
-    systemd.tmpfiles.rules = [
-      "d /fun/media/docs							0700 paperless paperless - -"
-      "d /fun/media/shares/paperless	0700 paperless paperless - -"
-    ];
   };
 }

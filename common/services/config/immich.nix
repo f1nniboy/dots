@@ -6,8 +6,8 @@ builtins.toJSON {
   oauth = {
     enabled = true;
     buttonText = "Mit Authelia anmelden";
-    clientId = "${config.sops.placeholder."${config.networking.hostName}/oidc/immich/id"}";
-    clientSecret = "${config.sops.placeholder."${config.networking.hostName}/oidc/immich/secret"}";
+    clientId = config.sops.placeholder."${config.networking.hostName}/oidc/immich/id";
+    clientSecret = config.sops.placeholder."${config.networking.hostName}/oidc/immich/secret";
     issuerUrl = "https://auth.${config.custom.services.caddy.domain}";
     tokenEndpointAuthMethod = "client_secret_basic";
   };

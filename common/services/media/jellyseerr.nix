@@ -57,17 +57,25 @@ in
       ];
     };
 
+    systemd.tmpfiles.settings."10-jellyseerr-settings"."/var/lib/jellyseerr/config/settings.json"."C+" = {
+      argument = config.sops.templates.jellyseerr-config.path;
+      user = "jellyseerr";
+      group = "media";
+      mode = "0700";
+    };
+
     sops = {
       templates.jellyseerr-config = {
-        path = "/var/lib/jellyseerr/config/settings.json";
         content = import ../config/jellyseerr.nix {
           inherit config;
         };
-        owner = "jellyseerr";
-        mode = "0600";
       };
       secrets = {
         "${config.networking.hostName}/jellyseerr/api-key".owner = "jellyseerr";
+        "${config.networking.hostName}/jellyseerr/client-id".owner = "jellyseerr";
+        "${config.networking.hostName}/jellyseerr/vapid/public".owner = "jellyseerr";
+        "${config.networking.hostName}/jellyseerr/vapid/private".owner = "jellyseerr";
+
         "jellyseerr-${config.networking.hostName}/jellyfin/server-id" = {
           key = "${config.networking.hostName}/jellyfin/server-id";
           owner = "jellyseerr";
