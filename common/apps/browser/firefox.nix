@@ -33,6 +33,9 @@ let
     "trailhead.firstrun.didSeeAboutWelcome" = true;
     "browser.bookmarks.restore_default_bookmarks" = false;
     "browser.bookmarks.addedImportButton" = true;
+    "app.normandy.first_run" = false;
+    "browser.aboutwelcome.enabled" = false;
+    "datareporting.policy.dataSubmissionPolicyBypassNotification" = true;
 
     # clean up browser history & unwanted cookies on restart
     "privacy.sanitize.sanitizeOnShutdown" = true;
@@ -112,6 +115,12 @@ let
     # theme
     "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
     "svg.context-properties.content.enabled" = true;
+
+    # allow extensions to be auto-enabled
+    "extensions.autoDisableScopes" = 0;
+
+    # disable about:config warning
+    "browser.aboutConfig.showWarning" = false;
   };
 in
 {
