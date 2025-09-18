@@ -1,4 +1,3 @@
-{ ... }:
 builtins.toJSON {
   settings_version = 11;
   show_beta_releases = false;

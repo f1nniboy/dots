@@ -7,7 +7,7 @@ let
     package = pkgs.mullvad-vpn;
   };
   mullvad-settings = pkgs.writeText "mullvad-settings" (
-    import ../config/mullvad.nix {}
+    import ../config/mullvad.nix
   );
 in
 {
