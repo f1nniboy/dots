@@ -36,6 +36,7 @@ in
         gnomeExtensions.just-perfection
         gnomeExtensions.rounded-corners
         gnomeExtensions.tailscale-qs
+        gnomeExtensions.grand-theft-focus
 
         nautilus
         decibels
@@ -95,6 +96,7 @@ in
             "just-perfection-desktop@just-perfection"
             "Rounded_Corners@lennart-k"
             "tailscale@joaophi.github.com"
+            "grand-theft-focus@zalckos.github.com"
           ];
         };
         "org/gnome/desktop/background" = {
