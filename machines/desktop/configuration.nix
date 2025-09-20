@@ -62,8 +62,12 @@
       };
 
       xmrig = {
-        enable = true;
+        enable = false;
         cpuUsage = 50;
+      };
+
+      gow = {
+        enable = true;
       };
     };
 
