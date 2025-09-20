@@ -1,6 +1,7 @@
 [
   {
     title = "Steam";
+    icon = "https://games-on-whales.github.io/wildlife/apps/steam/assets/icon.png";
     image = "ghcr.io/games-on-whales/steam:edge";
     container = {
       HostConfig = {
@@ -12,5 +13,10 @@
         DeviceCgroupRules = [ "c 13:* rmw" "c 244:* rmw" ];
       };
     };
+    env = [
+      "PROTON_LOG=1"
+      "RUN_SWAY=true"
+      "GOW_REQUIRED_DEVICES=/dev/input/* /dev/dri/* /dev/nvidia*"
+    ];
   }
 ]
