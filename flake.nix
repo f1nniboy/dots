@@ -10,6 +10,7 @@
     flatpaks.url = "github:in-a-dil-emma/declarative-flatpak/stable-v3";
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
     piped.url = "github:squalus/piped-flake";
+    nix-std.url = "github:chessai/nix-std";
 
     home-manager = {
       url = "github:nix-community/home-manager/master";
@@ -40,6 +41,7 @@
       piped,
       declarative-jellyfin,
       nix-minecraft,
+      nix-std,
       ...
     }@inputs:
     let
@@ -59,6 +61,7 @@
             sops-nix.nixosModules.sops
             piped.nixosModules.default
             declarative-jellyfin.nixosModules.default
+            nix-std.lib
             path
             (dirOf path + "/hardware.nix")
           ];

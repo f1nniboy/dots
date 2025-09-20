@@ -66,8 +66,11 @@
         cpuUsage = 50;
       };
 
+      docker.enable = true;
+
       gow = {
         enable = true;
+        id = "a49c9a30-72b1-4757-bcf6-34104956356c";
       };
     };
 
