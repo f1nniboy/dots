@@ -2,6 +2,7 @@
 let
   apps = import ./apps.nix;
   clients = import ./clients.nix;
+  gstreamer = import ./gstreamer.nix;
 
   generateApp = service:
   ''
@@ -11,9 +12,9 @@ let
     title = "${service.title}"
 
     [apps.runner]
-    base_create_json = '''
+    base_create_json = ''''
       ${builtins.toJSON service.container}
-    '''
+    ''''
     devices = []
     env = ${builtins.toJSON service.env}
     image = '${service.image}'
@@ -27,7 +28,7 @@ let
   ''
     [[paired_clients]]
     app_state_folder = "${client.id}"
-    client_cert = '''${client.cert}'''
+    client_cert = ''''${client.cert}''''
   '';
 
   tomlServices = builtins.map generateApp apps;
@@ -41,4 +42,6 @@ uuid = '${config.custom.services.gow.id}'
 ${builtins.concatStringsSep "\n" tomlServices}
 
 ${builtins.concatStringsSep "\n" tomlClients}
+
+${gstreamer}
 ''

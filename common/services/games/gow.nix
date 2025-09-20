@@ -35,7 +35,29 @@ in
     };
 
     # containers
-
+    virtualisation.oci-containers.containers."wolf" = {
+      image = "ghcr.io/games-on-whales/wolf:stable";
+      volumes = [
+        "/dev/:/dev:rw"
+        "/var/lib/wolf/:/etc/wolf:rw"
+        "/run/udev:/run/udev:rw"
+        "/var/run/docker.sock:/var/run/docker.sock:rw"
+      ];
+      extraOptions = [
+        "--device=/dev/dri:/dev/dri:rwm"
+        "--device=/dev/uhid:/dev/uhid:rwm"
+        "--device=/dev/uinput:/dev/uinput:rwm"
+        "--network=host"
+      ];
+    };
+    systemd.services."docker-wolf" = {
+      partOf = [
+        "docker-compose-wolf-root.target"
+      ];
+      wantedBy = [
+        "docker-compose-wolf-root.target"
+      ];
+    };
 
     # root service
     systemd.targets."docker-compose-wolf-root" = {
