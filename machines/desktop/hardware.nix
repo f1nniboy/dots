@@ -26,6 +26,9 @@
             device = "/dev/nvme1n1p2";
             allowDiscards = true;
           };
+          "fun" = {
+            device = "/dev/nvme0n1";
+          };
         };
       };
     };
@@ -48,6 +51,10 @@
     };
     "/nix" = {
       device = "/dev/disk/by-label/nix";
+      fsType = "ext4";
+    };
+    "/fun" = {
+      device = "/dev/disk/by-label/fun";
       fsType = "ext4";
     };
   };

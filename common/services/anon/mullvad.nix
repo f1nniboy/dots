@@ -40,7 +40,8 @@ in
 
     # make mullvad work simultaneously with tailscale
     networking.nftables = {
-      enable = true;
+      # TODO: ENABLE AGAIN
+      enable = false;
       ruleset = ''
         table inet mullvad_tailscale {
           chain output {
