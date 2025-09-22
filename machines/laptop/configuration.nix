@@ -21,6 +21,7 @@
       luanti.enable = true;
       prismlauncher.enable = true;
       supertux.enable = true;
+      moonlight.enable = true;
 
       bitwarden.enable = true;
     };

@@ -8,6 +8,7 @@
 
     ./bitwarden.nix
     ./easyeffects.nix
+    ./moonlight.nix
     ./obs.nix
     ./openrgb.nix
     ./ptyxis.nix

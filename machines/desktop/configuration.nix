@@ -24,6 +24,7 @@
       luanti.enable = true;
       prismlauncher.enable = true;
       supertux.enable = true;
+      moonlight.enable = true;
 
       adb.enable = true;
 
