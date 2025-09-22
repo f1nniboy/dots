@@ -20,9 +20,6 @@ in
 {
   options.custom.services.gow = {
     enable = mkEnableOption "Games on Whales";
-    id = mkOption {
-      type = types.str;
-    };
   };
 
   config = mkIf cfg.enable {

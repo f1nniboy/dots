@@ -27,9 +27,9 @@ in
     "d ${baseDir}/library/movies							0770 nobody			media     - -"
     "d ${baseDir}/library/shows  							0770 nobody			media     - -"
     "d ${baseDir}/library/music  							0770 nobody			media     - -"
-    "d ${baseDir}/library/archive							0700 pinchflat	pinchflat - -"
+    "d ${baseDir}/library/archive							0770 pinchflat	pinchflat - -"
 
-    "d ${baseDir}/downloads/incomplete      	0700 nobody			media     - -"
+    "d ${baseDir}/downloads/incomplete      	0770 nobody			media     - -"
 
     "d ${baseDir}/downloads/complete/movies		0770 nobody			media     - -"
     "d ${baseDir}/downloads/complete/shows  	0770 nobody			media     - -"

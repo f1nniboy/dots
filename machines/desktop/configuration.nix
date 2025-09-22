@@ -38,6 +38,8 @@
       easyeffects.enable = true;
 
       bitwarden.enable = true;
+
+      openrgb.enable = true;
     };
 
     services = {
@@ -70,7 +72,6 @@
 
       gow = {
         enable = true;
-        id = "a49c9a30-72b1-4757-bcf6-34104956356c";
       };
     };
 
