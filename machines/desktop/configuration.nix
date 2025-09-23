@@ -65,8 +65,8 @@
       };
 
       xmrig = {
-        enable = false;
-        cpuUsage = 50;
+        enable = true;
+        cpuUsage = 40;
       };
 
       docker.enable = true;

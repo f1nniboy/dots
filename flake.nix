@@ -1,5 +1,5 @@
 {
-  description = "NixOS configurations for lab and desktop";
+  description = "NixOS configurations for my systems";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -12,7 +12,7 @@
     piped.url = "github:squalus/piped-flake";
 
     home-manager = {
-      url = "github:nix-community/home-manager/master";
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

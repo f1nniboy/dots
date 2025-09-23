@@ -70,8 +70,6 @@
       multi-scrobbler.enable = true;
       #tidarr.enable = true;
 
-      minecraft.enable = true;
-
       open-webui.enable = true;
 
       i2pd.enable = true;
@@ -81,15 +79,11 @@
       monero = {
         enable = true;
         whitelist = [
-          "100.127.231.5" # desktop
-          "100.125.233.13" # phone
-        ];
+          "100.100.20.20" # desktop
+       ];
       };
       p2pool = {
         enable = true;
-
-        # extra mining wallet
-        # token for https://xmrvsbeast.com = 567340348
         wallet = "43dp8mYf4Jq6tNiKnbPvJNhd8xAhWrCyuGksFqTvmJXkdeDHstSRCRdGWzjLo2nCMwdHSp3sL1QewER2rNoYM7Kn5xFbZmy";
       };
       xmrig = {

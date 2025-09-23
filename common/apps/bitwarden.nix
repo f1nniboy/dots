@@ -19,5 +19,7 @@ in
     custom.system.persistence.userConfig = {
       directories = [ ".config/Bitwarden" ];
     };
+
+    # TODO: configure declaratively (server domain)
   };
 }

@@ -46,7 +46,7 @@ in
         gnome-text-editor
         file-roller
 
-        celluloid
+        showtime
         resources
         impression
         papers

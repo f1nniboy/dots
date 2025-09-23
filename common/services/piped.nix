@@ -56,6 +56,8 @@ in
           API_URL = "https://api.${cfg.subdomain}.${config.custom.services.caddy.domain}";
           PROXY_PART = "https://proxy.${cfg.subdomain}.${config.custom.services.caddy.domain}";
           FRONTEND_URL = "https://${cfg.subdomain}.${config.custom.services.caddy.domain}";
+
+          # TODO: run separate postgres instance for piped, as it doesn't support unix sockets
           "hibernate.connection.url" = "jdbc:postgresql://127.0.0.1:5432/piped?user=piped";
         };
       };

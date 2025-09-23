@@ -21,6 +21,7 @@ in
       apps = {
         # gui
         firefox.enable = true;
+        epiphany.enable = true;
         ptyxis.enable = true;
         vesktop.enable = true;
         vscode.enable = true;
@@ -34,7 +35,6 @@ in
 
       services = {
         printing.enable = true;
-        #openssh.enable = true;
         tailscale.enable = true;
       };
 

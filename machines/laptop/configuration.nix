@@ -46,6 +46,9 @@
     };
 
     hardware = {
+      gpu = {
+        intel.enable = true;
+      };
       fingerprint.enable = true;
     };
   };

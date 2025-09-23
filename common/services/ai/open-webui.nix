@@ -34,6 +34,7 @@ in
       inherit (cfg) port;
       environment = {
         # TODO: "Failed to initialize the database connection: Postgres driver not installed!"
+        # i will just use the sqlite db for now
         #DATABASE_URL = "postgresql://open-webui:@/open-webui";
 
         # general
