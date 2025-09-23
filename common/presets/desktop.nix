@@ -25,6 +25,7 @@ in
         ptyxis.enable = true;
         vesktop.enable = true;
         vscode.enable = true;
+        notesnook.enable = true;
         spicetify.enable = true;
 
         # cli

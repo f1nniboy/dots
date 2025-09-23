@@ -21,7 +21,7 @@ in
         directories = [ ".config/Notesnook" ];
       };
       home = {
-        # disable the initial setup prompt
+        # TODO: figure out how to declaratively configure api urls
         configFile = {
           "Notesnook/config.json" = {
             text = builtins.toJSON {
