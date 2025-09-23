@@ -3,6 +3,7 @@
     ./browser
     ./cli
     ./crypto
+    ./docs
     ./games
     ./work
 
