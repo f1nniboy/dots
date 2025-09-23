@@ -57,7 +57,7 @@ in
       ];
     };
 
-    systemd.tmpfiles.settings."10-jellyseerr-settings"."/var/lib/jellyseerr/config/settings.json"."C+" = {
+    systemd.tmpfiles.settings."10-jellyseerr-settings"."/var/lib/jellyseerr/config/settings.json"."C" = {
       argument = config.sops.templates.jellyseerr-config.path;
       user = "jellyseerr";
       group = "media";

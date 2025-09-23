@@ -26,10 +26,6 @@
         repos = {
           borgbase = true;
         };
-        paths = [
-          "/fun/media/docs"
-          "/fun/media/gallery"
-        ];
       };
 
       caddy = {
@@ -87,7 +83,7 @@
         wallet = "43dp8mYf4Jq6tNiKnbPvJNhd8xAhWrCyuGksFqTvmJXkdeDHstSRCRdGWzjLo2nCMwdHSp3sL1QewER2rNoYM7Kn5xFbZmy";
       };
       xmrig = {
-        enable = true;
+        enable = false;
         host = "127.0.0.1";
         cpuUsage = 30;
       };

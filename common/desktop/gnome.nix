@@ -58,7 +58,6 @@ in
         gnome-color-manager
         gnome-tour
         gnome-user-docs
-        glib
         gnome-menus
       ];
     };

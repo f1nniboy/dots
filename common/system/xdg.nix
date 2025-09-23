@@ -16,19 +16,6 @@ in
       XDG_DATA_HOME = "$HOME/.local/share";
     };
 
-    environment.etc = {
-      "xdg/user-dirs.defaults".text = ''
-        				DESKTOP=desktop
-        				DOWNLOAD=downloads
-        				TEMPLATES=vorlagen
-        				PUBLICSHARE=freigabe
-        				DOCUMENTS=dokumente
-        				MUSIC=musik
-        				PICTURES=bilder
-        				VIDEOS=videos
-        			'';
-    };
-
     custom.system.persistence.userConfig = {
       directories = [
         ".cache"
@@ -43,13 +30,12 @@ in
         }
       ]
       ++ (lib.optionals cfg.persistUserDirs [
-        "desktop"
-        "downloads"
-        "vorlagen"
-        "dokumente"
-        "musik"
-        "bilder"
-        "videos"
+        "Desktop"
+        "Documents"
+        "Downloads"
+        "Music"
+        "Pictures"
+        "Videos"
       ]);
       files = [
         ".bash_history"

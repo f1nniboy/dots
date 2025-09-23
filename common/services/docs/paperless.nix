@@ -7,6 +7,7 @@
 with lib;
 let
   cfg = config.custom.services.paperless;
+  docsDir = "/fun/media/docs";
 in
 {
   options.custom.services.paperless = {
@@ -33,7 +34,7 @@ in
     services = {
       paperless = {
         enable = true;
-        mediaDir = "/fun/media/docs";
+        mediaDir = docsDir;
         consumptionDir = "/fun/media/shares/paperless";
         database.createLocally = false;
         passwordFile = config.sops.secrets."${config.networking.hostName}/paperless/admin-password".path;
@@ -70,8 +71,13 @@ in
       };
       restic.paths = [
         "/var/lib/paperless"
+        docsDir
       ];
     };
+
+    systemd.tmpfiles.rules = [
+      "d ${docsDir} 0700 paperless paperless - -"
+    ];
 
     systemd.services.paperless-web.serviceConfig.EnvironmentFile =
       config.sops.templates.paperless-secrets.path;

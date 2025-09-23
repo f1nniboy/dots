@@ -2,6 +2,7 @@
 with lib;
 let
   cfg = config.custom.services.immich;
+  mediaDir = "/fun/media/gallery";
 in
 {
   options.custom.services.immich = {
@@ -20,7 +21,7 @@ in
 
     services.immich = {
       enable = true;
-      mediaLocation = "/fun/media/gallery";
+      mediaLocation = mediaDir;
       database = {
         createDB = false;
       };
@@ -82,7 +83,11 @@ in
     };
 
     systemd.tmpfiles.rules = [
-      "d /fun/media/gallery 0700 immich immich - -"
+      "d ${mediaDir} 0700 immich immich - -"
+    ];
+
+    custom.services.restic.paths = [
+      mediaDir
     ];
   };
 }
