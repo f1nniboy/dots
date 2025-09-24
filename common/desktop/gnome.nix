@@ -19,7 +19,10 @@ in
         enable = true;
         excludePackages = [ pkgs.xterm ];
       };
-      displayManager.gdm.enable = true;
+      displayManager.gdm = {
+        enable = true;
+        autoSuspend = false;
+      };
       desktopManager.gnome.enable = true;
       gnome = {
         core-apps.enable = false;
@@ -106,23 +109,6 @@ in
           picture-uri = bg.light;
           picture-uri-dark = bg.dark;
         };
-        "org/gnome/shell/extensions/just-perfection" = {
-          search = false;
-          workspace-switcher-size = 10;
-          world-clock = false;
-          events-button = false;
-          show-apps-icon = false;
-
-          # disable donation popup
-          support-notifier-type = 0;
-        };
-        "org/gnome/shell/extensions/appindicator" = {
-          icon-saturation = 1.0;
-        };
-        "org/gnome/shell/extensions/clipboard-indicator" = {
-          history-size = 250;
-          cache-size = 10;
-        };
         "org/gnome/GWeather4" = {
           temperature-unit = "centigrade";
         };
@@ -178,6 +164,29 @@ in
         };
         "org/gnome/mutter" = {
           dynamic-workspaces = false;
+        };
+        "org/gnome/settings-daemon/plugins/power" = {
+          # don't suspend after inactivity
+          sleep-inactive-ac-type = "nothing";
+        };
+
+        # extensions
+        "org/gnome/shell/extensions/just-perfection" = {
+          search = false;
+          workspace-switcher-size = 10;
+          world-clock = false;
+          events-button = false;
+          show-apps-icon = false;
+
+          # disable donation popup
+          support-notifier-type = 0;
+        };
+        "org/gnome/shell/extensions/appindicator" = {
+          icon-saturation = 1.0;
+        };
+        "org/gnome/shell/extensions/clipboard-indicator" = {
+          history-size = 250;
+          cache-size = 10;
         };
       };
     };
