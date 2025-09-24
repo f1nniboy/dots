@@ -16,6 +16,10 @@ in
 
     virtualisation.oci-containers.backend = "docker";
 
+    custom.system.user.extraGroups = [
+      "docker"
+    ];
+
     environment.persistence."/nix/persist" = {
       directories = [ "/var/lib/docker" ];
     };

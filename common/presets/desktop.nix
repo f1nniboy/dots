@@ -23,6 +23,7 @@ in
         firefox.enable = true;
         epiphany.enable = true;
         ptyxis.enable = true;
+        halloy.enable = true;
         vesktop.enable = true;
         vscode.enable = true;
         spicetify.enable = true;

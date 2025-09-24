@@ -9,8 +9,12 @@ in
     fullName = mkOption { type = types.str; };
     email = mkOption { type = types.str; };
     sshPublicKey = mkOption {
-      type = lib.types.nullOr types.str;
+      type = types.nullOr types.str;
       default = null;
+    };
+    extraGroups = mkOption {
+      type = types.listOf types.str;
+      default = [];
     };
   };
 
@@ -20,7 +24,9 @@ in
     users.users.${cfg.name} = {
       description = cfg.fullName;
       isNormalUser = true;
-      extraGroups = [ "wheel" ];
+      extraGroups = cfg.extraGroups ++ [
+        "wheel"
+      ];
       hashedPasswordFile = config.sops.secrets."common/user/hashed-password".path;
       /*openssh.authorizedKeys.keys = lib.optionals (cfg.sshPublicKey != null) [
         cfg.sshPublicKey

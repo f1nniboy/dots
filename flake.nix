@@ -53,7 +53,29 @@
           specialArgs = { inherit inputs outputs vars; };
           modules = [
             {
-              nixpkgs.overlays = [ nix-minecraft.overlay ];
+              nixpkgs.overlays = [
+                nix-minecraft.overlay
+
+                # TODO: remove when halloy updates upstream
+                (self: super: {
+                  halloy = super.halloy.overrideAttrs (oldAttrs: rec {
+                    version = "2025.9";
+                    src = self.fetchFromGitHub {
+                      owner = "squidowl";
+                      repo = "halloy";
+                      tag = "2025.9";
+                      hash = "sha256-yjia9tNNaXCTQFe8xfUeBYVHhW214AaOeCLFjAG703E=";
+                    };
+                    cargoDeps = self.rustPlatform.fetchCargoVendor {
+                      inherit src;
+                      hash = "sha256-GmcRm6/dvY3stjV2ON8NVlVWZ5m0LXa9Kv0gqycbRoY=";
+                    };
+                    buildInputs = oldAttrs.buildInputs ++ [
+                      self.xorg.libxcb
+                    ];
+                  });
+                })
+              ];
             }
             nix-minecraft.nixosModules.minecraft-servers
             sops-nix.nixosModules.sops

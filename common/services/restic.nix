@@ -10,21 +10,21 @@ in
       default = {
         borgbase = true;
       };
-      type = lib.types.submodule {
+      type = types.submodule {
         options = {
           borgbase = mkEnableOption "BorgBase";
         };
       };
     };
     paths = mkOption {
-      type = lib.types.listOf lib.types.str;
+      type = types.listOf types.str;
     };
     exclude = mkOption {
-      type = lib.types.listOf lib.types.str;
+      type = types.listOf types.str;
       default = [ ];
     };
     frequency = mkOption {
-      type = lib.types.str;
+      type = types.str;
       description = "Frequency of backups, in systemd calendar time format";
       default = "daily";
     };

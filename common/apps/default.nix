@@ -1,6 +1,7 @@
 {
   imports = [
     ./browser
+    ./chat
     ./cli
     ./crypto
     ./docs
@@ -14,6 +15,5 @@
     ./openrgb.nix
     ./ptyxis.nix
     ./spicetify.nix
-    ./vesktop.nix
   ];
 }

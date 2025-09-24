@@ -1,4 +1,4 @@
-{ inputs, vars, ... }:
+{ config, inputs, vars, ... }:
 {
   imports = [
     inputs.impermanence.nixosModules.impermanence
@@ -31,6 +31,14 @@
       caddy = {
         enable = true;
         domain = "f1nn.space";
+      };
+      acme = {
+        enable = true;
+        domains = {
+          "irc.${config.custom.services.caddy.domain}" = {
+            group = "soju";
+          };
+        };
       };
 
       postgresql.enable = true;
@@ -71,6 +79,8 @@
       i2pd.enable = true;
 
       forgejo.enable = true;
+
+      soju.enable = true;
 
       monero = {
         enable = true;
