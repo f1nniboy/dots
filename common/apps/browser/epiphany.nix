@@ -22,6 +22,10 @@ in
 
    custom.system.home.extraOptions = {
       dconf.settings = {
+        "org/gnome/epiphany" = {
+          ask-for-default = false;
+        };
+
         "org/gnome/epiphany/web" = {
           # general
           homepage-url = "about:newtab";

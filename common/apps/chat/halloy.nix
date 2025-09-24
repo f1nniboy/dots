@@ -32,6 +32,14 @@ in
               password_file = config.sops.secrets."common/halloy/password".path;
             };
 
+            # security
+            ctcp = {
+              ping = false;
+              source = false;
+              time = false;
+              version = false;
+            };
+
             # ui
             font = {
               family = "Adwaita Mono";
