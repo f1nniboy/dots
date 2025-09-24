@@ -170,6 +170,11 @@ in
           sleep-inactive-ac-type = "nothing";
         };
 
+        "org/gnome/desktop/app-folders" = {
+          # remove all folders from overview
+          folder-children = [];
+        };
+
         # extensions
         "org/gnome/shell/extensions/just-perfection" = {
           search = false;
