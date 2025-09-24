@@ -12,6 +12,7 @@
   custom = {
     apps = {
       # cli
+      neovim.enable = true;
       yazi.enable = true;
       git.enable = true;
     };

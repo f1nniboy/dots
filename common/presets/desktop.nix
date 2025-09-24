@@ -32,6 +32,7 @@ in
 
         # cli
         #helix.enable = true;
+        neovim.enable = true;
         yazi.enable = true;
         git.enable = true;
       };

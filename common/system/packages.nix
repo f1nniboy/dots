@@ -21,7 +21,6 @@ in
       git
       bottom
       just
-      neovim
       statix
       fd
     ];
