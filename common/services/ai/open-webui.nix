@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 with lib;
 let
   cfg = config.custom.services.open-webui;
@@ -30,6 +30,13 @@ in
     };
 
     services.open-webui = {
+      # TODO: remove when https://github.com/NixOS/nixpkgs/pull/446013 fixed
+      package = pkgs.open-webui.overridePythonAttrs (oldAttrs: {
+        dependencies = oldAttrs.dependencies ++ [
+          pkgs.python3Packages.itsdangerous
+        ];
+      });
+
       enable = true;
       inherit (cfg) port;
       environment = {
