@@ -24,6 +24,8 @@
       moonlight.enable = true;
 
       bitwarden.enable = true;
+
+      openrgb.enable = true;
     };
 
     services = {
