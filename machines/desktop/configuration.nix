@@ -65,9 +65,11 @@
       };
 
       xmrig = {
-        enable = true;
+        enable = false;
         cpuUsage = 40;
       };
+
+      openssh.enable = true;
 
       docker.enable = true;
 
