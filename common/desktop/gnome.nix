@@ -71,9 +71,27 @@ in
         ".config/goa-1.0"
         ".config/evolution"
       ];
+
+      files = [
+        # settings -> displays
+        ".config/monitors.xml"
+      ];
     };
 
     custom.system.home.extraOptions = {
+      xdg.mimeApps = let
+        apps = {
+          image = "org.gnome.Loupe.desktop";
+        };
+      in {
+        enable = true;
+        defaultApplications = {
+          "image/png" = apps.image;
+          "image/jpeg" = apps.image;
+          "image/webp" = apps.image;
+        };
+      };
+
       dconf.settings = let
         bgPath = "file:///run/current-system/sw/share/backgrounds/gnome";
         bg = {

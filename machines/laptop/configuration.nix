@@ -24,10 +24,13 @@
       moonlight.enable = true;
 
       bitwarden.enable = true;
+
+      openrgb.enable = true;
     };
 
     services = {
       mullvad.enable = true;
+      docker.enable = true;
     };
 
     system = {
