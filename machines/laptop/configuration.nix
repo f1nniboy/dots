@@ -30,6 +30,7 @@
 
     services = {
       mullvad.enable = true;
+      docker.enable = true;
     };
 
     system = {

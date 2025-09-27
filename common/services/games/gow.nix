@@ -52,7 +52,7 @@ in
     # containers
     virtualisation.oci-containers.containers = {
       "wolf" = {
-        image = "ghcr.io/games-on-whales/wolf:stable";
+        image = "ghcr.io/games-on-whales/wolf:wolf-ui";
         environment = {
           "WOLF_SOCKET_PATH" = "/var/run/wolf/wolf.sock";
         };
