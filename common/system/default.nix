@@ -14,6 +14,7 @@
     ./security.nix
     ./sops.nix
     ./ssh.nix
+    ./swap.nix
     ./user.nix
     ./xdg.nix
   ];

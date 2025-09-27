@@ -54,11 +54,16 @@ in
       "wolf" = {
         image = "ghcr.io/games-on-whales/wolf:wolf-ui";
         environment = {
-          "WOLF_SOCKET_PATH" = "/var/run/wolf/wolf.sock";
+          WOLF_SOCKET_PATH = "/var/run/wolf/wolf.sock";
+          WOLF_HTTP_PORT = toString ports.http;
+          WOLF_HTTPS_PORT = toString ports.https;
+          WOLF_CONTROL_PORT = toString ports.control;
+          WOLF_RTSP_SETUP_PORT = toString ports.rtsp;
+          WOLF_VIDEO_PING_PORT = toString ports.video;
+          WOLF_AUDIO_PING_PORT = toString ports.audio;
         };
         volumes = [
           "${paths.backend}:/etc/wolf:rw"
-          "/var/run/wolf:/var/run/wolf:rw"
           "/dev:/dev:rw"
           "/run/udev:/run/udev:rw"
           "/var/run/docker.sock:/var/run/docker.sock:rw"
@@ -76,11 +81,12 @@ in
           "${toString ports.manager}:3000"
         ];
         environment = {
-          "NODE_ENV" = "production";
-          "NEXTAUTH_URL" = "http://localhost:${toString ports.manager}";
+          NODE_ENV = "production";
+          NEXTAUTH_URL = "http://localhost:${toString ports.manager}";
         };
         volumes = [
-          "/var/run/wolf:/var/run/wolf"
+          # TODO: why is the socket in the cfg dir?
+          "${paths.backend}/cfg/wolf.sock:/var/run/wolf/wolf.sock"
           "/var/run/docker.sock:/var/run/docker.sock:rw"
           "${paths.manager}:/app/config"
         ];

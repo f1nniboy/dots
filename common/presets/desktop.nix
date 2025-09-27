@@ -54,6 +54,7 @@ in
         security.enable = true;
         flatpak.enable = true;
         persistence.enable = true;
+        swap.enable = true;
 
         xdg = {
           enable = true;
