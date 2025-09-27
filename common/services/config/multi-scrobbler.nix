@@ -3,6 +3,7 @@ builtins.toJSON {
   sources = [
     {
       name = "Jellyfin";
+      type = "jellyfin";
       enable = true;
       data = {
         url = "https://${config.custom.services.caddy.hosts.jellyfin.subdomain}.${config.custom.services.caddy.domain}:443";
@@ -12,6 +13,7 @@ builtins.toJSON {
     }
     {
       name = "Spotify";
+      type = "spotify";
       enable = true;
       data = {
         clientId = config.sops.placeholder."${config.networking.hostName}/multi-scrobbler/sources/spotify/client-id";
