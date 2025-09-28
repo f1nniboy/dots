@@ -52,7 +52,7 @@ in
           subdomain = "xmr";
           target = ":${toString config.services.monero.rpc.port}";
 
-          # only permit usage of monero node on desktop & phone
+          # only permit usage of monero node on specific devices
           extra = ''
             @blocked not remote_ip ${concatStringsSep " " cfg.whitelist}
             respond @blocked 403
