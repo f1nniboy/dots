@@ -2,6 +2,8 @@
 let
   mkSecret = path:
     config.sops.placeholder."${config.networking.hostName}/sabnzbd/${path}";
+
+  serverHost = mkSecret "server/host";
 in
 ''
 __version__ = 19
@@ -336,10 +338,10 @@ nscript_prio_queue_done = 0
 nscript_prio_other = 1
 
 [servers]
-[[news.eweka.nl]]
-name = news.eweka.nl
-displayname = news.eweka.nl
-host = news.eweka.nl
+[[${serverHost}]]
+name = ${serverHost}
+displayname = ${serverHost}
+host = ${serverHost}
 port = 563
 timeout = 60
 username = ${mkSecret "server/username"}

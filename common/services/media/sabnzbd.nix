@@ -46,9 +46,9 @@ in
       secrets = {
         "${config.networking.hostName}/sabnzbd/api-key".owner = "sabnzbd";
         "${config.networking.hostName}/sabnzbd/nzb-key".owner = "sabnzbd";
+        "${config.networking.hostName}/sabnzbd/server/host".owner = "sabnzbd";
         "${config.networking.hostName}/sabnzbd/server/username".owner = "sabnzbd";
         "${config.networking.hostName}/sabnzbd/server/password".owner = "sabnzbd";
-
       };
     };
 
