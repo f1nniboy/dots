@@ -25,6 +25,7 @@
       prismlauncher.enable = true;
       supertux.enable = true;
       moonlight.enable = true;
+      beammp-launcher.enable = true;
 
       adb.enable = true;
 
