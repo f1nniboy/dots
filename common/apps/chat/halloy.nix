@@ -28,8 +28,9 @@ in
               port = 6697;
             };
             servers.f1.sasl.plain = {
+              # TODO: use username specified in sops secrets
               username = "finn";
-              password_file = config.sops.secrets."common/halloy/password".path;
+              password_file = config.sops.secrets."halloy-common/soju/user/password".path;
             };
 
             # security
@@ -61,7 +62,14 @@ in
 
     sops = {
       secrets = {
-        "common/halloy/password".owner = config.custom.system.user.name;
+        "halloy-common/soju/user/username" = {
+          key = "common/soju/user/username";
+          owner = config.custom.system.user.name;
+        };
+        "halloy-common/soju/user/password" = {
+          key = "common/soju/user/password";
+          owner = config.custom.system.user.name;
+        };
       };
     };
   };
