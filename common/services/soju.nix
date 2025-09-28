@@ -2,6 +2,7 @@
 with lib;
 let
   cfg = config.custom.services.soju;
+  domain = "irc.${config.custom.services.caddy.domain}";
 in
 {
   options.custom.services.soju = {
@@ -19,12 +20,12 @@ in
 
     services.soju = {
       enable = true;
-      hostName = "irc.f1nn.space";
+      hostName = domain;
       listen = [
         "ircs://:6697"
       ];
-      tlsCertificate = "/var/lib/acme/irc.f1nn.space/fullchain.pem";
-      tlsCertificateKey = "/var/lib/acme/irc.f1nn.space/key.pem";
+      tlsCertificate = "/var/lib/acme/${domain}/fullchain.pem";
+      tlsCertificateKey = "/var/lib/acme/${domain}/key.pem";
     };
 
     systemd.services.soju = {

@@ -76,7 +76,7 @@ in
     };
 
     systemd.tmpfiles.rules = [
-      "d ${docsDir} 0700 paperless paperless - -"
+    #  "d ${docsDir} 0700 paperless paperless - -"
     ];
 
     systemd.services.paperless-web.serviceConfig.EnvironmentFile =
