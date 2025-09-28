@@ -42,7 +42,7 @@ in
         wantedBy = [ "multi-user.target" ];
         script = let
           sojuctl = "${pkgs.soju}/bin/sojuctl -config ${config.services.soju.configFile}";
-          userctl = "${pkgs.soju}/bin/sojuctl -config ${config.services.soju.configFile} user run ${username}";
+          userctl = "${sojuctl} user run ${username}";
 
           username = "\"$(cat ${config.sops.secrets."common/soju/user/username".path})\"";
           password = "\"$(cat ${config.sops.secrets."common/soju/user/password".path})\"";
