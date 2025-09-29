@@ -93,23 +93,11 @@ in
       };
     };
 
-    networking.firewall = {
-      allowedTCPPorts = [
-        ports.https
-        ports.http
-        ports.rtsp
-        ports.control
-        ports.video
-        ports.audio
-      ];
-      allowedUDPPorts = [
-        ports.https
-        ports.http
-        ports.rtsp
-        ports.control
-        ports.video
-        ports.audio
-      ];
+    networking.firewall = let
+      p = builtins.attrValues ports;
+    in {
+      allowedTCPPorts = p;
+      allowedUDPPorts = p;
     };
 
     environment.persistence."/nix/persist" = {
@@ -122,6 +110,7 @@ in
     };
 
     systemd.tmpfiles.rules = [
+      # TODO: run wolf as separate user?
       "d /fun/games 0770 me users - -"
     ];
   };

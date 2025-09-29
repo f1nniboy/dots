@@ -1,7 +1,18 @@
+{ config, lib, ... }:
+with lib;
 let
-  baseDir = "/fun/media/htpc";
+  cfg = config.custom.media;
 in
 {
+  options.custom.media = {
+    enable = mkEnableOption "FileFlows media post-processing";
+
+    baseDir = mkOption {
+      type = types.str;
+      default = "/fun/media/htpc";
+    };
+  };
+
   imports = [
     ./arr.nix
     ./fileflows.nix
@@ -11,30 +22,19 @@ in
     ./sabnzbd.nix
   ];
 
-  users = {
-    users.media = {
-      group = "media";
-      isSystemUser = true;
+  config = mkIf cfg.enable {
+    users = {
+      users.media = {
+        group = "media";
+        isSystemUser = true;
+      };
+      groups.media = {
+        gid = 981;
+      };
     };
-    groups.media = {
-      gid = 981;
-    };
+
+    systemd.tmpfiles.rules = [
+      "d ${cfg.baseDir} 0770 nobody media - -"
+    ];
   };
-
-  systemd.tmpfiles.rules = [
-    "d ${baseDir}                           	0770 nobody			media     - -"
-
-    "d ${baseDir}/library/movies							0770 nobody			media     - -"
-    "d ${baseDir}/library/shows  							0770 nobody			media     - -"
-    "d ${baseDir}/library/music  							0770 nobody			media     - -"
-    "d ${baseDir}/library/archive							0770 pinchflat	pinchflat - -"
-
-    "d ${baseDir}/downloads/incomplete      	0770 nobody			media     - -"
-
-    "d ${baseDir}/downloads/complete/movies		0770 nobody			media     - -"
-    "d ${baseDir}/downloads/complete/shows  	0770 nobody			media     - -"
-
-    "d ${baseDir}/downloads/converted/movies	0770 fileflows	media     - -"
-    "d ${baseDir}/downloads/converted/shows  	0770 fileflows	media     - -"
-  ];
 }

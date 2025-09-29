@@ -32,9 +32,9 @@ in
         "TZ" = config.time.timeZone;
       };
       volumes = [
-        "/fun/media/htpc:/media:rw"
+        "${config.custom.media.baseDir}:/media:rw"
         "/var/lib/fileflows:/app/Data:rw"
-        "/fun/media/htpc/tmp:/temp:rw"
+        "${config.custom.media.baseDir}/tmp:/temp:rw"
       ];
       extraOptions = [
         "--device=/dev/dri:/dev/dri:rwm"
@@ -62,6 +62,11 @@ in
 
     custom.services.restic.paths = [
       "/var/lib/fileflows"
+    ];
+
+    systemd.tmpfiles.rules = [
+      "d ${config.custom.media.baseDir}/downloads/converted/movies 0770 fileflows media - -"
+      "d ${config.custom.media.baseDir}/downloads/converted/shows  0770 fileflows media - -"
     ];
   };
 }

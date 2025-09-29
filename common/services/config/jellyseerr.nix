@@ -51,7 +51,7 @@ builtins.toJSON {
       useSsl = false;
       activeProfileId = 11;
       activeProfileName = "HD";
-      activeDirectory = "/fun/media/htpc/library/movies";
+      activeDirectory = "${config.custom.media.baseDir}/library/movies";
       is4k = false;
       minimumAvailability = "released";
       tags = [];
@@ -72,7 +72,7 @@ builtins.toJSON {
       useSsl = false;
       activeProfileId = 11;
       activeProfileName = "HD";
-      activeDirectory = "/fun/media/htpc/library/shows";
+      activeDirectory = "${config.custom.media.baseDir}/library/shows";
       tags = [];
       animeTags = [];
       is4k = false;

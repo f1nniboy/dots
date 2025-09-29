@@ -29,18 +29,24 @@ in
   };
 
   config = mkIf cfg.enable {
-    custom.system.home.extraOptions = {
-      home = {
-        enableNixpkgsReleaseCheck = false;
+    custom.system.home = {
+      configFile = {
+        # ref: https://github.com/nix-community/home-manager/issues/1213
+        "mimeapps.list".force = true;
+      };
+      extraOptions = {
+        home = {
+          enableNixpkgsReleaseCheck = false;
 
-        inherit (config.system) stateVersion;
-        inherit (cfg) file;
+          inherit (config.system) stateVersion;
+          inherit (cfg) file;
+        };
+        xdg = {
+          enable = true;
+          inherit (cfg) configFile;
+        };
+        systemd.user.startServices = "sd-switch";
       };
-      xdg = {
-        enable = true;
-        inherit (cfg) configFile;
-      };
-      systemd.user.startServices = "sd-switch";
     };
 
     home-manager = {

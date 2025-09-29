@@ -30,9 +30,9 @@ in
         ];
         volumes = [
           "/var/lib/tidarr:/home/app/standalone/shared"
-          "/fun/media/htpc/downloads/tidal/incomplete:/home/app/standalone/download/incomplete"
-          "/fun/media/htpc/library/music:/home/app/standalone/download/albums"
-          "/fun/media/htpc/library/music:/home/app/standalone/download/tracks"
+          "${config.custom.media.baseDir}/downloads/tidal/incomplete:/home/app/standalone/download/incomplete"
+          "${config.custom.media.baseDir}/library/music:/home/app/standalone/download/albums"
+          "${config.custom.media.baseDir}/library/music:/home/app/standalone/download/tracks"
         ];
         environment = {
           "PUID" = toString config.users.users.tidarr.uid;

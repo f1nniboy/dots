@@ -44,6 +44,8 @@
       openrgb.enable = true;
     };
 
+    media.enable = true;
+
     services = {
       mullvad.enable = true;
 
@@ -71,11 +73,21 @@
       };
 
       openssh.enable = true;
-
       docker.enable = true;
-
       gow = {
         enable = true;
+      };
+      
+      sabnzbd = {
+        enable = true;
+        dirs = {
+          complete = "/fun/media/usenet/complete";
+          incomplete = "/fun/media/usenet/incomplete";
+        };
+        categories = [
+          { name = null;    script = "None";    dir = "";      }
+          { name = "games"; script = "Default"; dir = "games"; }
+        ];
       };
     };
 

@@ -69,7 +69,7 @@ in
           {
             enabled = true;
             contentType = "movies";
-            pathInfos = [ "/fun/media/htpc/library/movies" ];
+            pathInfos = [ "${config.custom.media.baseDir}/library/movies" ];
           }
           baseLibrarySettings
         ];
@@ -77,7 +77,7 @@ in
           {
             enabled = true;
             contentType = "tvshows";
-            pathInfos = [ "/fun/media/htpc/library/shows" ];
+            pathInfos = [ "${config.custom.media.baseDir}/library/shows" ];
           }
           baseLibrarySettings
         ];
@@ -106,7 +106,7 @@ in
     services.samba = {
       settings = {
         "library" = {
-          "path" = "/fun/media/htpc/library";
+          "path" = "${config.custom.media.baseDir}/library";
           "browseable" = "yes";
           "read only" = "no";
           "guest ok" = "no";
@@ -161,5 +161,10 @@ in
         "/var/lib/jellyfin/metadata"
       ];
     };
+
+    systemd.tmpfiles.rules = [
+      "d ${config.custom.media.baseDir}/library/movies 0770 nobody media - -"
+      "d ${config.custom.media.baseDir}/library/shows  0770 nobody media - -"
+    ];
   };
 }

@@ -1,7 +1,28 @@
 { cfg, config, ... }:
 let
   mkSecret = path:
-    config.sops.placeholder."${config.networking.hostName}/sabnzbd/${path}";
+    config.sops.placeholder."common/sabnzbd/${path}";
+
+  mkCategories = categories:
+    builtins.concatStringsSep "\n" (
+      builtins.genList
+        (index:
+          let
+            cat     = builtins.elemAt categories index;
+            cName   = if cat.name == null then "*" else cat.name;
+          in ''
+            [[${cName}]]
+            name = ${cName}
+            order = ${toString index}
+            script = ${cat.script}
+            dir = ${cat.dir}
+            pp = 3
+            newzbin = ""
+            priority = 0
+          ''
+        )
+        (builtins.length categories)
+    );
 
   serverHost = mkSecret "server/host";
 in
@@ -45,9 +66,9 @@ api_key = ${mkSecret "api-key"}
 nzb_key = ${mkSecret "nzb-key"}
 socks5_proxy_url = ""
 permissions = 770
-download_dir = /fun/media/htpc/downloads/incomplete
+download_dir = ${cfg.dirs.incomplete}
 download_free = ""
-complete_dir = /fun/media/htpc/downloads/complete
+complete_dir = ${cfg.dirs.complete}
 complete_free = ""
 fulldisk_autoresume = 0
 script_dir = ""
@@ -161,7 +182,12 @@ max_foldername_length = 246
 nomedia_marker = ""
 ipv6_servers = 1
 url_base = ""
-host_whitelist = ${config.custom.services.caddy.hosts.sabnzbd.subdomain}.${config.custom.services.caddy.domain},
+host_whitelist = ${
+  if config.custom.services.caddy.enable or false then
+    "${config.custom.services.caddy.hosts.sabnzbd.subdomain}.${config.custom.services.caddy.domain}"
+  else
+    "127.0.0.1"
+},
 local_ranges = ,
 max_url_retries = 10
 downloader_sleep_time = 10
@@ -361,28 +387,5 @@ priority = 0
 notes = ""
 
 [categories]
-[[*]]
-name = *
-order = 0
-pp = 3
-script = None
-dir = ""
-newzbin = ""
-priority = 0
-[[movies]]
-name = movies
-order = 1
-pp = ""
-script = Default
-dir = movies
-newzbin = ""
-priority = -100
-[[tv]]
-name = tv
-order = 2
-pp = ""
-script = Default
-dir = shows
-newzbin = ""
-priority = -100
+${mkCategories cfg.categories}
 ''

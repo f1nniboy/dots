@@ -24,7 +24,7 @@ in
     services.pinchflat = {
       enable = true;
       selfhosted = true;
-      mediaDir = "/fun/media/htpc/library/archive";
+      mediaDir = "${config.custom.media.baseDir}/library/archive";
     };
 
     custom.services.caddy.hosts = {
@@ -48,6 +48,10 @@ in
 
     custom.services.restic.paths = [
       "/var/lib/pinchflat"
+    ];
+
+    systemd.tmpfiles.rules = [
+      "d ${config.custom.media.baseDir}/library/archive 0770 pinchflat media - -"
     ];
   };
 }

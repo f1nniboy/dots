@@ -17,6 +17,9 @@
       git.enable = true;
     };
 
+    # for jellyfin, *arr, etc.
+    media.enable = true;
+
     services = {
       tailscale.enable = true;
       openssh.enable = true;

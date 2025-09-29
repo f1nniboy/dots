@@ -22,15 +22,15 @@ in
           enable = true;
           settings = {
             # servers
-            servers.f1 = {
+            servers.bouncer = {
               nickname = "f1nn";
               server = "irc.f1nn.space";
               port = 6697;
-            };
-            servers.f1.sasl.plain = {
-              # TODO: use username specified in sops secrets
-              username = "finn";
-              password_file = config.sops.secrets."halloy-common/soju/user/password".path;
+              sasl.plain = {
+                # TODO: use username specified in sops secrets (halloy doesnt have an option to read username from file)
+                username = "finn";
+                password_file = config.sops.secrets."halloy-common/soju/user/password".path;
+              };
             };
 
             # security
