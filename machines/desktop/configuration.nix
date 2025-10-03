@@ -49,22 +49,24 @@
     services = {
       mullvad.enable = true;
 
-      restic = {
+      restic = let
+        homeDir = config.users.users."${config.custom.system.user.name}".home;
+      in
+      {
         enable = true;
         frequency = "daily";
         repos = {
           borgbase = true;
         };
-        paths =
-          let
-            homeDir = config.users.users."${config.custom.system.user.name}".home;
-          in
-          [
-            "${homeDir}/source"
-            "${homeDir}/bilder"
-            "${homeDir}/dokumente"
-            "${homeDir}/.local/share/Haveno-reto"
-          ];
+        paths = [
+          "${homeDir}/source"
+          "${homeDir}/bilder"
+          "${homeDir}/dokumente"
+          "${homeDir}/.local/share/Haveno-reto"
+        ];
+        exclude = [
+          "**/node_modules"
+        ];
       };
 
       xmrig = {

@@ -69,10 +69,16 @@ in
           target = ":${toString config.services.paperless.port}";
         };
       };
-      restic.paths = [
-        "/var/lib/paperless"
-        docsDir
-      ];
+      restic = {
+        paths = [
+          "/var/lib/paperless"
+          docsDir
+        ];
+        exclude = [
+          "/fun/media/docs/documents/thumbnails"
+          "/var/lib/paperless/log"
+        ];
+      };
     };
 
     systemd.services.paperless-web.serviceConfig.EnvironmentFile =

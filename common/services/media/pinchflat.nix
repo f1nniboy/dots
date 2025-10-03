@@ -46,9 +46,15 @@ in
       ];
     };
 
-    custom.services.restic.paths = [
-      "/var/lib/pinchflat"
-    ];
+    custom.services.restic = {
+      paths = [
+        "/var/lib/pinchflat"
+      ];
+      exclude = [
+        "/var/lib/pinchflat/logs"
+        "/var/lib/pinchflat/tmp"
+      ];
+    };
 
     systemd.tmpfiles.rules = [
       "d ${config.custom.media.baseDir}/library/archive 0770 pinchflat media - -"

@@ -86,8 +86,15 @@ in
       "d ${mediaDir} 0700 immich immich - -"
     ];
 
-    custom.services.restic.paths = [
-      mediaDir
-    ];
+    custom.services.restic = {
+      paths = [
+        mediaDir
+      ];
+      exclude = [
+        "/fun/media/gallery/backups" # we're already backing up the db
+        "/fun/media/gallery/thumbs"  # can be re-generated afterwards
+        "/fun/media/gallery/upload"  # only used for uploads
+      ];
+    };
   };
 }

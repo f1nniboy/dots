@@ -134,10 +134,25 @@ in
       ];
     };
 
-    custom.services.restic.paths = [
-      "/var/lib/prowlarr"
-      "/var/lib/radarr"
-      "/var/lib/sonarr"
-    ];
+    custom.services.restic = {
+      paths = [
+        "/var/lib/prowlarr"
+        "/var/lib/radarr"
+        "/var/lib/sonarr"
+      ];
+      exclude = [
+        "/var/lib/prowlarr/Definitions"
+        "/var/lib/prowlarr/Backups"
+        "/var/lib/prowlarr/logs"
+
+        "/var/lib/sonarr/.config/NzbDrone/MediaCover"
+        "/var/lib/sonarr/.config/NzbDrone/Backups"
+        "/var/lib/sonarr/.config/NzbDrone/logs"
+
+        "/var/lib/radarr/.config/Radarr/MediaCover"
+        "/var/lib/radarr/.config/Radarr/Backups"
+        "/var/lib/radarr/.config/Radarr/logs"
+      ];
+    };
   };
 }
