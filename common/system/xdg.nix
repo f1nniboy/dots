@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.system.xdg = {
-    enable = mkEnableOption "XDG base directory compliance";
+    enable = mkEnableOption "XDG base directories";
     persistUserDirs = mkEnableOption "Persist user XDG directories, e.g. documents";
   };
 

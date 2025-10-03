@@ -17,8 +17,8 @@ in
     environment.defaultPackages = mkForce [ ];
 
     environment.systemPackages = with pkgs; [
+      # utilities
       efibootmgr
-      git
       bottom
       just
       statix

@@ -65,12 +65,12 @@
           "${homeDir}/.local/share/Haveno-reto"
         ];
         exclude = [
-          "**/node_modules"
+          "${homeDir}/source/**/node_modules"
         ];
       };
 
       xmrig = {
-        enable = false;
+        enable = true;
         cpuUsage = 40;
       };
 
