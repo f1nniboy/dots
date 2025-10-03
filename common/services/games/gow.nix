@@ -23,6 +23,14 @@ in
   };
 
   config = mkIf cfg.enable {
+    users = {
+      users.wolf = {
+        uid = 1050;
+        isSystemUser = true;
+        group = "users";
+      };
+    };
+
     systemd = {
       services = {
         "docker-wolf" = {
@@ -64,6 +72,7 @@ in
         };
         volumes = [
           "${paths.backend}:/etc/wolf:rw"
+          "/var/run/wolf:/var/run/wolf"
           "/dev:/dev:rw"
           "/run/udev:/run/udev:rw"
           "/var/run/docker.sock:/var/run/docker.sock:rw"
@@ -85,20 +94,21 @@ in
           NEXTAUTH_URL = "http://localhost:${toString ports.manager}";
         };
         volumes = [
-          # TODO: why is the socket in the cfg dir?
-          "${paths.backend}/cfg/wolf.sock:/var/run/wolf/wolf.sock"
+          "/var/run/wolf:/var/run/wolf"
           "/var/run/docker.sock:/var/run/docker.sock:rw"
           "${paths.manager}:/app/config"
         ];
       };
     };
 
-    networking.firewall = let
-      p = builtins.attrValues ports;
-    in {
-      allowedTCPPorts = p;
-      allowedUDPPorts = p;
-    };
+    networking.firewall =
+      let
+        p = builtins.attrValues ports;
+      in
+      {
+        allowedTCPPorts = p;
+        allowedUDPPorts = p;
+      };
 
     environment.persistence."/nix/persist" = {
       directories = [
@@ -110,8 +120,7 @@ in
     };
 
     systemd.tmpfiles.rules = [
-      # TODO: run wolf as separate user?
-      "d /fun/games 0770 me users - -"
+      "d /fun/games 0770 wolf users - -"
     ];
   };
 }
