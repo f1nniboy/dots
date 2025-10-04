@@ -23,14 +23,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    users = {
-      users.wolf = {
-        uid = 1050;
-        isSystemUser = true;
-        group = "users";
-      };
-    };
-
     systemd = {
       services = {
         "docker-wolf" = {
@@ -120,7 +112,7 @@ in
     };
 
     systemd.tmpfiles.rules = [
-      "d /fun/games 0770 wolf users - -"
+      "d /fun/games 0770 ${config.custom.system.user.name} users - -"
     ];
   };
 }
