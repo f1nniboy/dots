@@ -24,7 +24,7 @@ in
 
       settings = {
         unix_socket_permissions = "0660";
-        listen_addresses = mkForce "";
+        #listen_addresses = mkForce "";
       };
 
       # ensure databases are created
@@ -39,6 +39,10 @@ in
       authentication = pkgs.lib.mkOverride 10 ''
         # TYPE  DATABASE  USER      ADDRESS   		METHOD
         local   all       all                 		peer
+
+        # only allow the "piped" user on tcp connections
+        host    piped     piped     127.0.0.1/32  trust
+        host    all       all       127.0.0.1/32  reject
       '';
     };
 

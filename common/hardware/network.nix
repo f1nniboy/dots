@@ -9,7 +9,9 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.users.${config.custom.system.user.name}.extraGroups = [ "networkmanager" ];
+    users.users.${config.custom.system.user.name} = {
+      extraGroups = [ "networkmanager" ];
+    };
 
     networking = {
       networkmanager = {

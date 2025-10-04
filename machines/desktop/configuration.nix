@@ -12,7 +12,15 @@
     ../../common/presets/desktop.nix
   ];
 
-  networking.hostName = "desktop";
+  networking = {
+    hostName = "desktop";
+
+    interfaces = {
+      eno1 = {
+        wakeOnLan.enable = true;
+      };
+    };
+  };
 
   custom = {
     presets.desktop.enable = true;

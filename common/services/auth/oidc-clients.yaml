@@ -79,3 +79,20 @@ identity_providers:
         token_endpoint_auth_method: 'client_secret_basic'
         redirect_uris:
           - "https://chat.f1nn.space/oauth/oidc/callback"
+
+      - client_name: "UpSnap"
+        client_id: {{ secret "/run/secrets/authelia-lab/oidc/upsnap/id" | mindent 10 "|" | msquote }}
+        client_secret: {{ secret "/run/secrets/lab/oidc/upsnap/secret-hash" | mindent 10 "|" | msquote }}
+        public: false
+        authorization_policy: "one_factor"
+        require_pkce: true
+        pkce_challenge_method: "S256"
+        response_types:
+          - 'code'
+        grant_types:
+          - 'authorization_code'
+        access_token_signed_response_alg: 'none'
+        userinfo_signed_response_alg: 'none'
+        token_endpoint_auth_method: 'client_secret_basic'
+        redirect_uris:
+          - "https://wake.f1nn.space/api/oauth2-redirect"

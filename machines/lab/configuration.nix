@@ -22,6 +22,8 @@
 
     services = {
       tailscale.enable = true;
+      upsnap.enable = true;
+
       openssh.enable = true;
 
       restic = {
@@ -62,7 +64,7 @@
       jellyseerr.enable = true;
       fileflows.enable = true;
       pinchflat.enable = true;
-      #piped.enable = true;
+      piped.enable = true;
 
       immich.enable = true;
       samba.enable = true;
