@@ -10,14 +10,5 @@ in
 
   config = mkIf cfg.enable {
     zramSwap.enable = true;
-
-    swapDevices = [{
-      device = "/var/lib/swapfile";
-      size = 16 * 1024; # 16 GB
-    }];
-
-    environment.persistence."/nix/persist" = {
-      files = [ "/var/lib/swapfile" ];
-    };
   };
 }

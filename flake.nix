@@ -4,6 +4,11 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
+    nur = {
+      url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     impermanence.url = "github:nix-community/impermanence";
     sops-nix.url = "github:Mic92/sops-nix";
     caddy.url = "github:vincentbernat/caddy-nix";
@@ -30,6 +35,11 @@
       url = "github:rafaelmardojai/firefox-gnome-theme";
       flake = false;
     };
+
+    nix-mineral = {
+      url = "github:cynicsketch/nix-mineral";
+      flake = false;
+    };
   };
 
   outputs =
@@ -40,6 +50,7 @@
       piped,
       declarative-jellyfin,
       nix-minecraft,
+      nur,
       ...
     }@inputs:
     let
@@ -55,6 +66,7 @@
             {
               nixpkgs.overlays = [
                 nix-minecraft.overlay
+                nur.overlays.default
               ];
             }
             nix-minecraft.nixosModules.minecraft-servers

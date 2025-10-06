@@ -82,6 +82,7 @@
     "privacy.trackingprotection.enabled" = true;
     "dom.security.https_only_mode" = true;
 
+    # disable spellchecker
     "layout.spellcheckDefault" = 0; # 0 = disabled, 1 = multi-line, 2 = single and multi-line
 
     # new tab
@@ -104,4 +105,10 @@
 
     # disable PiP
     "media.videocontrols.picture-in-picture.video-toggle.enabled" = false;
+
+    # use xdg file picker
+    "widget.use-xdg-desktop-portal.file-picker" = 1;
+
+    # hide bookmark toolbar
+    "browser.toolbars.bookmarks.visibility" = "never";
   }
