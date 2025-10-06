@@ -27,7 +27,7 @@ in
       defaults = {
         dnsProvider = "porkbun";
         environmentFile = config.sops.templates.acme-porkbun-secrets.path;
-        email = config.custom.system.user.email;
+        inherit (config.custom.system.user) email;
       };
       certs = cfg.domains;
     };

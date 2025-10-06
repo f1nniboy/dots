@@ -16,7 +16,7 @@ in
       ssh = {
         enable = true;
         shell = "/bin/cryptsetup-askpass";
-        authorizedKeys = config.custom.system.ssh.authorizedKeys;
+        inherit (config.custom.system.ssh) authorizedKeys;
         hostKeys = [ "/nix/secret/initrd/ssh_host_ed25519_key" ];
       };
     };

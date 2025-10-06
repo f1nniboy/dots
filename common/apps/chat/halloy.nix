@@ -46,14 +46,16 @@ in
               family = "Adwaita Mono";
               size = 16;
             };
-            buffer.backlog_separator = {
-              hide_when_all_read = true;
-            };
-            buffer.text_input = {
-              auto_format = "markdown";
-            };
-            buffer.chathistory = {
-              infinite_scroll = true;
+            buffer = {
+              backlog_separator = {
+                hide_when_all_read = true;
+              };
+              text_input = {
+                auto_format = "markdown";
+              };
+              chathistory = {
+                infinite_scroll = true;
+              };
             };
           };
         };
