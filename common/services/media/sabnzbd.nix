@@ -5,14 +5,11 @@ let
 
   categoryTmpfiles =
     let
-      catLines =
-        map (cat:
-          if cat.dir != ""
-          then "d ${cfg.dirs.complete}/${cat.dir} 0770 nobody media - -"
-          else null
-        ) cfg.categories;
+      catLines = map (
+        cat: if cat.dir != "" then "d ${cfg.dirs.complete}/${cat.dir} 0770 nobody media - -" else null
+      ) cfg.categories;
     in
-      filter (line: line != null) catLines;
+    filter (line: line != null) catLines;
 in
 {
   options.custom.services.sabnzbd = {
@@ -40,29 +37,43 @@ in
     };
 
     categories = mkOption {
-      type = types.listOf (types.submodule {
-        options = {
-          name = mkOption {
-            type = types.nullOr types.str;
-            default = null;
-            description = "Category name (null means '*').";
+      type = types.listOf (
+        types.submodule {
+          options = {
+            name = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              description = "Category name (null means '*').";
+            };
+            script = mkOption {
+              type = types.str;
+              default = "Default";
+              description = "Script name for this category.";
+            };
+            dir = mkOption {
+              type = types.str;
+              default = "";
+              description = "Directory for this category.";
+            };
           };
-          script = mkOption {
-            type = types.str;
-            default = "Default";
-            description = "Script name for this category.";
-          };
-          dir = mkOption {
-            type = types.str;
-            default = "";
-            description = "Directory for this category.";
-          };
-        };
-      });
+        }
+      );
       default = [
-        { name = null;      script = "None";    dir = "";       }
-        { name = "movies";  script = "Default"; dir = "movies"; }
-        { name = "tv";      script = "Default"; dir = "shows";  }
+        {
+          name = null;
+          script = "None";
+          dir = "";
+        }
+        {
+          name = "movies";
+          script = "Default";
+          dir = "movies";
+        }
+        {
+          name = "tv";
+          script = "Default";
+          dir = "shows";
+        }
       ];
     };
   };
@@ -118,8 +129,9 @@ in
     };
 
     systemd.tmpfiles.rules = [
-      "d ${cfg.dirs.incomplete} 0770 nobody media - -" 
-      "d ${cfg.dirs.complete}   0770 nobody media - -" 
-    ] ++ categoryTmpfiles;
+      "d ${cfg.dirs.incomplete} 0770 nobody media - -"
+      "d ${cfg.dirs.complete}   0770 nobody media - -"
+    ]
+    ++ categoryTmpfiles;
   };
 }

@@ -80,7 +80,9 @@ in
       templates.open-webui-secrets = {
         content = ''
           OAUTH_CLIENT_ID=${config.sops.placeholder."${config.networking.hostName}/oidc/open-webui/id"}
-          OAUTH_CLIENT_SECRET=${config.sops.placeholder."${config.networking.hostName}/oidc/open-webui/secret"}
+          OAUTH_CLIENT_SECRET=${
+            config.sops.placeholder."${config.networking.hostName}/oidc/open-webui/secret"
+          }
         '';
         owner = "open-webui";
         mode = "0600";

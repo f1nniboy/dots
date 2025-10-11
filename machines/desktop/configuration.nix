@@ -57,25 +57,26 @@
     services = {
       mullvad.enable = true;
 
-      restic = let
-        homeDir = config.users.users."${config.custom.system.user.name}".home;
-      in
-      {
-        enable = true;
-        frequency = "daily";
-        repos = {
-          borgbase = true;
+      restic =
+        let
+          homeDir = config.users.users."${config.custom.system.user.name}".home;
+        in
+        {
+          enable = true;
+          frequency = "daily";
+          repos = {
+            borgbase = true;
+          };
+          paths = [
+            "${homeDir}/source"
+            "${homeDir}/bilder"
+            "${homeDir}/dokumente"
+            "${homeDir}/.local/share/Haveno-reto"
+          ];
+          exclude = [
+            "${homeDir}/source/**/node_modules"
+          ];
         };
-        paths = [
-          "${homeDir}/source"
-          "${homeDir}/bilder"
-          "${homeDir}/dokumente"
-          "${homeDir}/.local/share/Haveno-reto"
-        ];
-        exclude = [
-          "${homeDir}/source/**/node_modules"
-        ];
-      };
 
       xmrig = {
         enable = true;
@@ -87,7 +88,7 @@
       gow = {
         enable = true;
       };
-      
+
       sabnzbd = {
         enable = true;
         dirs = {
@@ -95,8 +96,16 @@
           incomplete = "/fun/media/usenet/incomplete";
         };
         categories = [
-          { name = null;    script = "None";    dir = "";      }
-          { name = "games"; script = "Default"; dir = "games"; }
+          {
+            name = null;
+            script = "None";
+            dir = "";
+          }
+          {
+            name = "games";
+            script = "Default";
+            dir = "games";
+          }
         ];
       };
     };
@@ -116,7 +125,10 @@
 
       ld.enable = true;
       persistence = {
-        userConfig.directories = [ "source" ".node-llama-cpp" ];
+        userConfig.directories = [
+          "source"
+          ".node-llama-cpp"
+        ];
       };
     };
   };

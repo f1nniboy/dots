@@ -95,10 +95,12 @@ in
 
       apikeys = {
         jellyseerr = {
-          keyPath = config.sops.secrets."jellyfin-${config.networking.hostName}/jellyfin/api-keys/jellyseerr".path;
+          keyPath =
+            config.sops.secrets."jellyfin-${config.networking.hostName}/jellyfin/api-keys/jellyseerr".path;
         };
         multi-scrobbler = {
-          keyPath = config.sops.secrets."jellyfin-${config.networking.hostName}/jellyfin/api-keys/multi-scrobbler".path;
+          keyPath =
+            config.sops.secrets."jellyfin-${config.networking.hostName}/jellyfin/api-keys/multi-scrobbler".path;
         };
       };
     };

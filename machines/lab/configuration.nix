@@ -1,4 +1,9 @@
-{ config, inputs, vars, ... }:
+{
+  config,
+  inputs,
+  vars,
+  ...
+}:
 {
   imports = [
     inputs.impermanence.nixosModules.impermanence
@@ -64,11 +69,11 @@
       jellyseerr.enable = true;
       fileflows.enable = true;
       pinchflat.enable = true;
-      piped.enable = true;
+      #piped.enable = true;
 
       immich.enable = true;
       samba.enable = true;
-      miniflux.enable = true;
+      #miniflux.enable = true;
       notesnook.enable = true;
       radicale.enable = true;
       #karakeep.enable = true;
@@ -92,7 +97,7 @@
         enable = true;
         whitelist = [
           "100.100.20.20" # desktop
-       ];
+        ];
       };
       p2pool = {
         enable = true;

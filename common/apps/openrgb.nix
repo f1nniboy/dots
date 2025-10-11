@@ -31,8 +31,7 @@ in
     boot.kernelModules = [ "i2c-dev" ];
     hardware.i2c.enable = true;
 
-    systemd.services.no-rgb = {
-      description = "no-rgb";
+    systemd.services.openrgb-no-rgb = {
       serviceConfig = {
         ExecStart = "${no-rgb-script}/bin/no-rgb";
         Type = "oneshot";

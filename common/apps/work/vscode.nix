@@ -15,7 +15,6 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      vscode
       nil # language server
       nixfmt-rfc-style # formatter
     ];

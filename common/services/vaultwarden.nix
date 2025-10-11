@@ -30,10 +30,10 @@ in
 
     custom.services = {
       caddy.hosts = {
-          vaultwarden = {
-            subdomain = "vault";
-            target = ":${toString cfg.port}";
-          };
+        vaultwarden = {
+          subdomain = "vault";
+          target = ":${toString cfg.port}";
+        };
       };
       postgresql.users = [ "vaultwarden" ];
     };

@@ -27,8 +27,8 @@ in
       lfs.enable = true;
       settings = {
         server = {
-          DOMAIN    = "${subdomain}.${config.custom.services.caddy.domain}";
-          ROOT_URL  = "https://${subdomain}.${config.custom.services.caddy.domain}/";
+          DOMAIN = "${subdomain}.${config.custom.services.caddy.domain}";
+          ROOT_URL = "https://${subdomain}.${config.custom.services.caddy.domain}/";
           HTTP_PORT = cfg.port;
         };
         service = {
@@ -37,21 +37,23 @@ in
         openid = {
           ENABLE_OPENID_SIGNIN = true;
           ENABLE_OPENID_SIGNUP = true;
-          WHITELISTED_URIS     = "auth.${config.custom.services.caddy.domain}";
+          WHITELISTED_URIS = "auth.${config.custom.services.caddy.domain}";
         };
       };
     };
 
     # ensure admin account
-    systemd.services.forgejo.preStart = let 
-      adminCmd = "${lib.getExe config.services.forgejo.package} admin user";
-      pwd = config.sops.secrets."${config.networking.hostName}/forgejo/admin-password";
-      user = "finn";
-    in ''
-      ${adminCmd} create --admin --email "${config.custom.system.user.email}" --username ${user} --password "$(tr -d '\n' < ${pwd.path})" || true
-      ## uncomment this line to change an admin user which was already created
-      # ${adminCmd} change-password --username ${user} --password "$(tr -d '\n' < ${pwd.path})" || true
-    '';
+    systemd.services.forgejo.preStart =
+      let
+        adminCmd = "${lib.getExe config.services.forgejo.package} admin user";
+        pwd = config.sops.secrets."${config.networking.hostName}/forgejo/admin-password";
+        user = "finn";
+      in
+      ''
+        ${adminCmd} create --admin --email "${config.custom.system.user.email}" --username ${user} --password "$(tr -d '\n' < ${pwd.path})" || true
+        ## uncomment this line to change an admin user which was already created
+        # ${adminCmd} change-password --username ${user} --password "$(tr -d '\n' < ${pwd.path})" || true
+      '';
 
     custom.services.caddy.hosts = {
       forgejo = {

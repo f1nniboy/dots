@@ -344,7 +344,9 @@ in
     sops = {
       templates.notesnook-secrets = {
         content = ''
-          MINIO_ROOT_PASSWORD=${config.sops.placeholder."${config.networking.hostName}/notesnook/minio-password"}
+          MINIO_ROOT_PASSWORD=${
+            config.sops.placeholder."${config.networking.hostName}/notesnook/minio-password"
+          }
           NOTESNOOK_API_SECRET=${config.sops.placeholder."${config.networking.hostName}/notesnook/api-secret"}
           S3_ACCESS_KEY=${config.sops.placeholder."${config.networking.hostName}/notesnook/s3-access-key"}
         '';

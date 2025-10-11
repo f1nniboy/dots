@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 let
   cfg = config.custom.services.mullvad;
@@ -55,7 +60,7 @@ in
             autoConnect = true;
             enableSystemNotifications = true;
             unpinnedWindow = true;
-            browsedForSplitTunnelingApplications = [];
+            browsedForSplitTunnelingApplications = [ ];
             changelogDisplayedForVersion = "2025.7";
           };
         };

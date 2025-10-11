@@ -21,9 +21,9 @@ in
     systemd.user.tmpfiles.rules = [
       "d ${notesDir} - - - - -"
     ];
-  
+
     custom.services.restic.paths = [
       notesDir
     ];
   };
-} 
+}

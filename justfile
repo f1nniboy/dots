@@ -34,6 +34,6 @@ sops-edit:
 
 sops-rotate:
 	for file in secrets/*; do sops --rotate --in-place "$file"; done
-	
+
 sops-update:
 	for file in secrets/*; do sops updatekeys "$file"; done

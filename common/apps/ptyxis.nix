@@ -22,10 +22,12 @@ in
         "org/gnome/Ptyxis" = {
           profile-uuids = [ "default" ];
           default-profile-uuid = "default";
-          window-size = with inputs.home-manager.lib.hm.gvariant; mkTuple [
-            (mkUint32 110)
-            (mkUint32 30)
-          ];
+          window-size =
+            with inputs.home-manager.lib.hm.gvariant;
+            mkTuple [
+              (mkUint32 110)
+              (mkUint32 30)
+            ];
         };
         "org/gnome/Ptyxis/Profiles/default" = {
           label = "Standard";

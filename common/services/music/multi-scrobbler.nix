@@ -77,10 +77,13 @@ in
         };
 
         "${config.networking.hostName}/multi-scrobbler/sources/spotify/client-id".owner = "multi-scrobbler";
-        "${config.networking.hostName}/multi-scrobbler/sources/spotify/client-secret".owner = "multi-scrobbler";
+        "${config.networking.hostName}/multi-scrobbler/sources/spotify/client-secret".owner =
+          "multi-scrobbler";
 
-        "${config.networking.hostName}/multi-scrobbler/clients/listenbrainz/token".owner = "multi-scrobbler";
-        "${config.networking.hostName}/multi-scrobbler/clients/listenbrainz/username".owner = "multi-scrobbler";
+        "${config.networking.hostName}/multi-scrobbler/clients/listenbrainz/token".owner =
+          "multi-scrobbler";
+        "${config.networking.hostName}/multi-scrobbler/clients/listenbrainz/username".owner =
+          "multi-scrobbler";
 
         "${config.networking.hostName}/multi-scrobbler/clients/lastfm/api-key".owner = "multi-scrobbler";
         "${config.networking.hostName}/multi-scrobbler/clients/lastfm/secret".owner = "multi-scrobbler";

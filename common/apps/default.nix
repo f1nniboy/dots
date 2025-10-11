@@ -10,6 +10,7 @@
 
     ./bitwarden.nix
     ./easyeffects.nix
+    ./ghostty.nix
     ./moonlight.nix
     ./obs.nix
     ./openrgb.nix

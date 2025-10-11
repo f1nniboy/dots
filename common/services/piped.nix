@@ -50,6 +50,7 @@ in
     };
 
     services = {
+      # TODO: "Exception in thread "main" java.lang.UnsatisfiedLinkError: /tmp/libreqwestXXX.so: /tmp/libreqwestXXX.so: failed to map segment from shared object"
       piped-backend = {
         enable = true;
         settings = {

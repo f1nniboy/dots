@@ -23,12 +23,14 @@ in
         firefox.enable = true;
         epiphany.enable = true;
         ptyxis.enable = true;
+        ghostty.enable = true;
         halloy.enable = true;
         vesktop.enable = true;
-        vscode.enable = true;
-        spicetify.enable = true;
+        #vscode.enable = true;
+        #spicetify.enable = true;
         notesnook.enable = true;
         rnote.enable = true;
+        zed.enable = true;
 
         # cli
         #helix.enable = true;

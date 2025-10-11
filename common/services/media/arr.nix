@@ -67,8 +67,12 @@ in
         };
       };
       recyclarr.serviceConfig.LoadCredential = [
-        "radarr_api-key:${config.sops.secrets."recyclarr-${config.networking.hostName}/radarr/api-key".path}"
-        "sonarr_api-key:${config.sops.secrets."recyclarr-${config.networking.hostName}/sonarr/api-key".path}"
+        "radarr_api-key:${
+          config.sops.secrets."recyclarr-${config.networking.hostName}/radarr/api-key".path
+        }"
+        "sonarr_api-key:${
+          config.sops.secrets."recyclarr-${config.networking.hostName}/sonarr/api-key".path
+        }"
       ];
     };
 

@@ -40,7 +40,8 @@ builtins.toJSON {
       }
     ];
     serverId = config.sops.placeholder."jellyseerr-${config.networking.hostName}/jellyfin/server-id";
-    apiKey = config.sops.placeholder."jellyseerr-${config.networking.hostName}/jellyfin/api-keys/jellyseerr";
+    apiKey =
+      config.sops.placeholder."jellyseerr-${config.networking.hostName}/jellyfin/api-keys/jellyseerr";
   };
   radarr = [
     {
@@ -54,7 +55,7 @@ builtins.toJSON {
       activeDirectory = "${config.custom.media.baseDir}/library/movies";
       is4k = false;
       minimumAvailability = "released";
-      tags = [];
+      tags = [ ];
       isDefault = true;
       externalUrl = "https://mov.media.${config.custom.services.caddy.domain}";
       syncEnabled = true;
@@ -73,8 +74,8 @@ builtins.toJSON {
       activeProfileId = 11;
       activeProfileName = "HD";
       activeDirectory = "${config.custom.media.baseDir}/library/shows";
-      tags = [];
-      animeTags = [];
+      tags = [ ];
+      animeTags = [ ];
       is4k = false;
       isDefault = true;
       enableSeasonFolders = true;

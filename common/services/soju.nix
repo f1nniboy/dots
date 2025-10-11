@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 let
   cfg = config.custom.services.soju;
@@ -40,32 +45,34 @@ in
         description = "Setup Soju users";
         after = [ "soju.service" ];
         wantedBy = [ "multi-user.target" ];
-        script = let
-          sojuctl = "${pkgs.soju}/bin/sojuctl -config ${config.services.soju.configFile}";
-          userctl = "${sojuctl} user run ${username}";
+        script =
+          let
+            sojuctl = "${pkgs.soju}/bin/sojuctl -config ${config.services.soju.configFile}";
+            userctl = "${sojuctl} user run ${username}";
 
-          username = "\"$(cat ${config.sops.secrets."common/soju/user/username".path})\"";
-          password = "\"$(cat ${config.sops.secrets."common/soju/user/password".path})\"";
+            username = "\"$(cat ${config.sops.secrets."common/soju/user/username".path})\"";
+            password = "\"$(cat ${config.sops.secrets."common/soju/user/password".path})\"";
 
-          net = {
-            name = "\"$(cat ${config.sops.secrets."common/soju/network/name".path})\"";
-            host = "\"$(cat ${config.sops.secrets."common/soju/network/host".path})\"";
-            username = "\"$(cat ${config.sops.secrets."common/soju/network/username".path})\"";
-            password = "\"$(cat ${config.sops.secrets."common/soju/network/password".path})\"";
-          };
-        in ''
-          #!/bin/sh
+            net = {
+              name = "\"$(cat ${config.sops.secrets."common/soju/network/name".path})\"";
+              host = "\"$(cat ${config.sops.secrets."common/soju/network/host".path})\"";
+              username = "\"$(cat ${config.sops.secrets."common/soju/network/username".path})\"";
+              password = "\"$(cat ${config.sops.secrets."common/soju/network/password".path})\"";
+            };
+          in
+          ''
+            #!/bin/sh
 
-          # create user
-          if ! ${sojuctl} user status ${username}; then
-            ${sojuctl} user create -username ${username} -password ${password} -admin=true
-          fi
+            # create user
+            if ! ${sojuctl} user status ${username}; then
+              ${sojuctl} user create -username ${username} -password ${password} -admin=true
+            fi
 
-          # create network
-          if ! ${userctl} network status | grep -q ${net.name}; then
-            ${userctl} network create -name ${net.name} -addr ${net.host} -nick ${net.username} -pass ${net.password}
-          fi
-        '';
+            # create network
+            if ! ${userctl} network status | grep -q ${net.name}; then
+              ${userctl} network create -name ${net.name} -addr ${net.host} -nick ${net.username} -pass ${net.password}
+            fi
+          '';
         serviceConfig = {
           Type = "oneshot";
           User = "soju";

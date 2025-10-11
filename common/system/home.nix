@@ -53,8 +53,8 @@ in
       useUserPackages = true;
       useGlobalPkgs = true;
 
-      users.${config.custom.system.user.name}
-        = mkAliasDefinitions options.custom.system.home.extraOptions;
+      users.${config.custom.system.user.name} =
+        mkAliasDefinitions options.custom.system.home.extraOptions;
     };
   };
 }

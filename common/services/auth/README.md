@@ -1,5 +1,3 @@
-
-
 # generating
 ## client id
 ```

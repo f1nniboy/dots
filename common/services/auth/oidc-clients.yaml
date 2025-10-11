@@ -18,14 +18,7 @@ identity_providers:
             - "profile"
             - "email"
 
-      - client_name: "Miniflux"
-        client_id: {{ secret "/run/secrets/authelia-lab/oidc/miniflux/id" | mindent 10 "|" | msquote }}
-        client_secret: {{ secret "/run/secrets/lab/oidc/miniflux/secret-hash" | mindent 10 "|" | msquote }}
-        authorization_policy: "one_factor"
-        require_pkce: true
-        pkce_challenge_method: "S256"
-        redirect_uris:
-          - "https://news.f1nn.space/oauth2/oidc/callback"
+      # ... miniflux
 
       # ... karakeep
 

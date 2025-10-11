@@ -27,7 +27,7 @@ in
         log-level=0
 
         confirm-external-bind=true
-        
+
         public-node=false
         hide-my-port=true
 

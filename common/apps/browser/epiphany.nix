@@ -20,7 +20,7 @@ in
       directories = [ ".local/share/epiphany" ];
     };
 
-   custom.system.home.extraOptions = {
+    custom.system.home.extraOptions = {
       dconf.settings = {
         "org/gnome/epiphany" = {
           ask-for-default = false;

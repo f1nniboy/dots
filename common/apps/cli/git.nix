@@ -7,7 +7,9 @@ let
   toAllowedSignersLine = key: "* ${key}";
 
   # convert the array of keys to allowed_signers content
-  allowedSignersContent = lib.concatMapStringsSep "\n" toAllowedSignersLine config.custom.system.ssh.authorizedKeys;
+  allowedSignersContent =
+    lib.concatMapStringsSep "\n" toAllowedSignersLine
+      config.custom.system.ssh.authorizedKeys;
 in
 {
   options.custom.apps.git = {

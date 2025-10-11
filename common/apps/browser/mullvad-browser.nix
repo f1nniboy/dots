@@ -18,7 +18,7 @@ in
 
     # no persistence for now, muh security
     #custom.system.persistence.userConfig = {
-      #directories = [ ".mullvad" ];
+    #  directories = [ ".mullvad" ];
     #};
   };
 }

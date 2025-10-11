@@ -25,10 +25,11 @@ in
       groups.miniflux = { };
     };
 
+    # TODO: error reading secret file for key OAUTH2_CLIENT_ID_FILE: open /run/secrets/lab/oidc/miniflux/id: permission denied
     services.miniflux = {
       enable = true;
       adminCredentialsFile = config.sops.templates.miniflux-creds.path;
-      # https://miniflux.app/docs/configuration.html
+      # ref: https://miniflux.app/docs/configuration.html
       config =
         let
           inherit (config.sops) secrets;
@@ -46,6 +47,7 @@ in
           OAUTH2_OIDC_DISCOVERY_ENDPOINT = "https://auth.${config.custom.services.caddy.domain}";
           OAUTH2_OIDC_PROVIDER_NAME = "Authelia";
           OAUTH2_USER_CREATION = "1";
+          DISABLE_LOCAL_AUTH = "true";
         };
     };
 
@@ -56,7 +58,11 @@ in
       {
         requires = deps;
         after = deps;
-        serviceConfig.DynamicUser = mkForce false;
+        serviceConfig = {
+          DynamicUser = mkForce false;
+          User = mkForce "miniflux";
+          Group = mkForce "miniflux";
+        };
       };
 
     custom.services = {

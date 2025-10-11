@@ -8,14 +8,14 @@ in
     enable = mkEnableOption "Lightweight LDAP server";
 
     ports = mkOption {
-      type = lib.types.submodule {
+      type = types.submodule {
         options = {
-          http = lib.mkOption {
-            type = lib.types.port;
+          http = mkOption {
+            type = types.port;
             default = 17170;
           };
-          ldap = lib.mkOption {
-            type = lib.types.port;
+          ldap = mkOption {
+            type = types.port;
             default = 3890;
           };
         };

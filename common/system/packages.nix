@@ -25,11 +25,13 @@ in
       fd
 
       # remove bottom.desktop shortcut
-      (lib.hiPrio (pkgs.runCommand "bottom.desktop-hide" { } ''
-        mkdir -p "$out/share/applications"
-        cat "${pkgs.bottom}/share/applications/bottom.desktop" > "$out/share/applications/bottom.desktop"
-        echo "Hidden=1" >> "$out/share/applications/bottom.desktop"
-      ''))
+      (lib.hiPrio (
+        pkgs.runCommand "bottom.desktop-hide" { } ''
+          mkdir -p "$out/share/applications"
+          cat "${pkgs.bottom}/share/applications/bottom.desktop" > "$out/share/applications/bottom.desktop"
+          echo "Hidden=1" >> "$out/share/applications/bottom.desktop"
+        ''
+      ))
     ];
   };
 }

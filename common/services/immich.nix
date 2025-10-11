@@ -92,8 +92,8 @@ in
       ];
       exclude = [
         "/fun/media/gallery/backups" # we're already backing up the db
-        "/fun/media/gallery/thumbs"  # can be re-generated afterwards
-        "/fun/media/gallery/upload"  # only used for uploads
+        "/fun/media/gallery/thumbs" # can be re-generated afterwards
+        "/fun/media/gallery/upload" # only used for uploads
       ];
     };
   };
