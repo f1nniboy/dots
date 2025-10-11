@@ -12,7 +12,6 @@ in
     system.stateVersion = "25.05";
 
     documentation.nixos.enable = false;
-    nixpkgs.config.allowUnfree = true;
 
     nix = {
       gc = {

@@ -79,6 +79,12 @@ in
   };
 
   config = mkIf cfg.enable {
+    nixpkgs.config.allowUnfreePredicate =
+      pkg:
+      builtins.elem (lib.getName pkg) [
+        "unrar"
+      ];
+
     services.sabnzbd = {
       enable = true;
       group = "media";

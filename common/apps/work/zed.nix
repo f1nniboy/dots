@@ -42,8 +42,8 @@ in
 
           theme = {
             mode = "system";
-            light = "One Light";
-            dark = "Gruvbox Dark";
+            light = "Ayu Light";
+            dark = "Ayu Dark";
           };
         };
       };
