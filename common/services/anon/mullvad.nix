@@ -49,7 +49,7 @@ in
     };
 
     custom.system.home = {
-      configFile = {
+      configFiles = {
         "Mullvad VPN/gui_settings.json" = {
           text = builtins.toJSON {
             monochromaticIcon = true;

@@ -22,7 +22,7 @@ in
       };
       home = {
         # TODO: figure out how to declaratively configure api urls
-        configFile = {
+        configFiles = {
           "Notesnook/config.json" = {
             text = builtins.toJSON {
               theme = "system";

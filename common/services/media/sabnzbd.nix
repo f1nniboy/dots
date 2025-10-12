@@ -79,22 +79,21 @@ in
   };
 
   config = mkIf cfg.enable {
-    nixpkgs.config.allowUnfreePredicate =
-      pkg:
-      builtins.elem (lib.getName pkg) [
-        "unrar"
-      ];
-
     services.sabnzbd = {
       enable = true;
       group = "media";
     };
 
-    custom.services.caddy.hosts = {
-      sabnzbd = {
-        subdomain = "dl.media";
-        target = ":${toString cfg.port}";
-        import = [ "auth" ];
+    custom = {
+      system.packages.unfreePackages = [
+        "unrar"
+      ];
+      services.caddy.hosts = {
+        sabnzbd = {
+          subdomain = "dl.media";
+          target = ":${toString cfg.port}";
+          import = [ "auth" ];
+        };
       };
     };
 

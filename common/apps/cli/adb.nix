@@ -18,9 +18,9 @@ in
       pkgs.android-udev-rules
     ];
 
-    users.users.${config.custom.system.user.name} = {
-      extraGroups = [ "adbusers" ];
-    };
+    custom.system.user.extraGroups = [
+      "adbusers"
+    ];
 
     programs.adb.enable = true;
   };

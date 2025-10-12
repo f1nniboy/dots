@@ -55,14 +55,19 @@ in
       environmentFile = config.sops.templates.open-webui-secrets.path;
     };
 
-    custom.services = {
-      caddy.hosts = {
-        open-webui = {
-          subdomain = "chat";
-          target = ":${toString cfg.port}";
+    custom = {
+      system.packages.unfreePackages = [
+        "open-webui"
+      ];
+      services = {
+        caddy.hosts = {
+          open-webui = {
+            subdomain = "chat";
+            target = ":${toString cfg.port}";
+          };
         };
+        #postgresql.users = [ "open-webui" ];
       };
-      #postgresql.users = [ "open-webui" ];
     };
 
     environment.persistence."/nix/persist" = {

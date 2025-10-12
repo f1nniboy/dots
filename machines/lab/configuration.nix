@@ -97,6 +97,7 @@
         enable = true;
         whitelist = [
           "100.100.20.20" # desktop
+          "100.81.153.30" # laptop
         ];
       };
       p2pool = {

@@ -20,8 +20,9 @@ in
       defaultSopsFile = ./../../secrets/secrets.yaml;
       age.sshKeyPaths = [ "/nix/secret/initrd/ssh_host_ed25519_key" ];
 
-      secrets."common/user/hashed-password".neededForUsers = true;
-      secrets."common/user/hashed-password" = { };
+      secrets = {
+        "common/user/hashed-password".neededForUsers = true;
+      };
 
       # ref: https://github.com/Mic92/sops-nix/issues/427
       gnupg.sshKeyPaths = [ ];

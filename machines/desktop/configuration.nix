@@ -37,7 +37,6 @@
 
       adb.enable = true;
 
-      monero.enable = true;
       haveno.enable = true;
 
       tor.enable = true;
@@ -107,6 +106,25 @@
             dir = "games";
           }
         ];
+      };
+
+      syncthing = {
+        devices = {
+          laptop = {
+            # TODO: replace with actual id
+            id = "AEJYEPX-UAJ4RTY-3Z6WAKZ-TPG32BH-GBLEFM7-W62JWSB-BFT6EQG-DJJF2QP";
+          };
+        };
+        folders =
+          let
+            homeDir = config.custom.system.home.dir;
+          in
+          {
+            "${homeDir}/Documents/Wallets" = {
+              id = "wallets";
+              devices = [ "laptop" ];
+            };
+          };
       };
     };
 

@@ -24,6 +24,7 @@
     ./restic.nix
     ./samba.nix
     ./soju.nix
+    ./syncthing.nix
     ./vaultwarden.nix
   ];
 }

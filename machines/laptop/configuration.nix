@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   vars,
   ...
@@ -30,7 +31,24 @@
 
     services = {
       mullvad.enable = true;
-      docker.enable = true;
+
+      syncthing = {
+        devices = {
+          desktop = {
+            id = "AEJYEPX-UAJ4RTY-3Z6WAKZ-TPG32BH-GBLEFM7-W62JWSB-BFT6EQG-DJJF2QP";
+          };
+        };
+        folders =
+          let
+            homeDir = config.custom.system.home.dir;
+          in
+          {
+            "${homeDir}/Documents/Wallets" = {
+              id = "wallets";
+              devices = [ "desktop" ];
+            };
+          };
+      };
     };
 
     system = {

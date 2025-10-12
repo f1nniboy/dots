@@ -11,39 +11,40 @@ in
 {
   options.custom.system.home = {
     enable = mkEnableOption "home-manager configuration";
-    file = mkOption {
+    homeFiles = mkOption {
       type = types.attrs;
       default = { };
-      description = "Files to manage with home-manager home.file";
+      description = "alias for home.file";
     };
-    configFile = mkOption {
+    configFiles = mkOption {
       type = types.attrs;
       default = { };
-      description = "Files to manage with home-manager xdg.configFile";
+      description = "alias for xdg.configFile";
     };
     extraOptions = mkOption {
       type = types.attrs;
       default = { };
-      description = "Additional home-manager options";
+    };
+    dir = mkOption {
+      type = types.str;
+      default = config.users.users."${config.custom.system.user.name}".home;
     };
   };
 
   config = mkIf cfg.enable {
     custom.system.home = {
-      configFile = {
+      configFiles = {
         # ref: https://github.com/nix-community/home-manager/issues/1213
         "mimeapps.list".force = true;
       };
       extraOptions = {
         home = {
-          enableNixpkgsReleaseCheck = false;
-
           inherit (config.system) stateVersion;
-          inherit (cfg) file;
+          file = cfg.homeFiles;
         };
         xdg = {
           enable = true;
-          inherit (cfg) configFile;
+          configFile = cfg.configFiles;
         };
         systemd.user.startServices = "sd-switch";
       };

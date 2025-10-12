@@ -23,7 +23,7 @@ in
         firefox.enable = true;
         epiphany.enable = true;
         ptyxis.enable = true;
-        ghostty.enable = true;
+        #ghostty.enable = true;
         halloy.enable = true;
         vesktop.enable = true;
         #vscode.enable = true;
@@ -31,6 +31,7 @@ in
         notesnook.enable = true;
         rnote.enable = true;
         zed.enable = true;
+        monero.enable = true;
 
         # cli
         #helix.enable = true;
@@ -42,6 +43,10 @@ in
       services = {
         printing.enable = true;
         tailscale.enable = true;
+
+        syncthing = {
+          enable = true;
+        };
       };
 
       system = {

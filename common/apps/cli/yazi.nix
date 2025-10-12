@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 with lib;
@@ -14,12 +13,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.yazi ];
-
-    #custom.system.home.extraOptions = {
-    #	programs.yazi = {
-    #		enable = true;
-    #	};
-    #};
+    custom.system.home.extraOptions = {
+      programs.yazi = {
+        enable = true;
+      };
+    };
   };
 }

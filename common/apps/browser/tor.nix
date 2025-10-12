@@ -33,23 +33,20 @@ in
       ];
     };
 
-    custom.system.home.extraOptions = {
-      home.file = {
-        "${baseDir}/firefox/profiles.ini" = {
-          text = ''
-            [General]
-            StartWithLastProfile=1
-            Version=2
+    custom.system.home.homeFiles = {
+      "${baseDir}/firefox/profiles.ini" = {
+        text = ''
+          [General]
+          StartWithLastProfile=1
+          Version=2
 
-            [Profile0]
-            Default=1
-            IsRelative=1
-            Name=${profileName}
-            Path=${profileName}
-          '';
-        };
+          [Profile0]
+          Default=1
+          IsRelative=1
+          Name=${profileName}
+          Path=${profileName}
+        '';
       };
     };
-
   };
 }
