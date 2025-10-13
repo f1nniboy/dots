@@ -50,5 +50,9 @@ in
         inherit (cfg) devices folders;
       };
     };
+
+    custom.system.persistence.userConfig = {
+      directories = [ ".config/syncthing" ];
+    };
   };
 }

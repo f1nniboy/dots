@@ -35,7 +35,7 @@
       syncthing = {
         devices = {
           desktop = {
-            id = "AEJYEPX-UAJ4RTY-3Z6WAKZ-TPG32BH-GBLEFM7-W62JWSB-BFT6EQG-DJJF2QP";
+            id = "C6VRY6R-ZTMNATF-IQRP4XP-3DMFGM7-BVNDS5C-OINP5IC-RIQNQT5-R4T4ZQ4";
           };
         };
         folders =
