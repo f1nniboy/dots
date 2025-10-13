@@ -21,7 +21,12 @@ in
     security.sudo.wheelNeedsPassword = false;
     networking.firewall.enable = true;
 
-    nix-mineral.enable = true;
+    nix-mineral = {
+      enable = true;
+      overrides = {
+        desktop.tmp-exec = true;
+      };
+    };
 
     # nix-mineral filesystem settings are incompatible with impermanence
     fileSystems = {

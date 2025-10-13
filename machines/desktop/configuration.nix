@@ -111,7 +111,7 @@
       syncthing = {
         devices = {
           laptop = {
-            id = "LTQOADO-W75UWVR-FMADCWM-27LQTZI-5QYIE33-OE5EAMZ-USRCBPW-UZCROAK";
+            id = "J72PQBN-T4JUXSX-QPAGJ6K-SCFU4GS-CKLHRNJ-H3KW5YX-LRTT43Y-KGX2DQU";
           };
         };
         folders =
