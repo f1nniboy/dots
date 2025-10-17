@@ -45,6 +45,17 @@ in
             light = "Ayu Light";
             dark = "Ayu Dark";
           };
+
+          disable_ai = true;
+
+          title_bar = {
+            show_sign_in = false;
+          };
+
+          telemetry = {
+            diagnostics = false;
+            metrics = false;
+          };
         };
       };
     };
