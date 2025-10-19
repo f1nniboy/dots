@@ -22,14 +22,18 @@ in
 
       programs.git = {
         enable = true;
-        userName = config.custom.system.user.fullName;
-        userEmail = config.custom.system.user.email;
-        extraConfig = {
+        settings = {
+          user = {
+            name = config.custom.system.user.fullName;
+            email = config.custom.system.user.email;
+            signingkey = config.custom.system.user.sshPublicKey;
+          };
+          gpg = {
+            format = "ssh";
+            ssh.allowedSignersFile = "~/.ssh/allowed_signers";
+          };
           commit.gpgsign = true;
-          gpg.format = "ssh";
-          gpg.ssh.allowedSignersFile = "~/.ssh/allowed_signers";
-          user.signingkey = config.custom.system.user.sshPublicKey;
-          init.defaultBranch = "main";
+          user.init.defaultBranch = "main";
         };
       };
     };

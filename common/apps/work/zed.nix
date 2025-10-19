@@ -28,7 +28,7 @@ in
         enable = true;
 
         userSettings = {
-          ui_font_family = "Adwaita Sans";
+          ui_font_family = "FiraCode Nerd Font Mono";
           ui_font_size = 16;
 
           buffer_font_family = "FiraCode Nerd Font Mono";
