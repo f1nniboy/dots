@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 let
   cfg = config.custom.services.forgejo;
@@ -21,6 +26,7 @@ in
 
     services.forgejo = {
       enable = true;
+      package = pkgs.forgejo;
       database = {
         type = "postgres";
       };
