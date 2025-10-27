@@ -25,7 +25,7 @@ in
     };
     frequency = mkOption {
       type = types.str;
-      description = "Frequency of backups, in systemd calendar time format";
+      description = "frequency of backups, in systemd calendar time format";
       default = "daily";
     };
   };

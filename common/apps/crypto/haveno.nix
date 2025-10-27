@@ -17,8 +17,8 @@ in
     services.flatpak.packages = [
       ":${
         pkgs.fetchurl {
-          url = "https://github.com/retoaccess1/haveno-reto/releases/download/1.2.1-1/haveno-v1.2.0-linux-x86_64.flatpak";
-          sha256 = "sha256-z1C2ku2OmLP3dm7V5iZSSfp1tWqHpBy4YYVbMYJ/Uec=";
+          url = "https://github.com/retoaccess1/haveno-reto/releases/download/1.2.2-reto/haveno-v1.2.2-linux-x86_64.flatpak";
+          sha256 = "0fz3n2y5jrrlcbfmfr57bwgmaawdmmwwanigz23kgjzfrzbzpm8b";
         }
       }"
     ];

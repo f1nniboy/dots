@@ -16,7 +16,7 @@ in
   config = mkIf cfg.enable {
     virtualisation.oci-containers.containers = {
       "upsnap" = {
-        image = " ghcr.io/seriousm4x/upsnap:5";
+        image = " ghcr.io/seriousm4x/upsnap:latest";
         volumes = [
           "/var/lib/upsnap:/app/pb_data"
         ];

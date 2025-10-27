@@ -18,10 +18,6 @@ in
       pkgs.beammp-launcher
     ];
 
-    custom.system.persistence.userConfig = {
-      #directories = [ ".local/share/supertux2" ];
-    };
-
     # fix certificate issues
     security.pki.certificateFiles = [
       (pkgs.stdenvNoCC.mkDerivation {
