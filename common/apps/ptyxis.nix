@@ -11,7 +11,7 @@ let
 in
 {
   options.custom.apps.ptyxis = {
-    enable = mkEnableOption "Ptyxis GNOME terminal";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

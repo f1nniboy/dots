@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.system.remoteUnlock = {
-    enable = mkEnableOption "LUKS unlock over SSH";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

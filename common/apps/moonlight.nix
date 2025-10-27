@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.apps.moonlight = {
-    enable = mkEnableOption "Game streamingclient";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

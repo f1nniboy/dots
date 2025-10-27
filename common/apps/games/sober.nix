@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.apps.sober = {
-    enable = mkEnableOption "Roblox player for Linux";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

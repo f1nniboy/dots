@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.services.multi-scrobbler = {
-    enable = mkEnableOption "Scrobble plays from multiple sources to multiple clients";
+    enable = custom.enableOption;
 
     port = mkOption {
       type = types.port;
@@ -49,7 +49,7 @@ in
       };
     };
 
-    environment.persistence."/nix/persist" = {
+    custom.system.persistence.config = {
       directories = [
         {
           directory = "/var/lib/multi-scrobbler";

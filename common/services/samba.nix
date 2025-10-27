@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.services.samba = {
-    enable = mkEnableOption "Samba file-sharing server";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {
@@ -15,7 +15,7 @@ in
       openFirewall = true;
     };
 
-    environment.persistence."/nix/persist" = {
+    custom.system.persistence.config = {
       directories = [
         {
           directory = "/var/lib/samba";

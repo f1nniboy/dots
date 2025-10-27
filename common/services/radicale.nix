@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.services.radicale = {
-    enable = mkEnableOption "Radicale CalDAV & CardDAV backend";
+    enable = custom.enableOption;
     domain = mkOption {
       type = types.str;
     };
@@ -35,26 +35,28 @@ in
       };
     };
 
-    custom.services = {
-      caddy.hosts.radicale = {
-        subdomain = "cal";
-        target = ":${toString cfg.port}";
+    custom = {
+      services = {
+        caddy.hosts.radicale = {
+          subdomain = "cal";
+          target = ":${toString cfg.port}";
+        };
       };
-    };
 
-    environment.persistence."/nix/persist" = {
-      directories = [
-        {
-          directory = "/var/lib/radicale";
-          user = "radicale";
-          group = "radicale";
-          mode = "0700";
-        }
+      system.persistence.config = {
+        directories = [
+          {
+            directory = "/var/lib/radicale";
+            user = "radicale";
+            group = "radicale";
+            mode = "0700";
+          }
+        ];
+      };
+
+      services.restic.paths = [
+        "/var/lib/radicale"
       ];
     };
-
-    custom.services.restic.paths = [
-      "/var/lib/radicale"
-    ];
   };
 }

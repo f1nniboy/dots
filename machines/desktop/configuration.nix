@@ -9,21 +9,14 @@
     inputs.impermanence.nixosModules.impermanence
     inputs.home-manager.nixosModules.home-manager
 
-    ../../common/presets/desktop.nix
+    ../../common
   ];
 
-  networking = {
-    hostName = "desktop";
-
-    interfaces = {
-      eno1 = {
-        wakeOnLan.enable = true;
-      };
-    };
-  };
-
   custom = {
-    presets.desktop.enable = true;
+    presets = {
+      base.enable = true;
+      desktop.enable = true;
+    };
 
     apps = {
       # games
@@ -33,21 +26,12 @@
       prismlauncher.enable = true;
       supertux.enable = true;
       moonlight.enable = true;
-      beammp-launcher.enable = true;
 
       adb.enable = true;
-
-      haveno.enable = true;
-
       tor.enable = true;
-      mullvad-browser.enable = true;
-
       obs.enable = true;
       gimp.enable = true;
       easyeffects.enable = true;
-
-      bitwarden.enable = true;
-
       openrgb.enable = true;
     };
 
@@ -134,16 +118,13 @@
     system = {
       user = {
         fullName = "Finn";
-        name = "me";
         email = "me@f1nn.space";
         sshPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBK67b6pvKUWVH/lflBvW7TI6DTXy7xT7iM8xpvHvbi0";
       };
       inherit (vars) ssh;
 
-      ld.enable = true;
       persistence = {
         userConfig.directories = [
-          "source"
           ".node-llama-cpp"
         ];
       };

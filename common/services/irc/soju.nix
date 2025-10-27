@@ -7,11 +7,28 @@
 with lib;
 let
   cfg = config.custom.services.soju;
-  domain = "irc.${config.custom.services.caddy.domain}";
+  subdomain = "irc";
+  domain = "${subdomain}.${config.custom.services.caddy.domain}";
 in
 {
   options.custom.services.soju = {
-    enable = mkEnableOption "IRC bouncer";
+    enable = custom.enableOption;
+
+    ports = mkOption {
+      type = types.submodule {
+        options = {
+          ircs = mkOption {
+            type = types.port;
+            default = 6697;
+          };
+          http = mkOption {
+            type = types.port;
+            default = 6680;
+          };
+        };
+      };
+      default = { };
+    };
   };
 
   config = mkIf cfg.enable {
@@ -27,10 +44,16 @@ in
       enable = true;
       hostName = domain;
       listen = [
-        "ircs://:6697"
+        "ircs://:${toString cfg.ports.ircs}"
+        "http+insecure://localhost:${toString cfg.ports.http}"
       ];
+      acceptProxyIP = [ "0.0.0.0/0" ];
       tlsCertificate = "/var/lib/acme/${domain}/fullchain.pem";
       tlsCertificateKey = "/var/lib/acme/${domain}/key.pem";
+      extraConfig = ''
+        http-ingress https://${domain}
+        file-upload http http://127.0.0.1:${toString config.custom.services.convoyeur.port}/upload
+      '';
     };
 
     systemd.services = {
@@ -77,7 +100,6 @@ in
           Type = "oneshot";
           User = "soju";
           Group = "soju";
-          RemainAfterExit = true;
         };
       };
     };
@@ -94,7 +116,14 @@ in
       };
     };
 
-    environment.persistence."/nix/persist" = {
+    custom.services.caddy.hosts = {
+      soju = {
+        inherit subdomain;
+        target = ":${toString cfg.ports.http}";
+      };
+    };
+
+    custom.system.persistence.config = {
       directories = [
         {
           directory = "/var/lib/soju";

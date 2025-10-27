@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.services.redis = {
-    enable = mkEnableOption "Redis broker";
+    enable = custom.enableOption;
     servers = mkOption {
       type = types.listOf types.str;
       default = [ ];

@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.hardware.gpu.intel = {
-    enable = mkEnableOption "Intel GPU acceleration";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

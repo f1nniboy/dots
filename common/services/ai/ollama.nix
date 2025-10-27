@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.services.ollama = {
-    enable = mkEnableOption "LLM backend";
+    enable = custom.enableOption;
     port = mkOption {
       type = types.port;
       default = 11434;
@@ -38,7 +38,7 @@ in
       ];
     };
 
-    environment.persistence."/nix/persist" = {
+    custom.system.persistence.config = {
       directories = [
         {
           directory = "/var/lib/ollama";

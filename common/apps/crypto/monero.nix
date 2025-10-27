@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.apps.monero = {
-    enable = mkEnableOption "Monero GUI & CLI";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

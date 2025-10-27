@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.services.miniflux = {
-    enable = mkEnableOption "Miniflux RSS feed aggregator & web viewer";
+    enable = custom.enableOption;
     domain = mkOption {
       type = types.str;
     };

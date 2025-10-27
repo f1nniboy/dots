@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   lib,
   pkgs,
   ...
@@ -19,11 +20,15 @@ let
 in
 {
   options.custom.services.jellyfin = {
-    enable = mkEnableOption "Jellyfin media server";
+    enable = custom.enableOption;
     id = mkOption {
       type = types.str;
     };
   };
+
+  imports = [
+    inputs.declarative-jellyfin.nixosModules.default
+  ];
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.jellyfin-ffmpeg ];
@@ -118,28 +123,37 @@ in
       };
     };
 
-    custom.services.caddy.hosts = {
-      jellyfin = {
-        subdomain = "media";
-        target = ":8096";
+    custom = {
+      services.caddy.hosts = {
+        jellyfin = {
+          subdomain = "media";
+          target = ":8096";
+        };
       };
-    };
 
-    environment.persistence."/nix/persist" = {
-      directories = [
-        {
-          directory = "/var/lib/jellyfin";
-          user = "jellyfin";
-          group = "jellyfin";
-          mode = "0700";
-        }
-        {
-          directory = "/var/cache/jellyfin";
-          user = "jellyfin";
-          group = "jellyfin";
-          mode = "0700";
-        }
-      ];
+      system.persistence.config = {
+        directories = [
+          {
+            directory = "/var/lib/jellyfin";
+            user = "jellyfin";
+            group = "jellyfin";
+            mode = "0700";
+          }
+          {
+            directory = "/var/cache/jellyfin";
+            user = "jellyfin";
+            group = "jellyfin";
+            mode = "0700";
+          }
+        ];
+      };
+
+      services.restic = {
+        paths = [ "/var/lib/jellyfin" ];
+        exclude = [
+          "/var/lib/jellyfin/metadata"
+        ];
+      };
     };
 
     sops.secrets = {
@@ -155,13 +169,6 @@ in
         key = "${config.networking.hostName}/jellyfin/api-keys/multi-scrobbler";
         owner = "jellyfin";
       };
-    };
-
-    custom.services.restic = {
-      paths = [ "/var/lib/jellyfin" ];
-      exclude = [
-        "/var/lib/jellyfin/metadata"
-      ];
     };
 
     systemd.tmpfiles.rules = [

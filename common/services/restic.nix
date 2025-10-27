@@ -5,14 +5,14 @@ let
 in
 {
   options.custom.services.restic = {
-    enable = mkEnableOption "restic backups";
+    enable = custom.enableOption;
     repos = mkOption {
       default = {
         borgbase = true;
       };
       type = types.submodule {
         options = {
-          borgbase = mkEnableOption "BorgBase";
+          borgbase = custom.enableOption;
         };
       };
     };

@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.services.xmrig = {
-    enable = mkEnableOption "XMRig Monero miner";
+    enable = custom.enableOption;
     host = mkOption {
       description = "IP or hostname of P2Pool instance";
       type = types.str;

@@ -13,7 +13,7 @@ let
 in
 {
   options.custom.services.sabnzbd = {
-    enable = mkEnableOption "SABnzbd download client";
+    enable = custom.enableOption;
 
     port = mkOption {
       type = types.port;
@@ -122,7 +122,7 @@ in
       };
     };
 
-    environment.persistence."/nix/persist" = {
+    custom.system.persistence.config = {
       directories = [
         {
           directory = "/var/lib/sabnzbd";

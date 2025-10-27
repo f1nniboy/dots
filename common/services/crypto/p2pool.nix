@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.services.p2pool = {
-    enable = mkEnableOption "P2Pool for decentralized XMR mining";
+    enable = custom.enableOption;
 
     wallet = mkOption {
       type = types.str;

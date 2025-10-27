@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.apps.luanti = {
-    enable = mkEnableOption "An open source voxel game engine";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

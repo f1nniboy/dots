@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.services.open-webui = {
-    enable = mkEnableOption "Self-hosted AI platform";
+    enable = custom.enableOption;
     port = mkOption {
       type = types.port;
       default = 13024;
@@ -70,7 +70,7 @@ in
       };
     };
 
-    environment.persistence."/nix/persist" = {
+    custom.system.persistence.config = {
       directories = [
         {
           directory = "/var/lib/open-webui";

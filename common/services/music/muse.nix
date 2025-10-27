@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.services.muse = {
-    enable = mkEnableOption "Muse Discord bot";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {
@@ -51,7 +51,7 @@ in
       };
     };
 
-    environment.persistence."/nix/persist" = {
+    custom.system.persistence.config = {
       directories = [
         {
           directory = "/var/lib/muse";

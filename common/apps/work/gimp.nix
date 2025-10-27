@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.apps.gimp = {
-    enable = mkEnableOption "GNU Image Manipulation Program";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

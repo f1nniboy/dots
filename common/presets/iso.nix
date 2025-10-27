@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  vars,
   ...
 }:
 with lib;
@@ -9,7 +10,7 @@ let
 in
 {
   options.custom.presets.iso = {
-    enable = mkEnableOption "Preset for ISO images";
+    enable = custom.enableOption;
   };
 
   imports = [
@@ -28,7 +29,7 @@ in
     users.users.nixos = {
       isNormalUser = true;
       extraGroups = [ "wheel" ];
-      openssh.authorizedKeys.keys = config.custom.ssh.authorizedKeys;
+      openssh.authorizedKeys.keys = vars.ssh.authorizedKeys;
     };
 
     security.sudo.wheelNeedsPassword = false;

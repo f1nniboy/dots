@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.system.ld = {
-    enable = mkEnableOption "run unpackaged programs";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.apps.helix = {
-    enable = mkEnableOption "Helix text editor";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

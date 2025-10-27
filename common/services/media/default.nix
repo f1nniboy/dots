@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.media = {
-    enable = mkEnableOption "FileFlows media post-processing";
+    enable = custom.enableOption;
 
     baseDir = mkOption {
       type = types.str;

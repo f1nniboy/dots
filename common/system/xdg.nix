@@ -5,8 +5,7 @@ let
 in
 {
   options.custom.system.xdg = {
-    enable = mkEnableOption "XDG base directories";
-    persistUserDirs = mkEnableOption "Persist user XDG directories, e.g. documents";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {
@@ -28,15 +27,17 @@ in
           directory = ".ssh";
           mode = "0700";
         }
-      ]
-      ++ (lib.optionals cfg.persistUserDirs [
+
         "Desktop"
         "Documents"
         "Downloads"
         "Music"
         "Pictures"
         "Videos"
-      ]);
+        "Projects"
+
+        "source" # temp
+      ];
       files = [
         ".bash_history"
       ];

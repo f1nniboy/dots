@@ -16,7 +16,7 @@ in
   ];
 
   options.custom.apps.spicetify = {
-    enable = mkEnableOption "Modded Spotify client";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

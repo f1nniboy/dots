@@ -11,7 +11,7 @@ let
 in
 {
   options.custom.services.forgejo = {
-    enable = mkEnableOption "Lightweight Git software forge";
+    enable = custom.enableOption;
 
     port = mkOption {
       type = types.port;
@@ -68,7 +68,7 @@ in
       };
     };
 
-    environment.persistence."/nix/persist" = {
+    custom.system.persistence.config = {
       directories = [
         {
           directory = "/var/lib/forgejo";

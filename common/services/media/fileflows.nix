@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.services.fileflows = {
-    enable = mkEnableOption "FileFlows media post-processing";
+    enable = custom.enableOption;
 
     port = mkOption {
       type = types.port;
@@ -27,8 +27,8 @@ in
       image = "revenz/fileflows:latest";
       ports = [ "127.0.0.1:${toString cfg.port}:5000" ];
       environment = {
-        "PGID" = "${toString config.users.groups.media.gid}";
-        "PUID" = "${toString config.users.users.fileflows.uid}";
+        "PGID" = toString config.users.groups.media.gid;
+        "PUID" = toString config.users.users.fileflows.uid;
         "TZ" = config.time.timeZone;
       };
       volumes = [
@@ -41,28 +41,30 @@ in
       ];
     };
 
-    custom.services.caddy.hosts = {
-      fileflows = {
-        subdomain = "flows.media";
-        target = ":${toString cfg.port}";
-        import = [ "auth" ];
+    custom = {
+      services.caddy.hosts = {
+        fileflows = {
+          subdomain = "flows.media";
+          target = ":${toString cfg.port}";
+          import = [ "auth" ];
+        };
       };
-    };
 
-    environment.persistence."/nix/persist" = {
-      directories = [
-        {
-          directory = "/var/lib/fileflows";
-          user = "fileflows";
-          group = "media";
-          mode = "0700";
-        }
+      system.persistence.config = {
+        directories = [
+          {
+            directory = "/var/lib/fileflows";
+            user = "fileflows";
+            group = "media";
+            mode = "0700";
+          }
+        ];
+      };
+
+      services.restic.paths = [
+        "/var/lib/fileflows"
       ];
     };
-
-    custom.services.restic.paths = [
-      "/var/lib/fileflows"
-    ];
 
     systemd.tmpfiles.rules = [
       "d ${config.custom.media.baseDir}/downloads/converted/movies 0770 fileflows media - -"

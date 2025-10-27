@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.system.nix = {
-    enable = mkEnableOption "NixOS configuration";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

@@ -7,6 +7,7 @@
     ./crypto
     ./docs
     ./games
+    ./irc
     ./media
     ./music
     ./net
@@ -23,7 +24,6 @@
     ./radicale.nix
     ./restic.nix
     ./samba.nix
-    ./soju.nix
     ./syncthing.nix
     ./vaultwarden.nix
   ];

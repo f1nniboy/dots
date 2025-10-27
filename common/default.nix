@@ -4,6 +4,7 @@
     ./desktop
     ./hardware
     ./packages
+    ./presets
     ./services
     ./system
   ];

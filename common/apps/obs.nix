@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.apps.obs = {
-    enable = mkEnableOption "Open Broadcaster Studio";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

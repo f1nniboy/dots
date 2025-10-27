@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.apps.vesktop = {
-    enable = mkEnableOption "Custom Discord client";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

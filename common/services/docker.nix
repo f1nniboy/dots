@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.services.docker = {
-    enable = mkEnableOption "Docker container support";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {
@@ -20,7 +20,7 @@ in
       "docker"
     ];
 
-    environment.persistence."/nix/persist" = {
+    custom.system.persistence.config = {
       directories = [ "/var/lib/docker" ];
     };
   };

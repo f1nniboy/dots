@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.apps.bitwarden = {
-    enable = mkEnableOption "Secure password vault";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

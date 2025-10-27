@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.apps.beammp-launcher = {
-    enable = mkEnableOption "Launcher for the BeamNG.drive multiplayer mod";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

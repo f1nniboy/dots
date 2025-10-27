@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.services.printing = {
-    enable = mkEnableOption "Printing services";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

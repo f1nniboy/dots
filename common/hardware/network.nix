@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.hardware.network = {
-    enable = mkEnableOption "networking support";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {
@@ -33,7 +33,7 @@ in
     # ref: https://github.com/NixOS/nixpkgs/issues/180175
     systemd.services.NetworkManager-wait-online.enable = false;
 
-    environment.persistence."/nix/persist" = {
+    custom.system.persistence.config = {
       directories = [ "/etc/NetworkManager/system-connections" ];
     };
   };

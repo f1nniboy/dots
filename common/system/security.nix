@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.system.security = {
-    enable = mkEnableOption "security tweaks";
+    enable = custom.enableOption;
   };
 
   imports = [

@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.desktop.gnome = {
-    enable = mkEnableOption "GNOME desktop environment";
+    enable = custom.enableOption;
 
     extensions = mkOption {
       type = types.listOf types.package;

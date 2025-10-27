@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.apps.haveno = {
-    enable = mkEnableOption "P2P decentralized XMR exchange";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

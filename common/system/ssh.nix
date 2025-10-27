@@ -5,12 +5,13 @@ let
 in
 {
   options.custom.system.ssh = {
+    enable = custom.enableOption;
     authorizedKeys = mkOption {
       type = types.listOf types.str;
     };
   };
 
-  config = {
+  config = mkIf cfg.enable {
     users.mutableUsers = false;
 
     users.users.${config.custom.system.user.name} = {

@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.apps.prismlauncher = {
-    enable = mkEnableOption "Launcher for Minecraft";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.system.fonts = {
-    enable = mkEnableOption "font installation";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

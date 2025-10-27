@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.apps.epiphany = {
-    enable = mkEnableOption "GNOME Web";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.services.karakeep = {
-    enable = mkEnableOption "Karakeep bookmark manager";
+    enable = custom.enableOption;
 
     port = mkOption {
       type = types.port;
@@ -20,8 +20,7 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      # for video downloading
-      yt-dlp
+      yt-dlp # video downloading
     ];
 
     systemd.services = {
@@ -57,21 +56,44 @@ in
       environmentFile = config.sops.templates.karakeep-secrets.path;
     };
 
-    custom.services = {
-      caddy.hosts = {
-        karakeep = {
-          subdomain = "keep";
-          target = ":${toString cfg.port}";
+    custom = {
+      services = {
+        caddy.hosts = {
+          karakeep = {
+            subdomain = "keep";
+            target = ":${toString cfg.port}";
+          };
         };
+        authelia.rules = [
+          # required to use the mobile app & browser extension
+          {
+            domain = "keep.${config.custom.services.caddy.domain}";
+            policy = "bypass";
+            resources = [ "/api.*" ];
+          }
+        ];
+
+        restic.paths = [
+          "/var/lib/karakeep"
+        ];
       };
-      authelia.rules = [
-        # required to use the mobile app & browser extension
-        {
-          domain = "keep.${config.custom.services.caddy.domain}";
-          policy = "bypass";
-          resources = [ "/api.*" ];
-        }
-      ];
+
+      system.persistence.config = {
+        directories = [
+          {
+            directory = "/var/lib/karakeep";
+            user = "karakeep";
+            group = "karakeep";
+            mode = "0700";
+          }
+          {
+            directory = "/var/lib/karakeep-browser";
+            user = "karakeep";
+            group = "karakeep";
+            mode = "0700";
+          }
+        ];
+      };
     };
 
     sops = {
@@ -98,26 +120,5 @@ in
         };
       };
     };
-
-    environment.persistence."/nix/persist" = {
-      directories = [
-        {
-          directory = "/var/lib/karakeep";
-          user = "karakeep";
-          group = "karakeep";
-          mode = "0700";
-        }
-        {
-          directory = "/var/lib/karakeep-browser";
-          user = "karakeep";
-          group = "karakeep";
-          mode = "0700";
-        }
-      ];
-    };
-
-    custom.services.restic.paths = [
-      "/var/lib/karakeep"
-    ];
   };
 }

@@ -29,7 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     copyDesktopItems
     installShellFiles
-
     cmake
   ];
 

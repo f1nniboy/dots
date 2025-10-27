@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.system.boot = {
-    enable = mkEnableOption "boot configuration";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

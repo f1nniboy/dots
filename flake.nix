@@ -12,7 +12,7 @@
     impermanence.url = "github:nix-community/impermanence";
     sops-nix.url = "github:Mic92/sops-nix";
     caddy.url = "github:vincentbernat/caddy-nix";
-    flatpaks.url = "github:in-a-dil-emma/declarative-flatpak/v3.1.0";
+    flatpaks.url = "github:in-a-dil-emma/declarative-flatpak/latest";
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
     piped.url = "github:squalus/piped-flake";
 
@@ -46,47 +46,64 @@
     {
       self,
       nixpkgs,
-      sops-nix,
-      piped,
-      declarative-jellyfin,
-      nix-minecraft,
       nur,
       ...
     }@inputs:
     let
       inherit (self) outputs;
+
+      lib = import ./common/lib { inherit inputs; };
       vars = import ./vars.nix;
 
-      mkNixOSConfig =
-        path:
+      mkSystem =
+        hostname:
+        let
+          path = ./machines/${hostname};
+        in
         nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          specialArgs = { inherit inputs outputs vars; };
+          specialArgs = {
+            inherit
+              lib
+              inputs
+              outputs
+              vars
+              ;
+          };
           modules = [
             {
+              networking.hostName = hostname;
+            }
+
+            (path + "/configuration.nix")
+            (path + "/hardware.nix")
+
+            {
+              # TODO: what am I using NUR for again?
               nixpkgs.overlays = [
-                nix-minecraft.overlay
                 nur.overlays.default
               ];
             }
-            nix-minecraft.nixosModules.minecraft-servers
-            sops-nix.nixosModules.sops
-            piped.nixosModules.default
-            declarative-jellyfin.nixosModules.default
-            path
-            (dirOf path + "/hardware.nix")
           ];
         };
 
     in
     {
       nixosConfigurations = {
-        desktop = mkNixOSConfig ./machines/desktop/configuration.nix;
-        laptop = mkNixOSConfig ./machines/laptop/configuration.nix;
-        lab = mkNixOSConfig ./machines/lab/configuration.nix;
+        desktop = mkSystem "desktop";
+        laptop = mkSystem "laptop";
+        lab = mkSystem "lab";
+
         iso = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          specialArgs = { inherit inputs outputs vars; };
+          specialArgs = {
+            inherit
+              lib
+              inputs
+              outputs
+              vars
+              ;
+          };
           modules = [
             (nixpkgs + "/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix")
             ./machines/iso/configuration.nix

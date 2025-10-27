@@ -1,4 +1,10 @@
 { config, ... }:
+let
+  libraryIds = {
+    Filme = "7a2175bccb1f1a94152cbd2b2bae8f6d";
+    Serien = "43cfe12fe7d9d8d21251e0964e0232e2";
+  };
+in
 builtins.toJSON {
   clientId = config.sops.placeholder."${config.networking.hostName}/jellyseerr/client-id";
   vapidPrivate = config.sops.placeholder."${config.networking.hostName}/jellyseerr/vapid/private";
@@ -27,13 +33,13 @@ builtins.toJSON {
     jellyfinForgotPasswordUrl = "";
     libraries = [
       {
-        id = "7a2175bccb1f1a94152cbd2b2bae8f6d";
+        id = libraryIds.Filme;
         name = "Filme";
         enabled = true;
         type = "movie";
       }
       {
-        id = "43cfe12fe7d9d8d21251e0964e0232e2";
+        id = libraryIds.Serien;
         name = "Serien";
         enabled = true;
         type = "show";

@@ -19,7 +19,7 @@ let
 in
 {
   options.custom.services.gow = {
-    enable = mkEnableOption "Games on Whales";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {
@@ -102,7 +102,7 @@ in
         allowedUDPPorts = p;
       };
 
-    environment.persistence."/nix/persist" = {
+    custom.system.persistence.config = {
       directories = [
         {
           directory = "/var/lib/wolf";

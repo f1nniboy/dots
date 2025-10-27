@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   lib,
   pkgs,
   ...
@@ -10,8 +11,12 @@ let
 in
 {
   options.custom.system.sops = {
-    enable = mkEnableOption "sops secrets";
+    enable = custom.enableOption;
   };
+
+  imports = [
+    inputs.sops-nix.nixosModules.sops
+  ];
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.sops ];
@@ -19,10 +24,6 @@ in
     sops = {
       defaultSopsFile = ./../../secrets/secrets.yaml;
       age.sshKeyPaths = [ "/nix/secret/initrd/ssh_host_ed25519_key" ];
-
-      secrets = {
-        "common/user/hashed-password".neededForUsers = true;
-      };
 
       # ref: https://github.com/Mic92/sops-nix/issues/427
       gnupg.sshKeyPaths = [ ];

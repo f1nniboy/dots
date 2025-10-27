@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   lib,
   pkgs,
   ...
@@ -14,10 +15,18 @@ let
 in
 {
   options.custom.services.minecraft = {
-    enable = mkEnableOption "Minecraft server";
+    enable = custom.enableOption;
   };
 
+  imports = [
+    inputs.nix-minecraft.nixosModules.minecraft-servers
+  ];
+
   config = mkIf cfg.enable {
+    nixpkgs.overlays = [
+      inputs.nix-minecraft.overlay
+    ];
+
     services.minecraft-servers = {
       enable = true;
       dataDir = "/var/lib/minecraft";
@@ -159,7 +168,7 @@ in
       ];
     };
 
-    environment.persistence."/nix/persist" = {
+    custom.system.persistence.config = {
       directories = [
         {
           directory = "/var/lib/minecraft";

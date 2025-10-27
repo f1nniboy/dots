@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.system.home = {
-    enable = mkEnableOption "home-manager configuration";
+    enable = custom.enableOption;
     homeFiles = mkOption {
       type = types.attrs;
       default = { };

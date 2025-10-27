@@ -6,7 +6,7 @@ let
 in
 {
   options.custom.services.immich = {
-    enable = mkEnableOption "Immich photo library";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {
@@ -35,15 +35,45 @@ in
       };
     };
 
-    custom.services = {
-      caddy.hosts = {
-        immich = {
-          subdomain = "photo";
-          target = ":${toString config.services.immich.port}";
+    custom = {
+      services = {
+        caddy.hosts = {
+          immich = {
+            subdomain = "photo";
+            target = ":${toString config.services.immich.port}";
+          };
         };
+        postgresql.users = [ "immich" ];
+        redis.servers = [ "immich" ];
       };
-      postgresql.users = [ "immich" ];
-      redis.servers = [ "immich" ];
+
+      system.persistence.config = {
+        directories = [
+          {
+            directory = "/var/lib/immich";
+            user = "immich";
+            group = "immich";
+            mode = "0700";
+          }
+          {
+            directory = "/var/cache/immich";
+            user = "immich";
+            group = "immich";
+            mode = "0700";
+          }
+        ];
+      };
+
+      services.restic = {
+        paths = [
+          mediaDir
+        ];
+        exclude = [
+          "/fun/media/gallery/backups" # we're already backing up the db
+          "/fun/media/gallery/thumbs" # can be re-generated afterwards
+          "/fun/media/gallery/upload" # only used for uploads
+        ];
+      };
     };
 
     sops = {
@@ -65,36 +95,8 @@ in
       };
     };
 
-    environment.persistence."/nix/persist" = {
-      directories = [
-        {
-          directory = "/var/lib/immich";
-          user = "immich";
-          group = "immich";
-          mode = "0700";
-        }
-        {
-          directory = "/var/cache/immich";
-          user = "immich";
-          group = "immich";
-          mode = "0700";
-        }
-      ];
-    };
-
     systemd.tmpfiles.rules = [
       "d ${mediaDir} 0700 immich immich - -"
     ];
-
-    custom.services.restic = {
-      paths = [
-        mediaDir
-      ];
-      exclude = [
-        "/fun/media/gallery/backups" # we're already backing up the db
-        "/fun/media/gallery/thumbs" # can be re-generated afterwards
-        "/fun/media/gallery/upload" # only used for uploads
-      ];
-    };
   };
 }

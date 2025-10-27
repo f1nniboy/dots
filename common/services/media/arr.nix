@@ -10,7 +10,7 @@ in
 {
 
   options.custom.services.arr = {
-    enable = mkEnableOption "*arr media stack";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {
@@ -76,32 +76,78 @@ in
       ];
     };
 
-    custom.services = {
-      caddy.hosts = {
-        prowlarr = {
-          subdomain = "idx.media";
-          target = ":${toString config.services.prowlarr.settings.server.port}";
-          import = [ "auth" ];
+    custom = {
+      services = {
+        caddy.hosts = {
+          prowlarr = {
+            subdomain = "idx.media";
+            target = ":${toString config.services.prowlarr.settings.server.port}";
+            import = [ "auth" ];
+          };
+          radarr = {
+            subdomain = "mov.media";
+            target = ":${toString config.services.radarr.settings.server.port}";
+            import = [ "auth" ];
+          };
+          sonarr = {
+            subdomain = "tv.media";
+            target = ":${toString config.services.sonarr.settings.server.port}";
+            import = [ "auth" ];
+          };
         };
-        radarr = {
-          subdomain = "mov.media";
-          target = ":${toString config.services.radarr.settings.server.port}";
-          import = [ "auth" ];
-        };
-        sonarr = {
-          subdomain = "tv.media";
-          target = ":${toString config.services.sonarr.settings.server.port}";
-          import = [ "auth" ];
-        };
+        authelia.rules = [
+          # required for nzb360 mobile app
+          {
+            domain = "*.media.${config.custom.services.caddy.domain}";
+            policy = "bypass";
+            resources = [ "/api.*" ];
+          }
+        ];
       };
-      authelia.rules = [
-        # required for nzb360 mobile app
-        {
-          domain = "*.media.${config.custom.services.caddy.domain}";
-          policy = "bypass";
-          resources = [ "/api.*" ];
-        }
-      ];
+
+      system.persistence.config = {
+        directories = [
+          {
+            directory = "/var/lib/prowlarr";
+            user = "prowlarr";
+            group = "media";
+            mode = "0700";
+          }
+          {
+            directory = "/var/lib/radarr";
+            user = "radarr";
+            group = "media";
+            mode = "0700";
+          }
+          {
+            directory = "/var/lib/sonarr";
+            user = "sonarr";
+            group = "media";
+            mode = "0700";
+          }
+        ];
+      };
+
+      services.restic = {
+        paths = [
+          "/var/lib/prowlarr"
+          "/var/lib/radarr"
+          "/var/lib/sonarr"
+        ];
+        exclude = [
+          "/var/lib/prowlarr/Definitions"
+          "/var/lib/prowlarr/Backups"
+          "/var/lib/prowlarr/logs"
+
+          "/var/lib/sonarr/.config/NzbDrone/MediaCover"
+          "/var/lib/sonarr/.config/NzbDrone/Backups"
+          "/var/lib/sonarr/.config/NzbDrone/logs"
+
+          "/var/lib/radarr/.config/Radarr/MediaCover"
+          "/var/lib/radarr/.config/Radarr/Backups"
+          "/var/lib/radarr/.config/Radarr/logs"
+        ];
+      };
     };
 
     sops.secrets = {
@@ -113,50 +159,6 @@ in
         key = "${config.networking.hostName}/sonarr/api-key";
         owner = "authelia-main";
       };
-    };
-
-    environment.persistence."/nix/persist" = {
-      directories = [
-        {
-          directory = "/var/lib/prowlarr";
-          user = "prowlarr";
-          group = "media";
-          mode = "0700";
-        }
-        {
-          directory = "/var/lib/radarr";
-          user = "radarr";
-          group = "media";
-          mode = "0700";
-        }
-        {
-          directory = "/var/lib/sonarr";
-          user = "sonarr";
-          group = "media";
-          mode = "0700";
-        }
-      ];
-    };
-
-    custom.services.restic = {
-      paths = [
-        "/var/lib/prowlarr"
-        "/var/lib/radarr"
-        "/var/lib/sonarr"
-      ];
-      exclude = [
-        "/var/lib/prowlarr/Definitions"
-        "/var/lib/prowlarr/Backups"
-        "/var/lib/prowlarr/logs"
-
-        "/var/lib/sonarr/.config/NzbDrone/MediaCover"
-        "/var/lib/sonarr/.config/NzbDrone/Backups"
-        "/var/lib/sonarr/.config/NzbDrone/logs"
-
-        "/var/lib/radarr/.config/Radarr/MediaCover"
-        "/var/lib/radarr/.config/Radarr/Backups"
-        "/var/lib/radarr/.config/Radarr/logs"
-      ];
     };
   };
 }

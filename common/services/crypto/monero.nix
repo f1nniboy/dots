@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.services.monero = {
-    enable = mkEnableOption "Monero node server";
+    enable = custom.enableOption;
 
     whitelist = mkOption {
       type = types.listOf types.str;
@@ -22,7 +22,7 @@ in
         download = -1;
         upload = -1;
       };
-      # https://www.coincashew.com/coins/overview-xmr/guide-or-how-to-run-a-full-node
+      # ref: https://www.coincashew.com/coins/overview-xmr/guide-or-how-to-run-a-full-node
       extraConfig = ''
         log-level=0
 

@@ -9,7 +9,7 @@ let
 in
 {
   options.custom.apps.ghostty = {
-    enable = mkEnableOption "Ghostty terminal";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

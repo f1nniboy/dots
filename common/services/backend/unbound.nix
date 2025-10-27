@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.services.unbound = {
-    enable = mkEnableOption "Unbound DNS";
+    enable = custom.enableOption;
 
     port = mkOption {
       type = types.port;
@@ -71,7 +71,7 @@ in
       };
     };
 
-    environment.persistence."/nix/persist" = {
+    custom.system.persistence.config = {
       directories = [
         {
           directory = "/var/lib/unbound";

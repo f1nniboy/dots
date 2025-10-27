@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.apps.yazi = {
-    enable = mkEnableOption "Yazi file manager";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

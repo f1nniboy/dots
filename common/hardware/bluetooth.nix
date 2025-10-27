@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.hardware.bluetooth = {
-    enable = mkEnableOption "bluetooth support";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {
@@ -14,7 +14,7 @@ in
       powerOnBoot = true;
     };
 
-    environment.persistence."/nix/persist" = {
+    custom.system.persistence.config = {
       directories = [ "/var/lib/bluetooth" ];
     };
   };

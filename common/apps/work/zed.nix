@@ -10,19 +10,10 @@ let
 in
 {
   options.custom.apps.zed = {
-    enable = mkEnableOption "Zed editor";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-      # language servers
-      nil
-      nixd
-
-      # formatter
-      nixfmt-rfc-style
-    ];
-
     custom.system.home.extraOptions = {
       programs.zed-editor = {
         enable = true;

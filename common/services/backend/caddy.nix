@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.services.caddy = {
-    enable = mkEnableOption "reverse proxy with Caddy";
+    enable = custom.enableOption;
     domain = mkOption {
       type = types.str;
       description = "Default base domain for reverse proxy services";
@@ -112,7 +112,7 @@ in
       }) cfg.hosts;
     };
 
-    environment.persistence."/nix/persist" = {
+    custom.system.persistence.config = {
       directories = [
         {
           directory = "/var/lib/caddy";

@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.system.locale = {
-    enable = mkEnableOption "locale and timezone";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

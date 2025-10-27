@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.hardware.wheel = {
-    enable = mkEnableOption "Logitech steering wheel support";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

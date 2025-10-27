@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.apps.notesnook = {
-    enable = mkEnableOption "Encrypted note-taking app";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.system.env = {
-    enable = mkEnableOption "environment variables";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

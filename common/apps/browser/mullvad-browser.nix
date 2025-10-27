@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.apps.mullvad-browser = {
-    enable = mkEnableOption "Privacy-focused browser";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

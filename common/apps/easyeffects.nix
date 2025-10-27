@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.apps.easyeffects = {
-    enable = mkEnableOption "Audio effects for PipeWire applications";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

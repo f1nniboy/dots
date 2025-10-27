@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.services.vaultwarden = {
-    enable = mkEnableOption "Rust version of the Bitwarden password manager";
+    enable = custom.enableOption;
 
     port = mkOption {
       type = types.port;
@@ -38,7 +38,7 @@ in
       postgresql.users = [ "vaultwarden" ];
     };
 
-    environment.persistence."/nix/persist" = {
+    custom.system.persistence.config = {
       directories = [ "/var/lib/vaultwarden" ];
     };
   };

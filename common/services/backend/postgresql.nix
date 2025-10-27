@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.services.postgresql = {
-    enable = mkEnableOption "PostgreSQL database";
+    enable = custom.enableOption;
 
     users = mkOption {
       type = types.listOf types.str;
@@ -46,7 +46,7 @@ in
       '';
     };
 
-    environment.persistence."/nix/persist" = {
+    custom.system.persistence.config = {
       directories = [
         {
           directory = "/var/lib/postgresql";

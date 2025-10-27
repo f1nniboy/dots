@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.hardware.audio = {
-    enable = mkEnableOption "audio support";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

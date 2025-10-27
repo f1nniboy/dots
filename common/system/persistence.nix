@@ -5,7 +5,44 @@ let
 in
 {
   options.custom.system.persistence = {
-    enable = mkEnableOption "persistent storage";
+    enable = custom.enableOption;
+
+    config = mkOption {
+      type = types.submodule {
+        options = {
+          directories = mkOption {
+            type = types.listOf (
+              types.either types.str (
+                types.submodule {
+                  options = {
+                    directory = mkOption { type = types.str; };
+                    user = mkOption {
+                      type = types.str;
+                      default = "root";
+                    };
+                    group = mkOption {
+                      type = types.str;
+                      default = "root";
+                    };
+                    mode = mkOption {
+                      type = types.str;
+                      default = "0755";
+                    };
+                  };
+                }
+              )
+            );
+            default = [ ];
+          };
+          files = mkOption {
+            type = types.listOf types.str;
+            default = [ ];
+          };
+        };
+      };
+      default = { };
+    };
+
     userConfig = mkOption {
       type = types.submodule {
         options = {
@@ -24,17 +61,14 @@ in
               )
             );
             default = [ ];
-            description = "User directories to persist";
           };
           files = mkOption {
             type = types.listOf types.str;
             default = [ ];
-            description = "User files to persist";
           };
         };
       };
       default = { };
-      description = "Persistent storage for the user";
     };
   };
 
@@ -48,13 +82,15 @@ in
         }
         "/var/log"
         "/var/lib/nixos"
-      ];
+      ]
+      ++ cfg.config.directories;
       files = [
         "/etc/ssh/ssh_host_ed25519_key.pub"
         "/etc/ssh/ssh_host_ed25519_key"
         "/etc/ssh/ssh_host_rsa_key.pub"
         "/etc/ssh/ssh_host_rsa_key"
-      ];
+      ]
+      ++ cfg.config.files;
       users.${config.custom.system.user.name} = {
         inherit (cfg.userConfig) directories files;
       };

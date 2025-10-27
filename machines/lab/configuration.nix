@@ -12,9 +12,11 @@
     ../../common
   ];
 
-  networking.hostName = "lab";
-
   custom = {
+    presets = {
+      base.enable = true;
+    };
+
     apps = {
       # cli
       neovim.enable = true;
@@ -92,6 +94,7 @@
       forgejo.enable = true;
 
       soju.enable = true;
+      convoyeur.enable = true;
 
       monero = {
         enable = true;
@@ -114,28 +117,15 @@
     system = {
       user = {
         fullName = "Finn";
-        name = "me";
         email = "me@f1nn.space";
       };
       inherit (vars) ssh;
 
-      nix.enable = true;
-      boot.enable = true;
-      env.enable = true;
-      locale.enable = true;
-      packages.enable = true;
-      xdg.enable = true;
-      persistence.enable = true;
-      sops.enable = true;
-      security.enable = true;
       remoteUnlock.enable = true;
     };
 
     hardware = {
-      gpu = {
-        intel.enable = true;
-      };
-      network.enable = true;
+      gpu.intel.enable = true;
     };
   };
 }

@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.apps.supertux = {
-    enable = mkEnableOption "Classic 2D jump'n run sidescroller game";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

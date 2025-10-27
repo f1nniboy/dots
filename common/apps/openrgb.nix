@@ -19,7 +19,7 @@ let
 in
 {
   options.custom.apps.openrgb = {
-    enable = mkEnableOption "RGB daemon";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

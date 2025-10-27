@@ -5,12 +5,8 @@ let
 in
 {
   options.custom.presets.desktop = {
-    enable = mkEnableOption "Preset for GNOME desktop";
+    enable = custom.enableOption;
   };
-
-  imports = [
-    ../../common
-  ];
 
   config = mkIf cfg.enable {
     custom = {
@@ -23,21 +19,20 @@ in
         firefox.enable = true;
         epiphany.enable = true;
         ptyxis.enable = true;
-        #ghostty.enable = true;
         halloy.enable = true;
         vesktop.enable = true;
-        #vscode.enable = true;
-        #spicetify.enable = true;
         notesnook.enable = true;
         rnote.enable = true;
         zed.enable = true;
         monero.enable = true;
+        bitwarden.enable = true;
+        gimp.enable = true;
 
         # cli
-        #helix.enable = true;
         neovim.enable = true;
         yazi.enable = true;
         git.enable = true;
+        bottom.enable = true;
       };
 
       services = {
@@ -50,27 +45,14 @@ in
       };
 
       system = {
-        nix.enable = true;
-        boot.enable = true;
-        env.enable = true;
-        fonts.enable = true;
-        locale.enable = true;
-        packages.enable = true;
-        home.enable = true;
-        sops.enable = true;
-        security.enable = true;
+        dev.enable = true;
         flatpak.enable = true;
-        persistence.enable = true;
-        swap.enable = true;
-
-        xdg = {
-          enable = true;
-          persistUserDirs = true;
-        };
+        fonts.enable = true;
+        home.enable = true;
+        ld.enable = true;
       };
 
       hardware = {
-        network.enable = true;
         audio.enable = true;
         bluetooth.enable = true;
       };

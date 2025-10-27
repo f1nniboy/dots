@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.services.openssh = {
-    enable = mkEnableOption "OpenSSH server";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

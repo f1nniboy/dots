@@ -6,7 +6,7 @@ let
 in
 {
   options.custom.services.authelia = {
-    enable = mkEnableOption "Authelia authentication service";
+    enable = custom.enableOption;
 
     port = mkOption {
       type = types.port;

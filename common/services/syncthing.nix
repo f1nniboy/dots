@@ -6,7 +6,7 @@ let
 in
 {
   options.custom.services.syncthing = {
-    enable = mkEnableOption "Decentralized file syncing";
+    enable = custom.enableOption;
 
     devices = mkOption {
       type = types.attrsOf (
@@ -41,8 +41,8 @@ in
   config = mkIf cfg.enable {
     services.syncthing = {
       enable = true;
-      group = config.users.users."${config.custom.system.user.name}".group;
       user = config.custom.system.user.name;
+      inherit (config.users.users."${config.custom.system.user.name}") group;
       configDir = "${homeDir}/.config/syncthing";
       overrideDevices = true;
       overrideFolders = true;

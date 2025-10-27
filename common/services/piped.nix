@@ -1,11 +1,16 @@
-{ config, lib, ... }:
+{
+  config,
+  inputs,
+  lib,
+  ...
+}:
 with lib;
 let
   cfg = config.custom.services.piped;
 in
 {
   options.custom.services.piped = {
-    enable = mkEnableOption "Piped YouTube frontend & proxy";
+    enable = custom.enableOption;
     subdomain = mkOption {
       type = types.str;
       default = "yt";
@@ -30,6 +35,10 @@ in
       default = { };
     };
   };
+
+  imports = [
+    inputs.piped.nixosModules.default
+  ];
 
   config = mkIf cfg.enable {
     users = {

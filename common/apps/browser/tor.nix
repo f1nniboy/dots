@@ -12,7 +12,7 @@ let
 in
 {
   options.custom.apps.tor = {
-    enable = mkEnableOption "Tor browser";
+    enable = custom.enableOption;
   };
 
   # ref: https://github.com/BryceBeagle/nixos-config/blob/main/firefox.nix

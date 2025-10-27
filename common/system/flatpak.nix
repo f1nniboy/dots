@@ -10,11 +10,11 @@ let
 in
 {
   imports = [
-    inputs.flatpaks.nixosModule
+    inputs.flatpaks.nixosModules.default
   ];
 
   options.custom.system.flatpak = {
-    enable = mkEnableOption "flatpak support";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {
@@ -25,7 +25,7 @@ in
       };
     };
 
-    environment.persistence."/nix/persist" = {
+    custom.system.persistence.config = {
       directories = [
         {
           directory = "/var/lib/flatpak";

@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.services.i2pd = {
-    enable = mkEnableOption "PurpleI2P daemon";
+    enable = custom.enableOption;
 
     address = mkOption {
       type = types.str;
@@ -71,7 +71,7 @@ in
       ];
     };
 
-    environment.persistence."/nix/persist" = {
+    custom.system.persistence.config = {
       directories = [
         {
           directory = "/var/lib/i2pd";

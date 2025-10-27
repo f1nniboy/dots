@@ -46,7 +46,7 @@ let
 in
 {
   options.custom.services.notesnook = {
-    enable = mkEnableOption "Notesnook note-taking service";
+    enable = custom.enableOption;
 
     ports = mkOption {
       type = lib.types.submodule {
@@ -359,7 +359,7 @@ in
       };
     };
 
-    environment.persistence."/nix/persist" = {
+    custom.system.persistence.config = {
       directories = [
         {
           directory = "/var/lib/notesnook";

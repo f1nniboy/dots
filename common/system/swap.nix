@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.system.swap = {
-    enable = mkEnableOption "Memory swapping";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

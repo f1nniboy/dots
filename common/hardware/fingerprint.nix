@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.hardware.fingerprint = {
-    enable = mkEnableOption "Fingerprint reader support";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {
@@ -20,7 +20,7 @@ in
       enable = true;
     };
 
-    environment.persistence."/nix/persist" = {
+    custom.system.persistence.config = {
       directories = [ "/var/lib/fprint" ];
     };
   };

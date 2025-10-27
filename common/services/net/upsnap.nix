@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.services.upsnap = {
-    enable = mkEnableOption "Wake-on-LAN web app";
+    enable = custom.enableOption;
 
     port = mkOption {
       type = types.port;
@@ -34,7 +34,7 @@ in
       };
     };
 
-    environment.persistence."/nix/persist" = {
+    custom.system.persistence.config = {
       directories = [
         {
           directory = "/var/lib/upsnap";

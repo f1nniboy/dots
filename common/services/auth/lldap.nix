@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.services.lldap = {
-    enable = mkEnableOption "Lightweight LDAP server";
+    enable = custom.enableOption;
 
     ports = mkOption {
       type = types.submodule {

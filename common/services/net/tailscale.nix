@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.services.tailscale = {
-    enable = mkEnableOption "Tailscape VPN";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {
@@ -63,7 +63,7 @@ in
       checkReversePath = "loose";
     };
 
-    environment.persistence."/nix/persist" = {
+    custom.system.persistence.config = {
       directories = [ "/var/lib/tailscale" ];
     };
   };

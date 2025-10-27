@@ -13,7 +13,7 @@ let
 in
 {
   options.custom.apps.rnote = {
-    enable = mkEnableOption "Sketch and take handwritten notes";
+    enable = custom.enableOption;
   };
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.rnote ];

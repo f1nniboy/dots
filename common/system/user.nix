@@ -5,7 +5,10 @@ let
 in
 {
   options.custom.system.user = {
-    name = mkOption { type = types.str; };
+    name = mkOption {
+      type = types.str;
+      default = "me";
+    };
     fullName = mkOption { type = types.str; };
     email = mkOption { type = types.str; };
     sshPublicKey = mkOption {
@@ -19,15 +22,21 @@ in
   };
 
   config = {
-    users.mutableUsers = false;
+    sops.secrets = {
+      "common/user/hashed-password".neededForUsers = true;
+    };
 
-    users.users.${cfg.name} = {
-      description = cfg.fullName;
-      isNormalUser = true;
-      extraGroups = cfg.extraGroups ++ [
-        "wheel"
-      ];
-      hashedPasswordFile = config.sops.secrets."common/user/hashed-password".path;
+    users = {
+      mutableUsers = false;
+
+      users.${cfg.name} = {
+        description = cfg.fullName;
+        isNormalUser = true;
+        extraGroups = cfg.extraGroups ++ [
+          "wheel"
+        ];
+        hashedPasswordFile = config.sops.secrets."common/user/hashed-password".path;
+      };
     };
   };
 }

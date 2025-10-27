@@ -11,18 +11,13 @@ let
 in
 {
   options.custom.services.paperless = {
-    enable = mkEnableOption "Document archival service";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {
     environment.systemPackages = [
       pkgs.paperless-ngx
     ];
-
-    custom.services = {
-      postgresql.users = [ "paperless" ];
-      redis.servers = [ "paperless" ];
-    };
 
     users.users.paperless = {
       extraGroups = [
@@ -62,21 +57,39 @@ in
       };
     };
 
-    custom.services = {
-      caddy.hosts = {
-        paperless = {
-          subdomain = "paper";
-          target = ":${toString config.services.paperless.port}";
+    custom = {
+      services = {
+        postgresql.users = [ "paperless" ];
+        redis.servers = [ "paperless" ];
+      };
+
+      services = {
+        caddy.hosts = {
+          paperless = {
+            subdomain = "paper";
+            target = ":${toString config.services.paperless.port}";
+          };
+        };
+        restic = {
+          paths = [
+            "/var/lib/paperless"
+            docsDir
+          ];
+          exclude = [
+            "/fun/media/docs/documents/thumbnails"
+            "/var/lib/paperless/log"
+          ];
         };
       };
-      restic = {
-        paths = [
-          "/var/lib/paperless"
-          docsDir
-        ];
-        exclude = [
-          "/fun/media/docs/documents/thumbnails"
-          "/var/lib/paperless/log"
+
+      system.persistence.config = {
+        directories = [
+          {
+            directory = "/var/lib/paperless";
+            user = "paperless";
+            group = "paperless";
+            mode = "0700";
+          }
         ];
       };
     };
@@ -122,17 +135,6 @@ in
           owner = "authelia-main";
         };
       };
-    };
-
-    environment.persistence."/nix/persist" = {
-      directories = [
-        {
-          directory = "/var/lib/paperless";
-          user = "paperless";
-          group = "paperless";
-          mode = "0700";
-        }
-      ];
     };
   };
 }

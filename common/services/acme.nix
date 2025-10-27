@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.services.acme = {
-    enable = mkEnableOption "ACME certificate retrieval";
+    enable = custom.enableOption;
     domains = mkOption {
       type = types.attrsOf (
         types.submodule {
@@ -46,7 +46,7 @@ in
       };
     };
 
-    environment.persistence."/nix/persist" = {
+    custom.system.persistence.config = {
       directories = [
         {
           directory = "/var/lib/acme";

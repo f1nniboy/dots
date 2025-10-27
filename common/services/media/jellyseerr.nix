@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.services.jellyseerr = {
-    enable = mkEnableOption "Jellyseerr media requester";
+    enable = custom.enableOption;
 
     port = mkOption {
       type = types.port;
@@ -46,7 +46,7 @@ in
       };
     };
 
-    environment.persistence."/nix/persist" = {
+    custom.system.persistence.config = {
       directories = [
         {
           directory = "/var/lib/jellyseerr";

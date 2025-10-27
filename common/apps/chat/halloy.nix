@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.apps.halloy = {
-    enable = mkEnableOption "GUI IRC client";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

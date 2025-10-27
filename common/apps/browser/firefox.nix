@@ -32,7 +32,7 @@ let
 in
 {
   options.custom.apps.firefox = {
-    enable = mkEnableOption "Firefox browser";
+    enable = custom.enableOption;
   };
 
   # ref: https://github.com/BryceBeagle/nixos-config/blob/main/firefox.nix

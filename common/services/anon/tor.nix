@@ -5,7 +5,7 @@ let
 in
 {
   options.custom.services.tor = {
-    enable = mkEnableOption "Tor relay daemon";
+    enable = custom.enableOption;
     contact = mkOption {
       type = types.str;
     };
@@ -35,7 +35,7 @@ in
       allowedUDPPorts = [ cfg.port ];
     };
 
-    environment.persistence."/nix/persist" = {
+    custom.system.persistence.config = {
       directories = [
         {
           directory = "/var/lib/tor";

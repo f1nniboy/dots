@@ -14,7 +14,7 @@ let
 in
 {
   options.custom.services.mullvad = {
-    enable = mkEnableOption "Mullvad VPN";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {
@@ -67,7 +67,7 @@ in
       };
     };
 
-    environment.persistence."/nix/persist" = {
+    custom.system.persistence.config = {
       directories = [
         {
           directory = "/var/lib/mullvad-vpn";

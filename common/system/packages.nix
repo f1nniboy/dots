@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.system.packages = {
-    enable = mkEnableOption "common system packages";
+    enable = custom.enableOption;
     unfreePackages = mkOption {
       type = types.listOf types.str;
     };
@@ -24,19 +24,8 @@ in
       systemPackages = with pkgs; [
         # utilities
         efibootmgr
-        bottom
         just
-        statix
         fd
-
-        # remove bottom.desktop shortcut
-        (lib.hiPrio (
-          pkgs.runCommand "bottom.desktop-hide" { } ''
-            mkdir -p "$out/share/applications"
-            cat "${pkgs.bottom}/share/applications/bottom.desktop" > "$out/share/applications/bottom.desktop"
-            echo "Hidden=1" >> "$out/share/applications/bottom.desktop"
-          ''
-        ))
       ];
     };
   };

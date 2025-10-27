@@ -10,7 +10,7 @@ let
 in
 {
   options.custom.apps.steam = {
-    enable = mkEnableOption "Steam";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {

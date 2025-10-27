@@ -10,11 +10,12 @@ let
 in
 {
   options.custom.apps.neovim = {
-    enable = mkEnableOption "Neovim text editor";
+    enable = custom.enableOption;
   };
 
   config = mkIf cfg.enable {
     environment.systemPackages = [
+      # remove desktop shortcut
       (lib.hiPrio (
         pkgs.runCommand "nvim.desktop-hide" { } ''
           mkdir -p "$out/share/applications"
