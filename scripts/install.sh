@@ -17,8 +17,8 @@ log_error()   { echo -e "${RED}${BOLD}>>>${NC} $1" >&2; exit 1; }
 run_task() {
     local task_name="$1"
     shift
-    log_info "${BOLD}Starting${NC}: $task_name"
-    "$@" && log_success "${BOLD}Completed${NC}: $task_name" || log_error "Failed: $task_name"
+    log_info "${BOLD}starting${NC}: $task_name"
+    "$@" && log_success "${BOLD}completed${NC}: $task_name" || log_error "${BOLD}failed${NC}: $task_name"
 }
 
 undo_changes() {
@@ -51,22 +51,22 @@ generate_age_key() {
 }
 
 main() {
-    [ $# -ne 1 ] && log_error "Usage: $0 <device_name>"
+    [ $# -ne 1 ] && log_error "usage: $0 <device_name>"
     local device_name="$1"
 
-    log_warn "This script will prepare the system for NixOS installation It is irreversible."
-    read -n 1 -s -r -p "Press any key to continue or Ctrl+C to abort..."
+    log_warn "this script will prepare the system for NixOS installation"
+    read -n 1 -s -r -p "press any key to continue ..."
     echo
 
-    run_task "Undoing previous changes" undo_changes
-    run_task "Setting up disks" setup_disks "$device_name"
-    run_task "Mounting filesystems" mount_filesystems
-    run_task "Generating SSH host key" generate_ssh_key
-    run_task "Generating secrets key" generate_age_key
+    run_task "undoing previous changes" undo_changes
+    run_task "setting up disks" setup_disks "$device_name"
+    run_task "mounting filesystems" mount_filesystems
+    run_task "generating SSH host key" generate_ssh_key
+    run_task "generating secrets key" generate_age_key
 
-    echo -e "\n${BOLD}Next steps:${NC}"
-    echo -e "${BOLD}- Add the machine's public host key to SOPS configuration${NC}"
-    echo -e "${BOLD}- Install NixOS with: sudo nixos-install --no-root-passwd --root /mnt --flake ${PWD}#${device_name}${NC}"
+    echo -e "\n${BOLD}next steps:${NC}"
+    echo -e "${BOLD}-${NC} add the machine's public host key to ${BOLD}.sops.yaml${NC}"
+    echo -e "${BOLD}-${NC} install with: ${BOLD}sudo nixos-install --no-root-passwd --root /mnt --flake ${PWD}#${device_name}${NC}"
 }
 
 main "$@"
