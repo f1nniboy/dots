@@ -102,6 +102,10 @@ in
         allowedUDPPorts = p;
       };
 
+    systemd.tmpfiles.rules = [
+      "d /fun/games 0770 ${config.custom.system.user.name} users - -"
+    ];
+
     custom.system.persistence.config = {
       directories = [
         {
@@ -110,9 +114,5 @@ in
         }
       ];
     };
-
-    systemd.tmpfiles.rules = [
-      "d /fun/games 0770 ${config.custom.system.user.name} users - -"
-    ];
   };
 }

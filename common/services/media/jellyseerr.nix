@@ -26,44 +26,27 @@ in
       inherit (cfg) port;
     };
 
-    systemd.services = {
-      jellyseerr = {
-        environment = {
-          HOST = "127.0.0.1";
-        };
-        serviceConfig = {
-          DynamicUser = mkForce false;
-          User = "jellyseerr";
-          Group = "media";
+    systemd = {
+      services = {
+        jellyseerr = {
+          environment = {
+            HOST = "127.0.0.1";
+          };
+          serviceConfig = {
+            DynamicUser = mkForce false;
+            User = "jellyseerr";
+            Group = "media";
+          };
         };
       };
-    };
 
-    custom.services.caddy.hosts = {
-      jellyseerr = {
-        subdomain = "search.media";
-        target = ":${toString cfg.port}";
-      };
-    };
-
-    custom.system.persistence.config = {
-      directories = [
-        {
-          directory = "/var/lib/jellyseerr";
-          user = "jellyseerr";
-          group = "media";
-          mode = "0700";
-        }
-      ];
-    };
-
-    systemd.tmpfiles.settings."10-jellyseerr-settings"."/var/lib/jellyseerr/config/settings.json"."C" =
-      {
+      tmpfiles.settings."10-jellyseerr-settings"."/var/lib/jellyseerr/config/settings.json"."C" = {
         argument = config.sops.templates.jellyseerr-config.path;
         user = "jellyseerr";
         group = "media";
         mode = "0700";
       };
+    };
 
     sops = {
       templates.jellyseerr-config = {
@@ -93,6 +76,26 @@ in
           key = "${config.networking.hostName}/sonarr/api-key";
           owner = "jellyseerr";
         };
+      };
+    };
+
+    custom = {
+      services.caddy.hosts = {
+        jellyseerr = {
+          subdomain = "search.media";
+          target = ":${toString cfg.port}";
+        };
+      };
+
+      system.persistence.config = {
+        directories = [
+          {
+            directory = "/var/lib/jellyseerr";
+            user = "jellyseerr";
+            group = "media";
+            mode = "0700";
+          }
+        ];
       };
     };
   };

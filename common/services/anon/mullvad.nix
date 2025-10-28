@@ -48,34 +48,39 @@ in
       '';
     };
 
-    custom.system.home = {
-      configFiles = {
-        "Mullvad VPN/gui_settings.json" = {
-          text = builtins.toJSON {
-            monochromaticIcon = true;
-            animateMap = true;
-            startMinimized = true;
+    custom.system = {
+      home = {
+        configFiles = {
+          "Mullvad VPN/gui_settings.json" = {
+            text = builtins.toJSON {
+              monochromaticIcon = true;
+              animateMap = true;
+              startMinimized = true;
 
-            preferredLocale = "system";
-            autoConnect = true;
-            enableSystemNotifications = true;
-            unpinnedWindow = true;
-            browsedForSplitTunnelingApplications = [ ];
-            changelogDisplayedForVersion = "2025.7";
+              preferredLocale = "system";
+              autoConnect = true;
+              enableSystemNotifications = true;
+              unpinnedWindow = true;
+              browsedForSplitTunnelingApplications = [ ];
+              changelogDisplayedForVersion = "2025.7";
+            };
           };
         };
       };
-    };
 
-    custom.system.persistence.config = {
-      directories = [
-        {
-          directory = "/var/lib/mullvad-vpn";
-          user = "root";
-          group = "root";
-          mode = "0700";
-        }
-      ];
+      persistence = {
+        config.directories = [
+          {
+            directory = "/var/lib/mullvad-vpn";
+            user = "root";
+            group = "root";
+            mode = "0700";
+          }
+        ];
+        userConfig.directories = [
+          ".config/Mullvad VPN"
+        ];
+      };
     };
   };
 }

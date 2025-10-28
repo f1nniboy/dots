@@ -25,17 +25,19 @@ in
       };
     };
 
-    custom.system.persistence.config = {
-      directories = [
-        {
-          directory = "/var/lib/flatpak";
-          group = "users";
-        }
-      ];
-    };
+    custom.system.persistence = {
+      config = {
+        directories = [
+          {
+            directory = "/var/lib/flatpak";
+            group = "users";
+          }
+        ];
+      };
 
-    custom.system.persistence.userConfig = {
-      directories = [ ".var/app" ];
+      userConfig = {
+        directories = [ ".var/app" ];
+      };
     };
   };
 }

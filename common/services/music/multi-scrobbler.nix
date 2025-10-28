@@ -41,25 +41,6 @@ in
       };
     };
 
-    custom.services.caddy.hosts = {
-      multi-scrobbler = {
-        subdomain = "scrobbler";
-        target = ":${toString cfg.port}";
-        import = [ "auth" ];
-      };
-    };
-
-    custom.system.persistence.config = {
-      directories = [
-        {
-          directory = "/var/lib/multi-scrobbler";
-          user = "multi-scrobbler";
-          group = "multi-scrobbler";
-          mode = "0700";
-        }
-      ];
-    };
-
     sops = {
       templates.multi-scrobbler-config = {
         path = "/var/lib/multi-scrobbler/config.json";
@@ -87,6 +68,27 @@ in
 
         "${config.networking.hostName}/multi-scrobbler/clients/lastfm/api-key".owner = "multi-scrobbler";
         "${config.networking.hostName}/multi-scrobbler/clients/lastfm/secret".owner = "multi-scrobbler";
+      };
+    };
+
+    custom = {
+      services.caddy.hosts = {
+        multi-scrobbler = {
+          subdomain = "scrobbler";
+          target = ":${toString cfg.port}";
+          import = [ "auth" ];
+        };
+      };
+
+      system.persistence.config = {
+        directories = [
+          {
+            directory = "/var/lib/multi-scrobbler";
+            user = "multi-scrobbler";
+            group = "multi-scrobbler";
+            mode = "0700";
+          }
+        ];
       };
     };
   };

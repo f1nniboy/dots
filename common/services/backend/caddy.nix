@@ -21,7 +21,7 @@ in
           options = {
             subdomain = mkOption {
               type = types.str;
-              description = "Subdomain for the service";
+              description = "subdomain for the service";
             };
             target = mkOption {
               type = types.str;
@@ -29,12 +29,12 @@ in
             import = mkOption {
               type = types.listOf types.str;
               default = [ ];
-              description = "List of Caddy snippets to import for this host";
+              description = "list of Caddy snippets to import for this host";
             };
             extra = mkOption {
               type = types.str;
               default = "";
-              description = "Additional configuration directives";
+              description = "additional directives";
             };
             type = mkOption {
               type = types.enum [
@@ -47,29 +47,11 @@ in
         }
       );
       default = { };
-      description = "Services to reverse proxy or serve statically";
+      description = "services to reverse proxy or serve statically";
     };
   };
 
   config = mkIf cfg.enable {
-    sops = {
-      templates.caddy-secrets = {
-        content = ''
-          PORKBUN_API_KEY=${config.sops.placeholder."${config.networking.hostName}/caddy/porkbun/api-key"}
-          PORKBUN_API_SECRET_KEY=${
-            config.sops.placeholder."${config.networking.hostName}/caddy/porkbun/api-secret-key"
-          }
-        '';
-        owner = "caddy";
-      };
-      secrets = {
-        "${config.networking.hostName}/caddy/porkbun/api-key".owner = "caddy";
-        "${config.networking.hostName}/caddy/porkbun/api-secret-key".owner = "caddy";
-      };
-    };
-
-    systemd.services.caddy.serviceConfig.EnvironmentFile = config.sops.templates.caddy-secrets.path;
-
     services.caddy = {
       enable = true;
 
@@ -110,6 +92,24 @@ in
           '';
         };
       }) cfg.hosts;
+    };
+
+    systemd.services.caddy.serviceConfig.EnvironmentFile = config.sops.templates.caddy-secrets.path;
+
+    sops = {
+      templates.caddy-secrets = {
+        content = ''
+          PORKBUN_API_KEY=${config.sops.placeholder."${config.networking.hostName}/caddy/porkbun/api-key"}
+          PORKBUN_API_SECRET_KEY=${
+            config.sops.placeholder."${config.networking.hostName}/caddy/porkbun/api-secret-key"
+          }
+        '';
+        owner = "caddy";
+      };
+      secrets = {
+        "${config.networking.hostName}/caddy/porkbun/api-key".owner = "caddy";
+        "${config.networking.hostName}/caddy/porkbun/api-secret-key".owner = "caddy";
+      };
     };
 
     custom.system.persistence.config = {

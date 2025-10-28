@@ -79,7 +79,6 @@
             (path + "/hardware.nix")
 
             {
-              # TODO: what am I using NUR for again?
               nixpkgs.overlays = [
                 nur.overlays.default
               ];

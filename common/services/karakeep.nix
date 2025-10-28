@@ -56,6 +56,31 @@ in
       environmentFile = config.sops.templates.karakeep-secrets.path;
     };
 
+    sops = {
+      templates."karakeep-secrets" = {
+        content = ''
+          OAUTH_CLIENT_ID="${config.sops.placeholder."${config.networking.hostName}/oidc/karakeep/id"}"
+          OAUTH_CLIENT_SECRET="${
+            config.sops.placeholder."${config.networking.hostName}/oidc/karakeep/secret"
+          }"
+
+          OPENAI_API_KEY="${config.sops.placeholder."${config.networking.hostName}/karakeep/openai-api-key"}"
+        '';
+        owner = "karakeep";
+      };
+      secrets = {
+        "${config.networking.hostName}/karakeep/openai-api-key".owner = "karakeep";
+
+        "${config.networking.hostName}/oidc/karakeep/secret".owner = "karakeep";
+        "${config.networking.hostName}/oidc/karakeep/secret-hash".owner = "authelia-main";
+        "${config.networking.hostName}/oidc/karakeep/id".owner = "karakeep";
+        "authelia-${config.networking.hostName}/oidc/karakeep/id" = {
+          key = "${config.networking.hostName}/oidc/karakeep/id";
+          owner = "authelia-main";
+        };
+      };
+    };
+
     custom = {
       services = {
         caddy.hosts = {
@@ -93,31 +118,6 @@ in
             mode = "0700";
           }
         ];
-      };
-    };
-
-    sops = {
-      templates."karakeep-secrets" = {
-        content = ''
-          OAUTH_CLIENT_ID="${config.sops.placeholder."${config.networking.hostName}/oidc/karakeep/id"}"
-          OAUTH_CLIENT_SECRET="${
-            config.sops.placeholder."${config.networking.hostName}/oidc/karakeep/secret"
-          }"
-
-          OPENAI_API_KEY="${config.sops.placeholder."${config.networking.hostName}/karakeep/openai-api-key"}"
-        '';
-        owner = "karakeep";
-      };
-      secrets = {
-        "${config.networking.hostName}/karakeep/openai-api-key".owner = "karakeep";
-
-        "${config.networking.hostName}/oidc/karakeep/secret".owner = "karakeep";
-        "${config.networking.hostName}/oidc/karakeep/secret-hash".owner = "authelia-main";
-        "${config.networking.hostName}/oidc/karakeep/id".owner = "karakeep";
-        "authelia-${config.networking.hostName}/oidc/karakeep/id" = {
-          key = "${config.networking.hostName}/oidc/karakeep/id";
-          owner = "authelia-main";
-        };
       };
     };
   };

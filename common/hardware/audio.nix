@@ -22,8 +22,6 @@ in
       pulseaudio.enable = mkForce false;
     };
 
-    users.users.${config.custom.system.user.name} = {
-      extraGroups = [ "audio" ];
-    };
+    custom.system.user.extraGroups = [ "audio" ];
   };
 }

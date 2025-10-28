@@ -69,23 +69,25 @@ in
       };
     };
 
-    custom.services.caddy.hosts = {
-      paperless-gpt = {
-        subdomain = "ai.${config.custom.services.caddy.hosts.paperless.subdomain}";
-        target = ":${toString cfg.port}";
-        import = [ "auth" ];
+    custom = {
+      services.caddy.hosts = {
+        paperless-gpt = {
+          subdomain = "ai.${config.custom.services.caddy.hosts.paperless.subdomain}";
+          target = ":${toString cfg.port}";
+          import = [ "auth" ];
+        };
       };
-    };
 
-    custom.system.persistence.config = {
-      directories = [
-        {
-          directory = "/var/lib/paperless-gpt";
-          user = "paperless-gpt";
-          group = "paperless-gpt";
-          mode = "0700";
-        }
-      ];
+      system.persistence.config = {
+        directories = [
+          {
+            directory = "/var/lib/paperless-gpt";
+            user = "paperless-gpt";
+            group = "paperless-gpt";
+            mode = "0700";
+          }
+        ];
+      };
     };
   };
 }

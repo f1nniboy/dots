@@ -29,10 +29,7 @@ in
         gimp.enable = true;
 
         # cli
-        neovim.enable = true;
-        yazi.enable = true;
         git.enable = true;
-        bottom.enable = true;
       };
 
       services = {

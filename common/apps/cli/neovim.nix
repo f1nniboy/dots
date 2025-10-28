@@ -11,20 +11,27 @@ in
 {
   options.custom.apps.neovim = {
     enable = custom.enableOption;
+    defaultEditor = custom.enableOption;
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [
-      # remove desktop shortcut
-      (lib.hiPrio (
-        pkgs.runCommand "nvim.desktop-hide" { } ''
-          mkdir -p "$out/share/applications"
-          cat "${config.programs.neovim.finalPackage}/share/applications/nvim.desktop" > "$out/share/applications/nvim.desktop"
-          echo "Hidden=1" >> "$out/share/applications/nvim.desktop"
-        ''
-      ))
-    ];
-
     programs.neovim.enable = true;
+
+    environment = {
+      systemPackages = [
+        # remove desktop shortcut
+        (lib.hiPrio (
+          pkgs.runCommand "nvim.desktop-hide" { } ''
+            mkdir -p "$out/share/applications"
+            cat "${config.programs.neovim.finalPackage}/share/applications/nvim.desktop" > "$out/share/applications/nvim.desktop"
+            echo "Hidden=1" >> "$out/share/applications/nvim.desktop"
+          ''
+        ))
+      ];
+
+      variables = mkIf cfg.defaultEditor {
+        EDITOR = "nvim";
+      };
+    };
   };
 }

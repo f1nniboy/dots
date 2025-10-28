@@ -25,11 +25,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    systemd.services.lldap = {
-      after = [ "postgresql.service" ];
-      requires = [ "postgresql.service" ];
-    };
-
     users = {
       users.lldap = {
         group = "lldap";
@@ -37,6 +32,11 @@ in
         isSystemUser = true;
       };
       groups.lldap = { };
+    };
+
+    systemd.services.lldap = {
+      after = [ "postgresql.service" ];
+      requires = [ "postgresql.service" ];
     };
 
     services = {
@@ -58,6 +58,12 @@ in
       };
     };
 
+    sops.secrets = {
+      "${config.networking.hostName}/lldap/admin-password".owner = "lldap";
+      "${config.networking.hostName}/lldap/jwt-secret".owner = "lldap";
+      "${config.networking.hostName}/lldap/key-seed".owner = "lldap";
+    };
+
     custom.services = {
       caddy.hosts = {
         lldap = {
@@ -66,12 +72,6 @@ in
         };
       };
       postgresql.users = [ "lldap" ];
-    };
-
-    sops.secrets = {
-      "${config.networking.hostName}/lldap/admin-password".owner = "lldap";
-      "${config.networking.hostName}/lldap/jwt-secret".owner = "lldap";
-      "${config.networking.hostName}/lldap/key-seed".owner = "lldap";
     };
   };
 }

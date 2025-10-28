@@ -9,19 +9,19 @@ in
   };
 
   config = mkIf cfg.enable {
-    virtualisation.docker = {
-      enable = true;
-      autoPrune.enable = true;
+    virtualisation = {
+      docker = {
+        enable = true;
+        autoPrune.enable = true;
+      };
+      oci-containers.backend = "docker";
     };
 
-    virtualisation.oci-containers.backend = "docker";
-
-    custom.system.user.extraGroups = [
-      "docker"
-    ];
-
-    custom.system.persistence.config = {
-      directories = [ "/var/lib/docker" ];
+    custom.system = {
+      user.extraGroups = [ "docker" ];
+      persistence.config = {
+        directories = [ "/var/lib/docker" ];
+      };
     };
   };
 }

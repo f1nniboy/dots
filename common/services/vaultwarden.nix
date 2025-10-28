@@ -28,18 +28,20 @@ in
       };
     };
 
-    custom.services = {
-      caddy.hosts = {
-        vaultwarden = {
-          subdomain = "vault";
-          target = ":${toString cfg.port}";
+    custom = {
+      services = {
+        caddy.hosts = {
+          vaultwarden = {
+            subdomain = "vault";
+            target = ":${toString cfg.port}";
+          };
         };
+        postgresql.users = [ "vaultwarden" ];
       };
-      postgresql.users = [ "vaultwarden" ];
-    };
 
-    custom.system.persistence.config = {
-      directories = [ "/var/lib/vaultwarden" ];
+      system.persistence.config = {
+        directories = [ "/var/lib/vaultwarden" ];
+      };
     };
   };
 }

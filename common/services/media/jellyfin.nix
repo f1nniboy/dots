@@ -39,87 +39,109 @@ in
       "video"
     ];
 
-    services.declarative-jellyfin = {
-      enable = true;
-      backups = false;
+    services = {
+      declarative-jellyfin = {
+        enable = true;
+        backups = false;
 
-      serverId = cfg.id;
+        serverId = cfg.id;
 
-      system = {
-        serverName = "Jelly";
-        UICulture = "de";
-        preferredMetadataLanguage = "de";
-        metadataCountryCode = "DE";
-        trickplayOptions = {
-          enableHwAcceleration = true;
-          enableHwEncoding = true;
+        system = {
+          serverName = "Jelly";
+          UICulture = "de";
+          preferredMetadataLanguage = "de";
+          metadataCountryCode = "DE";
+          trickplayOptions = {
+            enableHwAcceleration = true;
+            enableHwEncoding = true;
+          };
         };
-      };
 
-      branding = {
-        customCss = ''
-          @import url("https://cdn.jsdelivr.net/gh/lscambo13/ElegantFin@main/Theme/ElegantFin-jellyfin-theme-build-latest-minified.css");
-        '';
-      };
+        branding = {
+          customCss = ''
+            @import url("https://cdn.jsdelivr.net/gh/lscambo13/ElegantFin@main/Theme/ElegantFin-jellyfin-theme-build-latest-minified.css");
+          '';
+        };
 
-      encoding = {
-        hardwareAccelerationType = "qsv";
-        enableVppTonemapping = true;
-        enableThrottling = true;
-        enableSegmentDeletion = true;
-      };
+        encoding = {
+          hardwareAccelerationType = "qsv";
+          enableVppTonemapping = true;
+          enableThrottling = true;
+          enableSegmentDeletion = true;
+        };
 
-      libraries = {
-        Filme = mkMerge [
-          {
-            enabled = true;
-            contentType = "movies";
-            pathInfos = [ "${config.custom.media.baseDir}/library/movies" ];
-          }
-          baseLibrarySettings
-        ];
-        Serien = mkMerge [
-          {
-            enabled = true;
-            contentType = "tvshows";
-            pathInfos = [ "${config.custom.media.baseDir}/library/shows" ];
-          }
-          baseLibrarySettings
-        ];
-      };
+        libraries = {
+          Filme = mkMerge [
+            {
+              enabled = true;
+              contentType = "movies";
+              pathInfos = [ "${config.custom.media.baseDir}/library/movies" ];
+            }
+            baseLibrarySettings
+          ];
+          Serien = mkMerge [
+            {
+              enabled = true;
+              contentType = "tvshows";
+              pathInfos = [ "${config.custom.media.baseDir}/library/shows" ];
+            }
+            baseLibrarySettings
+          ];
+        };
 
-      users = {
-        Finn = {
-          mutable = false;
-          hashedPasswordFile = config.sops.secrets."${config.networking.hostName}/jellyfin/users/Finn".path;
-          permissions = {
-            isAdministrator = true;
+        users = {
+          Finn = {
+            mutable = false;
+            hashedPasswordFile = config.sops.secrets."${config.networking.hostName}/jellyfin/users/Finn".path;
+            permissions = {
+              isAdministrator = true;
+            };
+          };
+        };
+
+        apikeys = {
+          jellyseerr = {
+            keyPath =
+              config.sops.secrets."jellyfin-${config.networking.hostName}/jellyfin/api-keys/jellyseerr".path;
+          };
+          multi-scrobbler = {
+            keyPath =
+              config.sops.secrets."jellyfin-${config.networking.hostName}/jellyfin/api-keys/multi-scrobbler".path;
           };
         };
       };
 
-      apikeys = {
-        jellyseerr = {
-          keyPath =
-            config.sops.secrets."jellyfin-${config.networking.hostName}/jellyfin/api-keys/jellyseerr".path;
-        };
-        multi-scrobbler = {
-          keyPath =
-            config.sops.secrets."jellyfin-${config.networking.hostName}/jellyfin/api-keys/multi-scrobbler".path;
+      samba = {
+        settings = {
+          "library" = {
+            "path" = "${config.custom.media.baseDir}/library";
+            "browseable" = "yes";
+            "read only" = "no";
+            "guest ok" = "no";
+            "force user" = "jellyfin";
+            "force group" = "media";
+          };
         };
       };
     };
 
-    services.samba = {
-      settings = {
-        "library" = {
-          "path" = "${config.custom.media.baseDir}/library";
-          "browseable" = "yes";
-          "read only" = "no";
-          "guest ok" = "no";
-          "force user" = "jellyfin";
-          "force group" = "media";
-        };
+    systemd.tmpfiles.rules = [
+      "d ${config.custom.media.baseDir}/library/movies 0770 nobody media - -"
+      "d ${config.custom.media.baseDir}/library/shows  0770 nobody media - -"
+    ];
+
+    sops.secrets = {
+      "${config.networking.hostName}/jellyfin/server-id".owner = "jellyfin";
+      "${config.networking.hostName}/jellyfin/users/Finn".owner = "jellyfin";
+
+      # api keys
+      "jellyfin-${config.networking.hostName}/jellyfin/api-keys/jellyseerr" = {
+        key = "${config.networking.hostName}/jellyfin/api-keys/jellyseerr";
+        owner = "jellyfin";
+      };
+      "jellyfin-${config.networking.hostName}/jellyfin/api-keys/multi-scrobbler" = {
+        key = "${config.networking.hostName}/jellyfin/api-keys/multi-scrobbler";
+        owner = "jellyfin";
       };
     };
 
@@ -155,25 +177,5 @@ in
         ];
       };
     };
-
-    sops.secrets = {
-      "${config.networking.hostName}/jellyfin/server-id".owner = "jellyfin";
-      "${config.networking.hostName}/jellyfin/users/Finn".owner = "jellyfin";
-
-      # api keys
-      "jellyfin-${config.networking.hostName}/jellyfin/api-keys/jellyseerr" = {
-        key = "${config.networking.hostName}/jellyfin/api-keys/jellyseerr";
-        owner = "jellyfin";
-      };
-      "jellyfin-${config.networking.hostName}/jellyfin/api-keys/multi-scrobbler" = {
-        key = "${config.networking.hostName}/jellyfin/api-keys/multi-scrobbler";
-        owner = "jellyfin";
-      };
-    };
-
-    systemd.tmpfiles.rules = [
-      "d ${config.custom.media.baseDir}/library/movies 0770 nobody media - -"
-      "d ${config.custom.media.baseDir}/library/shows  0770 nobody media - -"
-    ];
   };
 }

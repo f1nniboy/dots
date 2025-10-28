@@ -27,22 +27,6 @@ in
       };
     };
 
-    custom.services.caddy.hosts = {
-      upsnap = {
-        subdomain = "wake";
-        target = ":${toString cfg.port}";
-      };
-    };
-
-    custom.system.persistence.config = {
-      directories = [
-        {
-          directory = "/var/lib/upsnap";
-          mode = "0700";
-        }
-      ];
-    };
-
     sops = {
       secrets = {
         "${config.networking.hostName}/oidc/upsnap/secret-hash".owner = "authelia-main";
@@ -50,6 +34,24 @@ in
           key = "${config.networking.hostName}/oidc/upsnap/id";
           owner = "authelia-main";
         };
+      };
+    };
+
+    custom = {
+      services.caddy.hosts = {
+        upsnap = {
+          subdomain = "wake";
+          target = ":${toString cfg.port}";
+        };
+      };
+
+      system.persistence.config = {
+        directories = [
+          {
+            directory = "/var/lib/upsnap";
+            mode = "0700";
+          }
+        ];
       };
     };
   };

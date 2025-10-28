@@ -116,22 +116,24 @@ in
       };
     };
 
-    custom.services.caddy.hosts = {
-      soju = {
-        inherit subdomain;
-        target = ":${toString cfg.ports.http}";
+    custom = {
+      services.caddy.hosts = {
+        soju = {
+          inherit subdomain;
+          target = ":${toString cfg.ports.http}";
+        };
       };
-    };
 
-    custom.system.persistence.config = {
-      directories = [
-        {
-          directory = "/var/lib/soju";
-          user = "soju";
-          group = "soju";
-          mode = "0700";
-        }
-      ];
+      system.persistence.config = {
+        directories = [
+          {
+            directory = "/var/lib/soju";
+            user = "soju";
+            group = "soju";
+            mode = "0700";
+          }
+        ];
+      };
     };
   };
 }

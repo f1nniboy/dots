@@ -49,13 +49,25 @@ in
       };
     };
 
-    custom.services = {
-      caddy.hosts = {
-        i2pd = {
-          subdomain = "i2p";
-          target = ":${toString config.services.i2pd.proto.http.port}";
-          import = [ "auth" ];
+    custom = {
+      services = {
+        caddy.hosts = {
+          i2pd = {
+            subdomain = "i2p";
+            target = ":${toString config.services.i2pd.proto.http.port}";
+            import = [ "auth" ];
+          };
         };
+      };
+      system.persistence.config = {
+        directories = [
+          {
+            directory = "/var/lib/i2pd";
+            user = "i2pd";
+            group = "i2pd";
+            mode = "0700";
+          }
+        ];
       };
     };
 
@@ -68,17 +80,6 @@ in
       ];
       allowedUDPPorts = [
         cfg.port
-      ];
-    };
-
-    custom.system.persistence.config = {
-      directories = [
-        {
-          directory = "/var/lib/i2pd";
-          user = "i2pd";
-          group = "i2pd";
-          mode = "0700";
-        }
       ];
     };
   };

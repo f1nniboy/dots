@@ -55,32 +55,6 @@ in
       environmentFile = config.sops.templates.open-webui-secrets.path;
     };
 
-    custom = {
-      system.packages.unfreePackages = [
-        "open-webui"
-      ];
-      services = {
-        caddy.hosts = {
-          open-webui = {
-            subdomain = "chat";
-            target = ":${toString cfg.port}";
-          };
-        };
-        #postgresql.users = [ "open-webui" ];
-      };
-    };
-
-    custom.system.persistence.config = {
-      directories = [
-        {
-          directory = "/var/lib/open-webui";
-          user = "open-webui";
-          group = "open-webui";
-          mode = "0700";
-        }
-      ];
-    };
-
     sops = {
       templates.open-webui-secrets = {
         content = ''
@@ -100,6 +74,33 @@ in
           key = "${config.networking.hostName}/oidc/open-webui/id";
           owner = "authelia-main";
         };
+      };
+    };
+
+    custom = {
+      system = {
+        packages.unfreePackages = [
+          "open-webui"
+        ];
+        persistence.config = {
+          directories = [
+            {
+              directory = "/var/lib/open-webui";
+              user = "open-webui";
+              group = "open-webui";
+              mode = "0700";
+            }
+          ];
+        };
+      };
+      services = {
+        caddy.hosts = {
+          open-webui = {
+            subdomain = "chat";
+            target = ":${toString cfg.port}";
+          };
+        };
+        #postgresql.users = [ "open-webui" ];
       };
     };
   };

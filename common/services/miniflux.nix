@@ -65,14 +65,6 @@ in
         };
       };
 
-    custom.services = {
-      caddy.hosts.miniflux = {
-        subdomain = "news";
-        target = ":${toString cfg.port}";
-      };
-      postgresql.users = [ "miniflux" ];
-    };
-
     sops = {
       templates.miniflux-creds = {
         content = ''
@@ -93,6 +85,14 @@ in
         "${config.networking.hostName}/oidc/miniflux/secret".owner = "miniflux";
         "${config.networking.hostName}/oidc/miniflux/secret-hash".owner = "authelia-main";
       };
+    };
+
+    custom.services = {
+      caddy.hosts.miniflux = {
+        subdomain = "news";
+        target = ":${toString cfg.port}";
+      };
+      postgresql.users = [ "miniflux" ];
     };
   };
 }

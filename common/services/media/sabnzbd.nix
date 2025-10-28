@@ -84,19 +84,6 @@ in
       group = "media";
     };
 
-    custom = {
-      system.packages.unfreePackages = [
-        "unrar"
-      ];
-      services.caddy.hosts = {
-        sabnzbd = {
-          subdomain = "dl.media";
-          target = ":${toString cfg.port}";
-          import = [ "auth" ];
-        };
-      };
-    };
-
     systemd = {
       tmpfiles.settings."10-sabnzbd-config"."/var/lib/sabnzbd/sabnzbd.ini"."C+" = {
         user = "sabnzbd";
@@ -122,21 +109,37 @@ in
       };
     };
 
-    custom.system.persistence.config = {
-      directories = [
-        {
-          directory = "/var/lib/sabnzbd";
-          user = "sabnzbd";
-          group = "media";
-          mode = "0700";
-        }
-      ];
-    };
-
     systemd.tmpfiles.rules = [
       "d ${cfg.dirs.incomplete} 0770 nobody media - -"
       "d ${cfg.dirs.complete}   0770 nobody media - -"
     ]
     ++ categoryTmpfiles;
+
+    custom = {
+      services.caddy.hosts = {
+        sabnzbd = {
+          subdomain = "dl.media";
+          target = ":${toString cfg.port}";
+          import = [ "auth" ];
+        };
+      };
+
+      system = {
+        packages.unfreePackages = [
+          "unrar"
+        ];
+
+        persistence.config = {
+          directories = [
+            {
+              directory = "/var/lib/sabnzbd";
+              user = "sabnzbd";
+              group = "media";
+              mode = "0700";
+            }
+          ];
+        };
+      };
+    };
   };
 }

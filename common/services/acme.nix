@@ -17,7 +17,7 @@ in
         }
       );
       default = { };
-      description = "Domains to request a certificate for";
+      description = "domains to request a certificate for";
     };
   };
 

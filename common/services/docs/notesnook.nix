@@ -89,31 +89,6 @@ in
       };
     };
 
-    custom.services = {
-      caddy.hosts = {
-        notesnook-api = {
-          subdomain = "api.note";
-          target = ":${toString cfg.ports.api}";
-        };
-        notesnook-auth = {
-          subdomain = "auth.note";
-          target = ":${toString cfg.ports.auth}";
-        };
-        notesnook-mono = {
-          subdomain = "mono.note";
-          target = ":${toString cfg.ports.mono}";
-        };
-        notesnook-sse = {
-          subdomain = "sse.note";
-          target = ":${toString cfg.ports.sse}";
-        };
-        notesnook-s3 = {
-          subdomain = "files.note";
-          target = ":${toString cfg.ports.s3}";
-        };
-      };
-    };
-
     # containers
     virtualisation.oci-containers.containers = {
       "notesnook-api" = {
@@ -359,13 +334,40 @@ in
       };
     };
 
-    custom.system.persistence.config = {
-      directories = [
-        {
-          directory = "/var/lib/notesnook";
-          mode = "0700";
-        }
-      ];
+    custom = {
+      services = {
+        caddy.hosts = {
+          notesnook-api = {
+            subdomain = "api.note";
+            target = ":${toString cfg.ports.api}";
+          };
+          notesnook-auth = {
+            subdomain = "auth.note";
+            target = ":${toString cfg.ports.auth}";
+          };
+          notesnook-mono = {
+            subdomain = "mono.note";
+            target = ":${toString cfg.ports.mono}";
+          };
+          notesnook-sse = {
+            subdomain = "sse.note";
+            target = ":${toString cfg.ports.sse}";
+          };
+          notesnook-s3 = {
+            subdomain = "files.note";
+            target = ":${toString cfg.ports.s3}";
+          };
+        };
+      };
+
+      system.persistence.config = {
+        directories = [
+          {
+            directory = "/var/lib/notesnook";
+            mode = "0700";
+          }
+        ];
+      };
     };
   };
 }

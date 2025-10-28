@@ -61,24 +61,6 @@ in
         # ${adminCmd} change-password --username ${user} --password "$(tr -d '\n' < ${pwd.path})" || true
       '';
 
-    custom.services.caddy.hosts = {
-      forgejo = {
-        inherit subdomain;
-        target = ":${toString cfg.port}";
-      };
-    };
-
-    custom.system.persistence.config = {
-      directories = [
-        {
-          directory = "/var/lib/forgejo";
-          user = "forgejo";
-          group = "forgejo";
-          mode = "0700";
-        }
-      ];
-    };
-
     sops = {
       secrets = {
         "${config.networking.hostName}/forgejo/admin-password".owner = "forgejo";
@@ -90,6 +72,26 @@ in
           key = "${config.networking.hostName}/oidc/forgejo/id";
           owner = "authelia-main";
         };
+      };
+    };
+
+    custom = {
+      services.caddy.hosts = {
+        forgejo = {
+          inherit subdomain;
+          target = ":${toString cfg.port}";
+        };
+      };
+
+      system.persistence.config = {
+        directories = [
+          {
+            directory = "/var/lib/forgejo";
+            user = "forgejo";
+            group = "forgejo";
+            mode = "0700";
+          }
+        ];
       };
     };
   };

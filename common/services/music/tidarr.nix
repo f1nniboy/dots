@@ -41,23 +41,25 @@ in
       };
     };
 
-    custom.services.caddy.hosts = {
-      tidarr = {
-        subdomain = "tidal.media";
-        target = ":${toString cfg.port}";
-        import = [ "auth" ];
+    custom = {
+      services.caddy.hosts = {
+        tidarr = {
+          subdomain = "tidal.media";
+          target = ":${toString cfg.port}";
+          import = [ "auth" ];
+        };
       };
-    };
 
-    custom.system.persistence.config = {
-      directories = [
-        {
-          directory = "/var/lib/tidarr";
-          user = "tidarr";
-          group = "media";
-          mode = "0700";
-        }
-      ];
+      system.persistence.config = {
+        directories = [
+          {
+            directory = "/var/lib/tidarr";
+            user = "tidarr";
+            group = "media";
+            mode = "0700";
+          }
+        ];
+      };
     };
   };
 }

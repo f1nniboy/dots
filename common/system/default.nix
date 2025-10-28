@@ -2,7 +2,6 @@
   imports = [
     ./boot.nix
     ./dev.nix
-    ./env.nix
     ./flatpak.nix
     ./fonts.nix
     ./home.nix

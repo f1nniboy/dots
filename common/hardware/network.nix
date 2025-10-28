@@ -9,10 +9,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.users.${config.custom.system.user.name} = {
-      extraGroups = [ "networkmanager" ];
-    };
-
     networking = {
       networkmanager = {
         enable = true;
@@ -33,8 +29,11 @@ in
     # ref: https://github.com/NixOS/nixpkgs/issues/180175
     systemd.services.NetworkManager-wait-online.enable = false;
 
-    custom.system.persistence.config = {
-      directories = [ "/etc/NetworkManager/system-connections" ];
+    custom.system = {
+      user.extraGroups = [ "networkmanager" ];
+      persistence.config = {
+        directories = [ "/etc/NetworkManager/system-connections" ];
+      };
     };
   };
 }

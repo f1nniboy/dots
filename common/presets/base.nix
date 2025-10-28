@@ -10,9 +10,18 @@ in
 
   config = mkIf cfg.enable {
     custom = {
+      apps = {
+        # cli
+        neovim = {
+          enable = true;
+          defaultEditor = true;
+        };
+        yazi.enable = true;
+        bottom.enable = true;
+      };
+
       system = {
         boot.enable = true;
-        env.enable = true;
         locale.enable = true;
         nix.enable = true;
         packages.enable = true;

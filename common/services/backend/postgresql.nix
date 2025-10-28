@@ -46,19 +46,21 @@ in
       '';
     };
 
-    custom.system.persistence.config = {
-      directories = [
-        {
-          directory = "/var/lib/postgresql";
-          user = "postgres";
-          group = "postgres";
-          mode = "0700";
-        }
+    custom = {
+      system.persistence.config = {
+        directories = [
+          {
+            directory = "/var/lib/postgresql";
+            user = "postgres";
+            group = "postgres";
+            mode = "0700";
+          }
+        ];
+      };
+
+      services.restic.paths = [
+        "/var/lib/postgresql"
       ];
     };
-
-    custom.services.restic.paths = [
-      "/var/lib/postgresql"
-    ];
   };
 }

@@ -168,19 +168,21 @@ in
       ];
     };
 
-    custom.system.persistence.config = {
-      directories = [
-        {
-          directory = "/var/lib/minecraft";
-          user = "minecraft";
-          group = "minecraft";
-          mode = "0700";
-        }
+    custom = {
+      system.persistence.config = {
+        directories = [
+          {
+            directory = "/var/lib/minecraft";
+            user = "minecraft";
+            group = "minecraft";
+            mode = "0700";
+          }
+        ];
+      };
+
+      services.restic.paths = [
+        "/var/lib/minecraft"
       ];
     };
-
-    custom.services.restic.paths = [
-      "/var/lib/minecraft"
-    ];
   };
 }

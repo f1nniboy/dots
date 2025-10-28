@@ -11,10 +11,16 @@ in
 {
   options.custom.apps.helix = {
     enable = custom.enableOption;
+    defaultEditor = custom.enableOption;
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.helix ];
+    environment = {
+      systemPackages = [ pkgs.helix ];
+      variables = mkIf cfg.defaultEditor {
+        EDITOR = "hx";
+      };
+    };
 
     custom.system.home.extraOptions = {
       programs.helix = {

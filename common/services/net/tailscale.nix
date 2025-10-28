@@ -23,8 +23,6 @@ in
       tailscale.enable = true;
     };
 
-    sops.secrets."common/tailscale/auth-key" = { };
-
     systemd.services.tailscale-autoconnect = {
       description = "Automatic connection to Tailscale";
 
@@ -62,6 +60,8 @@ in
       allowedUDPPorts = [ config.services.tailscale.port ];
       checkReversePath = "loose";
     };
+
+    sops.secrets."common/tailscale/auth-key" = { };
 
     custom.system.persistence.config = {
       directories = [ "/var/lib/tailscale" ];
