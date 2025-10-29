@@ -29,8 +29,13 @@ in
       ];
     };
 
-    custom.system.persistence.userConfig = {
-      directories = [ ".config/spotify" ];
+    custom.system = {
+      packages.unfreePackages = [
+        "spotify"
+      ];
+      persistence.userConfig = {
+        directories = [ ".config/spotify" ];
+      };
     };
   };
 }

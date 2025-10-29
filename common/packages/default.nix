@@ -3,7 +3,7 @@
   config = {
     nixpkgs.overlays = [
       # custom packages
-      (self: super: {
+      (_: _: {
         beammp-launcher = pkgs.callPackage ./beammp-launcher { };
         convoyeur = pkgs.callPackage ./convoyeur { };
       })

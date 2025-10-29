@@ -1,9 +1,6 @@
-{
-  inputs,
-  ...
-}:
+{ inputs, ... }:
 inputs.nixpkgs.lib.extend (
-  final: prev: {
+  _: _: {
     custom = import ./custom.nix {
       inherit (inputs.nixpkgs) lib;
     };

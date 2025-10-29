@@ -7,8 +7,11 @@
 with lib;
 let
   cfg = config.custom.services.soju;
+
   subdomain = "irc";
   domain = "${subdomain}.${config.custom.services.caddy.domain}";
+
+  hostname = config.networking.hostName;
 in
 {
   options.custom.services.soju = {
@@ -77,10 +80,10 @@ in
             password = "\"$(cat ${config.sops.secrets."common/soju/user/password".path})\"";
 
             net = {
-              name = "\"$(cat ${config.sops.secrets."common/soju/network/name".path})\"";
-              host = "\"$(cat ${config.sops.secrets."common/soju/network/host".path})\"";
-              username = "\"$(cat ${config.sops.secrets."common/soju/network/username".path})\"";
-              password = "\"$(cat ${config.sops.secrets."common/soju/network/password".path})\"";
+              name = "\"$(cat ${config.sops.secrets."${hostname}/soju/network/name".path})\"";
+              host = "\"$(cat ${config.sops.secrets."${hostname}/soju/network/host".path})\"";
+              username = "\"$(cat ${config.sops.secrets."${hostname}/soju/network/username".path})\"";
+              password = "\"$(cat ${config.sops.secrets."${hostname}/soju/network/password".path})\"";
             };
           in
           ''
@@ -109,10 +112,10 @@ in
         "common/soju/user/username".owner = "soju";
         "common/soju/user/password".owner = "soju";
 
-        "common/soju/network/name".owner = "soju";
-        "common/soju/network/host".owner = "soju";
-        "common/soju/network/username".owner = "soju";
-        "common/soju/network/password".owner = "soju";
+        "${hostname}/soju/network/name".owner = "soju";
+        "${hostname}/soju/network/host".owner = "soju";
+        "${hostname}/soju/network/username".owner = "soju";
+        "${hostname}/soju/network/password".owner = "soju";
       };
     };
 

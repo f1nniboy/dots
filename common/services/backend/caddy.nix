@@ -69,7 +69,7 @@ in
         }
       '';
 
-      virtualHosts = mapAttrs' (name: service: {
+      virtualHosts = mapAttrs' (_: service: {
         name = "${service.subdomain}.${cfg.domain}";
         value = {
           logFormat = mkForce ''

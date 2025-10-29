@@ -27,6 +27,7 @@ in
         monero.enable = true;
         bitwarden.enable = true;
         gimp.enable = true;
+        spicetify.enable = true;
 
         # cli
         git.enable = true;
