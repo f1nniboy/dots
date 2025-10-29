@@ -6,5 +6,6 @@
     ./sober.nix
     ./steam.nix
     ./supertux.nix
+    ./supertuxkart.nix
   ];
 }

@@ -45,7 +45,6 @@ in
       users.p2pool = {
         isSystemUser = true;
         group = "p2pool";
-        description = "P2Pool daemon user";
         home = cfg.dataDir;
         createHome = true;
       };

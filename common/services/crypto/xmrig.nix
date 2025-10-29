@@ -21,7 +21,7 @@ in
       default = 3333;
     };
     cpuUsage = mkOption {
-      description = "Percentage of CPU threads to use";
+      description = "percentage of CPU threads to use";
       type = types.int;
       default = 100;
     };

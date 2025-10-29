@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 let
   cfg = config.custom.services.miniflux;
@@ -94,5 +99,24 @@ in
       };
       postgresql.users = [ "miniflux" ];
     };
+
+    security.apparmor.policies."bin.miniflux".profile =
+      let
+        pkg = config.services.miniflux.package;
+      in
+      mkForce ''
+        include <tunables/global>
+        profile ${pkg}/bin/miniflux flags=(attach_disconnected) {
+          include <abstractions/base>
+          include <abstractions/nameservice>
+          include <abstractions/ssl_certs>
+          include "${pkgs.apparmorRulesFromClosure { name = "miniflux"; } pkg}"
+          r ${pkg}/bin/miniflux,
+          r @{sys}/kernel/mm/transparent_hugepage/hpage_pmd_size,
+          rw /run/miniflux/**,
+          r /run/secrets.d/*/lab/oidc/miniflux/*,
+          rw /run/postgresql/*,
+        }
+      '';
   };
 }

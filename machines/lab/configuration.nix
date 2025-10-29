@@ -29,8 +29,6 @@
 
     services = {
       tailscale.enable = true;
-      upsnap.enable = true;
-
       openssh.enable = true;
 
       restic = {
@@ -75,7 +73,7 @@
 
       immich.enable = true;
       samba.enable = true;
-      #miniflux.enable = true;
+      miniflux.enable = true;
       notesnook.enable = true;
       radicale.enable = true;
       #karakeep.enable = true;
