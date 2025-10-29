@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  vars,
   ...
 }:
 with lib;
@@ -27,8 +28,7 @@ in
               server = "irc.f1nn.space";
               port = 6697;
               sasl.plain = {
-                # TODO: use username specified in sops secrets (halloy doesnt have an option to read username from file)
-                username = "finn";
+                username = vars.user.nick;
                 password_file = config.sops.secrets."halloy-common/soju/user/password".path;
               };
             };
@@ -64,10 +64,6 @@ in
 
     sops = {
       secrets = {
-        "halloy-common/soju/user/username" = {
-          key = "common/soju/user/username";
-          owner = config.custom.system.user.name;
-        };
         "halloy-common/soju/user/password" = {
           key = "common/soju/user/password";
           owner = config.custom.system.user.name;

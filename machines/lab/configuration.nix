@@ -113,12 +113,7 @@
     };
 
     system = {
-      user = {
-        fullName = "Finn";
-        email = "me@f1nn.space";
-      };
       inherit (vars) ssh;
-
       remoteUnlock.enable = true;
     };
 

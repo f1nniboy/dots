@@ -1,8 +1,9 @@
 {
-  config,
   inputs,
+  config,
   lib,
   pkgs,
+  vars,
   ...
 }:
 with lib;
@@ -90,9 +91,10 @@ in
         };
 
         users = {
-          Finn = {
+          ${vars.user.fullName} = {
             mutable = false;
-            hashedPasswordFile = config.sops.secrets."${config.networking.hostName}/jellyfin/users/Finn".path;
+            hashedPasswordFile =
+              config.sops.secrets."${config.networking.hostName}/jellyfin/users/${vars.user.fullName}".path;
             permissions = {
               isAdministrator = true;
             };
@@ -132,7 +134,7 @@ in
 
     sops.secrets = {
       "${config.networking.hostName}/jellyfin/server-id".owner = "jellyfin";
-      "${config.networking.hostName}/jellyfin/users/Finn".owner = "jellyfin";
+      "${config.networking.hostName}/jellyfin/users/${vars.user.fullName}".owner = "jellyfin";
 
       # api keys
       "jellyfin-${config.networking.hostName}/jellyfin/api-keys/jellyseerr" = {

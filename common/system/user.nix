@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  vars,
+  ...
+}:
 with lib;
 let
   cfg = config.custom.system.user;
@@ -9,8 +14,14 @@ in
       type = types.str;
       default = "me";
     };
-    fullName = mkOption { type = types.str; };
-    email = mkOption { type = types.str; };
+    fullName = mkOption {
+      type = types.str;
+      default = vars.user.fullName;
+    };
+    email = mkOption {
+      type = types.str;
+      default = vars.user.email;
+    };
     sshPublicKey = mkOption {
       type = types.nullOr types.str;
       default = null;

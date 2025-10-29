@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  vars,
   ...
 }:
 with lib;
@@ -53,7 +54,7 @@ in
       let
         adminCmd = "${lib.getExe config.services.forgejo.package} admin user";
         pwd = config.sops.secrets."${config.networking.hostName}/forgejo/admin-password";
-        user = "finn";
+        user = vars.user.nick;
       in
       ''
         ${adminCmd} create --admin --email "${config.custom.system.user.email}" --username ${user} --password "$(tr -d '\n' < ${pwd.path})" || true

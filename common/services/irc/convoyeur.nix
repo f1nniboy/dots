@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  vars,
   ...
 }:
 with lib;
@@ -10,7 +11,7 @@ let
   configFile = pkgs.writeTextFile {
     name = "convoyeur.hcl";
     text = import ../config/convoyeur.nix {
-      inherit cfg;
+      inherit cfg vars;
     };
   };
 in

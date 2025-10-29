@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  vars,
   ...
 }:
 with lib;
@@ -73,25 +74,29 @@ in
         wantedBy = [ "multi-user.target" ];
         script =
           let
-            sojuctl = "${pkgs.soju}/bin/sojuctl -config ${config.services.soju.configFile}";
-            userctl = "${sojuctl} user run ${username}";
+            mkSecretCat = path: "\"$(cat ${config.sops.secrets."${path}".path})\"";
 
-            username = "\"$(cat ${config.sops.secrets."common/soju/user/username".path})\"";
-            password = "\"$(cat ${config.sops.secrets."common/soju/user/password".path})\"";
+            sojuctl = "${pkgs.soju}/bin/sojuctl -config ${config.services.soju.configFile}";
+            userctl = "${sojuctl} user run ${account.username}";
+
+            account = {
+              username = vars.user.fullName;
+              password = mkSecretCat "common/soju/user/password";
+            };
 
             net = {
-              name = "\"$(cat ${config.sops.secrets."${hostname}/soju/network/name".path})\"";
-              host = "\"$(cat ${config.sops.secrets."${hostname}/soju/network/host".path})\"";
-              username = "\"$(cat ${config.sops.secrets."${hostname}/soju/network/username".path})\"";
-              password = "\"$(cat ${config.sops.secrets."${hostname}/soju/network/password".path})\"";
+              name = mkSecretCat "${hostname}/soju/network/name";
+              host = mkSecretCat "${hostname}/soju/network/host";
+              username = mkSecretCat "${hostname}/soju/network/username";
+              password = mkSecretCat "${hostname}/soju/network/password";
             };
           in
           ''
             #!/bin/sh
 
             # create user
-            if ! ${sojuctl} user status ${username}; then
-              ${sojuctl} user create -username ${username} -password ${password} -admin=true
+            if ! ${sojuctl} user status ${account.username}; then
+              ${sojuctl} user create -username ${account.username} -password ${account.password} -admin=true
             fi
 
             # create network
@@ -109,7 +114,6 @@ in
 
     sops = {
       secrets = {
-        "common/soju/user/username".owner = "soju";
         "common/soju/user/password".owner = "soju";
 
         "${hostname}/soju/network/name".owner = "soju";

@@ -50,8 +50,6 @@
 
     system = {
       user = {
-        fullName = "Finn";
-        email = "me@f1nn.space";
         sshPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICT4w58tzgbdbaJ33zNkUrV0eRWY+e5B/FQejghLR6dh";
       };
       inherit (vars) ssh;

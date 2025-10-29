@@ -1,4 +1,4 @@
-{ cfg, ... }:
+{ cfg, vars, ... }:
 # TODO: don't hardcode username
 #       - the config example in the README lies about
 #         `null` being used to reference all users,
@@ -10,7 +10,7 @@
   strip_exif = true
 
   users {
-    finn = "0x0.st"
+    ${vars.user.nick} = "0x0.st"
   }
 
   host "0x0.st" {
