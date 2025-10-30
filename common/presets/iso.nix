@@ -14,6 +14,7 @@ in
   };
 
   imports = [
+    ../system/dev.nix
     ../system/nix.nix
     ../system/packages.nix
   ];
@@ -21,6 +22,7 @@ in
   config = mkIf cfg.enable {
     custom = {
       system = {
+        dev.enable = true;
         nix.enable = true;
         packages.enable = true;
       };
