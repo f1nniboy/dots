@@ -14,6 +14,10 @@ in
   };
 
   config = mkIf cfg.enable {
+    assertions = [
+      { assertion = config.custom.system.flatpak.enable; }
+    ];
+
     environment.systemPackages = [
       pkgs.steam-devices-udev-rules
     ];

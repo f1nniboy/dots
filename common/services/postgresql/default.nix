@@ -1,0 +1,65 @@
+{
+  config,
+  lib,
+  ...
+}:
+with lib;
+let
+  cfg = config.custom.services.postgresql;
+in
+{
+  options.custom.services.postgresql = {
+    enable = custom.enableOption;
+
+    users = mkOption {
+      type = types.listOf types.str;
+      description = "list of PostgreSQL users & databases to create";
+    };
+  };
+
+  config = mkIf cfg.enable {
+    services.postgresql = {
+      enable = true;
+
+      settings = {
+        unix_socket_permissions = "0660";
+        #listen_addresses = mkForce "";
+      };
+
+      # ensure databases are created
+      ensureDatabases = cfg.users;
+
+      # create users with database ownership
+      ensureUsers = map (user: {
+        name = user;
+        ensureDBOwnership = true;
+      }) cfg.users;
+
+      authentication = mkOverride 10 ''
+        # TYPE  DATABASE  USER      ADDRESS   		METHOD
+        local   all       all                 		peer
+        host    all       all       127.0.0.1/32  reject
+
+        # only allow the "piped" user on tcp connections
+        host    piped     piped     127.0.0.1/32  trust
+      '';
+    };
+
+    custom = {
+      system.persistence.config = {
+        directories = [
+          {
+            directory = "/var/lib/postgresql";
+            user = "postgres";
+            group = "postgres";
+            mode = "0700";
+          }
+        ];
+      };
+
+      services.restic.paths = [
+        "/var/lib/postgresql"
+      ];
+    };
+  };
+}

@@ -1,0 +1,152 @@
+{
+  config,
+  lib,
+  pkgs,
+  vars,
+  ...
+}:
+with lib;
+let
+  cfg = config.custom.services.soju;
+
+  hostname = config.networking.hostName;
+  serviceDomain = custom.mkServiceDomain config "soju";
+in
+{
+  options.custom.services.soju = {
+    enable = custom.enableOption;
+
+    subdomain = mkOption {
+      type = types.str;
+      default = "irc";
+    };
+
+    ports = mkOption {
+      type = types.submodule {
+        options = {
+          ircs = mkOption {
+            type = types.port;
+            default = 6697;
+          };
+          http = mkOption {
+            type = types.port;
+            default = 6680;
+          };
+        };
+      };
+      default = { };
+    };
+  };
+
+  config = mkIf cfg.enable {
+    users = {
+      users.soju = {
+        isSystemUser = true;
+        group = "soju";
+      };
+      groups.soju = { };
+    };
+
+    services.soju = {
+      enable = true;
+      hostName = serviceDomain;
+      listen = [
+        "ircs://:${toString cfg.ports.ircs}"
+        "http+insecure://localhost:${toString cfg.ports.http}"
+      ];
+      acceptProxyIP = [ "0.0.0.0/0" ];
+      tlsCertificate = "/var/lib/acme/${serviceDomain}/fullchain.pem";
+      tlsCertificateKey = "/var/lib/acme/${serviceDomain}/key.pem";
+      extraConfig = ''
+        http-ingress https://${serviceDomain}
+        file-upload http http://127.0.0.1:${toString config.custom.services.convoyeur.port}/upload
+      '';
+    };
+
+    systemd.services = {
+      soju = {
+        serviceConfig = {
+          DynamicUser = mkForce false;
+          User = mkForce "soju";
+          Group = mkForce "soju";
+        };
+      };
+      soju-user-setup = {
+        description = "Setup Soju users";
+        after = [ "soju.service" ];
+        wantedBy = [ "multi-user.target" ];
+        script =
+          let
+            mkSecretCat = path: "\"$(cat ${config.sops.secrets."${path}".path})\"";
+
+            sojuctl = "${pkgs.soju}/bin/sojuctl -config ${config.services.soju.configFile}";
+            userctl = "${sojuctl} user run ${account.username}";
+
+            account = {
+              username = vars.user.fullName;
+              password = mkSecretCat "common/soju/user/password";
+            };
+
+            net = {
+              name = mkSecretCat "${hostname}/soju/network/name";
+              host = mkSecretCat "${hostname}/soju/network/host";
+              username = mkSecretCat "${hostname}/soju/network/username";
+              password = mkSecretCat "${hostname}/soju/network/password";
+            };
+          in
+          ''
+            #!/bin/sh
+
+            # create user
+            if ! ${sojuctl} user status ${account.username}; then
+              ${sojuctl} user create -username ${account.username} -password ${account.password} -admin=true
+            fi
+
+            # create network
+            if ! ${userctl} network status | grep -q ${net.name}; then
+              ${userctl} network create -name ${net.name} -addr ${net.host} -nick ${net.username} -pass ${net.password}
+            fi
+          '';
+        serviceConfig = {
+          Type = "oneshot";
+          User = "soju";
+          Group = "soju";
+        };
+      };
+    };
+
+    sops = {
+      secrets = {
+        "common/soju/user/password".owner = "soju";
+
+        "${hostname}/soju/network/name".owner = "soju";
+        "${hostname}/soju/network/host".owner = "soju";
+        "${hostname}/soju/network/username".owner = "soju";
+        "${hostname}/soju/network/password".owner = "soju";
+      };
+    };
+
+    custom = {
+      services = {
+        caddy.hosts = {
+          soju.target = ":${toString cfg.ports.http}";
+        };
+        acme.domains = {
+          ${serviceDomain} = {
+            group = "soju";
+          };
+        };
+      };
+      system.persistence.config = {
+        directories = [
+          {
+            directory = "/var/lib/soju";
+            user = "soju";
+            group = "soju";
+            mode = "0700";
+          }
+        ];
+      };
+    };
+  };
+}

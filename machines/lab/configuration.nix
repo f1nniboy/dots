@@ -1,5 +1,4 @@
 {
-  config,
   inputs,
   vars,
   ...
@@ -24,9 +23,6 @@
       git.enable = true;
     };
 
-    # for jellyfin, *arr, etc.
-    media.enable = true;
-
     services = {
       tailscale.enable = true;
       openssh.enable = true;
@@ -41,15 +37,10 @@
 
       caddy = {
         enable = true;
-        domain = "f1nn.space";
+        inherit (vars.lab) domain;
       };
       acme = {
         enable = true;
-        domains = {
-          "irc.${config.custom.services.caddy.domain}" = {
-            group = "soju";
-          };
-        };
       };
 
       postgresql.enable = true;
@@ -96,25 +87,20 @@
 
       monero = {
         enable = true;
-        whitelist = [
-          "100.100.20.20" # desktop
-          "100.81.153.30" # laptop
+        whitelist = with vars.net.hosts; [
+          desktop
+          laptop
         ];
       };
       p2pool = {
         enable = true;
         wallet = "43dp8mYf4Jq6tNiKnbPvJNhd8xAhWrCyuGksFqTvmJXkdeDHstSRCRdGWzjLo2nCMwdHSp3sL1QewER2rNoYM7Kn5xFbZmy";
       };
-      xmrig = {
-        enable = false;
-        host = "127.0.0.1";
-        cpuUsage = 30;
-      };
     };
 
     system = {
-      inherit (vars) ssh;
       remoteUnlock.enable = true;
+      media.enable = true;
     };
 
     hardware = {

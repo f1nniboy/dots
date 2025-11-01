@@ -1,5 +1,4 @@
 {
-  lib,
   rustPlatform,
   fetchFromGitHub,
   openssl,
@@ -29,10 +28,9 @@ rustPlatform.buildRustPackage rec {
     alsa-lib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "IRCv3 FILEHOST extension adapter to external file upload services";
     homepage = "https://github.com/classabbyamp/convoyeur";
-    license = licenses.gpl3Only; # TODO: wrong
     mainProgram = "convoyeur";
   };
 }

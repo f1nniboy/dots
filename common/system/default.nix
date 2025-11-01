@@ -7,6 +7,7 @@
     ./home.nix
     ./ld.nix
     ./locale.nix
+    ./media.nix
     ./nix.nix
     ./packages.nix
     ./persistence.nix

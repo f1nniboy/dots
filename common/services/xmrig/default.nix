@@ -1,0 +1,52 @@
+{
+  config,
+  lib,
+  pkgs,
+  vars,
+  ...
+}:
+with lib;
+let
+  cfg = config.custom.services.xmrig;
+in
+{
+  options.custom.services.xmrig = {
+    enable = custom.enableOption;
+    host = mkOption {
+      description = "IP or hostname of P2Pool instance";
+      type = types.str;
+      default = vars.net.hosts.lab;
+    };
+    port = mkOption {
+      type = types.port;
+      default = 3333;
+    };
+    cpuUsage = mkOption {
+      description = "percentage of CPU threads to use";
+      type = types.int;
+      default = 100;
+    };
+  };
+
+  config = mkIf cfg.enable {
+    environment.systemPackages = [ pkgs.xmrig ];
+
+    services.xmrig = {
+      enable = true;
+      settings = {
+        autosave = true;
+        cpu = {
+          "max-threads-hint" = cfg.cpuUsage;
+        };
+        randomx = {
+          "1gb-pages" = true;
+        };
+        pools = [
+          {
+            url = "${cfg.host}:${toString cfg.port}";
+          }
+        ];
+      };
+    };
+  };
+}

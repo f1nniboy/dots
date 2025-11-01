@@ -1,20 +1,27 @@
 {
   imports = [
-    ./browser
-    ./chat
     ./cli
-    ./crypto
-    ./docs
     ./games
-    ./work
 
-    ./bitwarden.nix
-    ./easyeffects.nix
-    ./ghostty.nix
-    ./moonlight.nix
-    ./obs.nix
-    ./openrgb.nix
-    ./ptyxis.nix
-    ./spicetify.nix
+    ./bitwarden
+    ./easyeffects
+    ./epiphany
+    ./firefox
+    ./ghostty
+    ./gimp
+    ./halloy
+    ./haveno
+    ./monero
+    ./moonlight
+    ./mullvad-browser
+    ./notesnook
+    ./obs
+    ./openrgb
+    ./ptyxis
+    ./rnote
+    ./spicetify
+    ./tor
+    ./vesktop
+    ./zed
   ];
 }
