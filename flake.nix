@@ -19,11 +19,23 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    spicetify-nix = {
+      url = "github:Gerg-L/spicetify-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    piped = {
+      url = "github:squalus/piped-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     impermanence.url = "github:nix-community/impermanence";
-    sops-nix.url = "github:Mic92/sops-nix";
     flatpaks.url = "github:in-a-dil-emma/declarative-flatpak/latest";
-    spicetify-nix.url = "github:Gerg-L/spicetify-nix";
-    piped.url = "github:squalus/piped-flake";
 
     firefox-gnome-theme = {
       url = "github:rafaelmardojai/firefox-gnome-theme";
