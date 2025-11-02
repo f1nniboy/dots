@@ -1,18 +1,14 @@
 { lib, config, ... }:
-with lib;
 let
-  # TODO: move to jellyfin service
-  libraryIds = {
-    Filme = "7a2175bccb1f1a94152cbd2b2bae8f6d";
-    Serien = "43cfe12fe7d9d8d21251e0964e0232e2";
-  };
+  mkAppSecret = path: config.sops.placeholder."${config.networking.hostName}/jellyseerr/${path}";
 in
+with lib;
 builtins.toJSON {
-  clientId = config.sops.placeholder."${config.networking.hostName}/jellyseerr/client-id";
-  vapidPrivate = config.sops.placeholder."${config.networking.hostName}/jellyseerr/vapid/private";
-  vapidPublic = config.sops.placeholder."${config.networking.hostName}/jellyseerr/vapid/public";
+  clientId = mkAppSecret "client-id";
+  vapidPrivate = mkAppSecret "vapid/private";
+  vapidPublic = mkAppSecret "vapid/public";
   main = {
-    apiKey = config.sops.placeholder."${config.networking.hostName}/jellyseerr/api-key";
+    apiKey = mkAppSecret "api-key";
     applicationTitle = "Jellyseerr";
     applicationUrl = "";
     cacheImages = true;
@@ -33,21 +29,21 @@ builtins.toJSON {
     urlBase = "";
     externalHostname = "https://${custom.mkServiceDomain config "jellyfin"}";
     jellyfinForgotPasswordUrl = "";
-    libraries = [
+    libraries = with config.custom.services.jellyfin; [
       {
-        id = libraryIds.Filme;
+        id = libraries.Filme.id;
         name = "Filme";
         enabled = true;
         type = "movie";
       }
       {
-        id = libraryIds.Serien;
+        id = libraries.Serien.id;
         name = "Serien";
         enabled = true;
         type = "show";
       }
     ];
-    serverId = config.sops.placeholder."jellyseerr-${config.networking.hostName}/jellyfin/server-id";
+    serverId = config.custom.services.jellyfin.id;
     apiKey =
       config.sops.placeholder."jellyseerr-${config.networking.hostName}/jellyfin/api-keys/jellyseerr";
   };

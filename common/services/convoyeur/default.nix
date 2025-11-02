@@ -27,7 +27,6 @@ in
 
   config = mkIf cfg.enable {
     systemd.services.convoyeur = {
-      description = "Convoyeur IRCv3 FILEHOST Adapter";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {

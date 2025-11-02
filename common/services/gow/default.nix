@@ -29,24 +29,18 @@ in
 
   config = mkIf cfg.enable {
     systemd = {
-      services = {
-        "docker-wolf" = {
-          partOf = [
-            "docker-compose-wolf-root.target"
-          ];
-          wantedBy = [
-            "docker-compose-wolf-root.target"
-          ];
+      services =
+        let
+          rootDeps = [ "docker-compose-wolf-root.target" ];
+          serviceConfig = {
+            partOf = rootDeps;
+            wantedBy = rootDeps;
+          };
+        in
+        {
+          "docker-wolf" = serviceConfig;
+          "docker-wolf-manager" = serviceConfig;
         };
-        "docker-wolf-manager" = {
-          partOf = [
-            "docker-compose-wolf-root.target"
-          ];
-          wantedBy = [
-            "docker-compose-wolf-root.target"
-          ];
-        };
-      };
 
       # root service
       targets."docker-compose-wolf-root" = {
@@ -100,7 +94,7 @@ in
 
     networking.firewall =
       let
-        p = builtins.attrValues ports;
+        p = builtins.attrValues (builtins.removeAttrs ports [ "manager" ]);
       in
       {
         allowedTCPPorts = p;

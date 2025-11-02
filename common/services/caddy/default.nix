@@ -74,7 +74,7 @@ in
       virtualHosts = mapAttrs' (_: service: {
         name = "${service.subdomain}.${cfg.domain}";
         value = {
-          logFormat = mkForce ''
+          logFormat = ''
             output discard
           '';
           extraConfig = ''

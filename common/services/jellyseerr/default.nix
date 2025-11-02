@@ -71,10 +71,6 @@ in
         "${config.networking.hostName}/jellyseerr/vapid/public".owner = "jellyseerr";
         "${config.networking.hostName}/jellyseerr/vapid/private".owner = "jellyseerr";
 
-        "jellyseerr-${config.networking.hostName}/jellyfin/server-id" = {
-          key = "${config.networking.hostName}/jellyfin/server-id";
-          owner = "jellyseerr";
-        };
         "jellyseerr-${config.networking.hostName}/jellyfin/api-keys/jellyseerr" = {
           key = "${config.networking.hostName}/jellyfin/api-keys/jellyseerr";
           owner = "jellyseerr";

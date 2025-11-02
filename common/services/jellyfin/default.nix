@@ -1,23 +1,12 @@
 {
-  inputs,
   config,
   lib,
-  pkgs,
-  vars,
   ...
 }:
 with lib;
 let
   cfg = config.custom.services.jellyfin;
-
-  baseLibrarySettings = {
-    preferredMetadataLanguage = "de";
-
-    enableChapterImageExtraction = true;
-    extractChapterImagesDuringLibraryScan = true;
-    enableTrickplayImageExtraction = true;
-    extractTrickplayImagesDuringLibraryScan = true;
-  };
+  mediaDir = config.custom.system.media.baseDir;
 in
 {
   options.custom.services.jellyfin = {
@@ -31,18 +20,35 @@ in
     id = mkOption {
       type = types.str;
     };
-  };
 
-  imports = [
-    inputs.declarative-jellyfin.nixosModules.default
-  ];
+    # useless right now, in preparation for declarative config in the future
+    libraries = mkOption {
+      type = types.attrsOf (
+        types.submodule {
+          options = {
+            id = mkOption {
+              type = types.str;
+            };
+            type = mkOption {
+              type = types.enum [
+                "movies"
+                "tvshows"
+              ];
+            };
+            path = mkOption {
+              type = types.str;
+            };
+          };
+        }
+      );
+      default = { };
+    };
+  };
 
   config = mkIf cfg.enable {
     assertions = [
       { assertion = config.custom.system.media.enable; }
     ];
-
-    environment.systemPackages = [ pkgs.jellyfin-ffmpeg ];
 
     users.users.jellyfin.extraGroups = [
       "media"
@@ -51,111 +57,14 @@ in
     ];
 
     services = {
-      declarative-jellyfin = {
+      jellyfin = {
         enable = true;
-        backups = false;
-
-        serverId = cfg.id;
-
-        system = {
-          serverName = "Jelly";
-          UICulture = "de";
-          preferredMetadataLanguage = "de";
-          metadataCountryCode = "DE";
-          trickplayOptions = {
-            enableHwAcceleration = true;
-            enableHwEncoding = true;
-          };
-        };
-
-        branding = {
-          customCss = ''
-            @import url("https://cdn.jsdelivr.net/gh/lscambo13/ElegantFin@main/Theme/ElegantFin-jellyfin-theme-build-latest-minified.css");
-          '';
-        };
-
-        encoding = {
-          hardwareAccelerationType = "qsv";
-          enableVppTonemapping = true;
-          enableThrottling = true;
-          enableSegmentDeletion = true;
-        };
-
-        libraries = {
-          Filme = mkMerge [
-            {
-              enabled = true;
-              contentType = "movies";
-              pathInfos = [ "${config.custom.system.media.baseDir}/library/movies" ];
-            }
-            baseLibrarySettings
-          ];
-          Serien = mkMerge [
-            {
-              enabled = true;
-              contentType = "tvshows";
-              pathInfos = [ "${config.custom.system.media.baseDir}/library/shows" ];
-            }
-            baseLibrarySettings
-          ];
-        };
-
-        users = {
-          ${vars.user.fullName} = {
-            mutable = false;
-            hashedPasswordFile =
-              config.sops.secrets."${config.networking.hostName}/jellyfin/users/${vars.user.fullName}".path;
-            permissions = {
-              isAdministrator = true;
-            };
-          };
-        };
-
-        apikeys = {
-          jellyseerr = {
-            keyPath =
-              config.sops.secrets."jellyfin-${config.networking.hostName}/jellyfin/api-keys/jellyseerr".path;
-          };
-          multi-scrobbler = {
-            keyPath =
-              config.sops.secrets."jellyfin-${config.networking.hostName}/jellyfin/api-keys/multi-scrobbler".path;
-          };
-        };
-      };
-
-      samba = {
-        settings = {
-          "library" = {
-            "path" = "${config.custom.system.media.baseDir}/library";
-            "browseable" = "yes";
-            "read only" = "no";
-            "guest ok" = "no";
-            "force user" = "jellyfin";
-            "force group" = "media";
-          };
-        };
       };
     };
 
-    systemd.tmpfiles.rules = [
-      "d ${config.custom.system.media.baseDir}/library/movies 0770 nobody media - -"
-      "d ${config.custom.system.media.baseDir}/library/shows  0770 nobody media - -"
-    ];
-
-    sops.secrets = {
-      "${config.networking.hostName}/jellyfin/server-id".owner = "jellyfin";
-      "${config.networking.hostName}/jellyfin/users/${vars.user.fullName}".owner = "jellyfin";
-
-      # api keys
-      "jellyfin-${config.networking.hostName}/jellyfin/api-keys/jellyseerr" = {
-        key = "${config.networking.hostName}/jellyfin/api-keys/jellyseerr";
-        owner = "jellyfin";
-      };
-      "jellyfin-${config.networking.hostName}/jellyfin/api-keys/multi-scrobbler" = {
-        key = "${config.networking.hostName}/jellyfin/api-keys/multi-scrobbler";
-        owner = "jellyfin";
-      };
-    };
+    systemd.tmpfiles.rules = mapAttrsToList (
+      name: l: "d ${mediaDir}/${l.path} 0770 nobody media - -"
+    ) cfg.libraries;
 
     custom = {
       services.caddy.hosts = {

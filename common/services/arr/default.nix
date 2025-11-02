@@ -6,6 +6,7 @@
 with lib;
 let
   cfg = config.custom.services.arr;
+  baseSubdomain = config.custom.system.media.subdomain;
 in
 {
   options.custom.services.arr = {
@@ -14,14 +15,8 @@ in
 
   config = mkIf cfg.enable {
     assertions = [
-      {
-        assertion = config.custom.system.media.enable;
-        message = "custom.system.media must be enabled";
-      }
-      {
-        assertion = config.custom.services.sabnzbd.enable;
-        message = "custom.services.sabnzbd must be enabled";
-      }
+      { assertion = config.custom.system.media.enable; }
+      { assertion = config.custom.services.sabnzbd.enable; }
     ];
 
     users = {
@@ -90,17 +85,17 @@ in
       services = {
         caddy.hosts = {
           prowlarr = {
-            subdomain = "idx.media";
+            subdomain = "idx.${baseSubdomain}";
             target = ":${toString config.services.prowlarr.settings.server.port}";
             import = [ "auth" ];
           };
           radarr = {
-            subdomain = "mov.media";
+            subdomain = "mov.${baseSubdomain}";
             target = ":${toString config.services.radarr.settings.server.port}";
             import = [ "auth" ];
           };
           sonarr = {
-            subdomain = "tv.media";
+            subdomain = "tv.${baseSubdomain}";
             target = ":${toString config.services.sonarr.settings.server.port}";
             import = [ "auth" ];
           };
@@ -108,7 +103,7 @@ in
         authelia.rules = [
           # required for nzb360 mobile app
           {
-            domain = "*.${config.custom.system.media.subdomain}.${config.custom.services.caddy.domain}";
+            domain = "*.${baseSubdomain}.${config.custom.services.caddy.domain}";
             policy = "bypass";
             resources = [ "/api.*" ];
           }
@@ -149,13 +144,13 @@ in
           "/var/lib/prowlarr/Backups"
           "/var/lib/prowlarr/logs"
 
-          "/var/lib/sonarr/.config/NzbDrone/MediaCover"
-          "/var/lib/sonarr/.config/NzbDrone/Backups"
-          "/var/lib/sonarr/.config/NzbDrone/logs"
-
           "/var/lib/radarr/.config/Radarr/MediaCover"
           "/var/lib/radarr/.config/Radarr/Backups"
           "/var/lib/radarr/.config/Radarr/logs"
+
+          "/var/lib/sonarr/.config/NzbDrone/MediaCover"
+          "/var/lib/sonarr/.config/NzbDrone/Backups"
+          "/var/lib/sonarr/.config/NzbDrone/logs"
         ];
       };
     };

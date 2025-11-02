@@ -8,8 +8,9 @@
 with lib;
 let
   cfg = config.custom.services.authelia;
-  name = "authelia-main";
 
+  name = "authelia-main";
+  dn = custom.domainToDn vars.lab.domain;
   oidcConfigFile = pkgs.writeTextFile {
     name = "oidc-clients.yaml";
     text = import ./oidcConfig.nix {
@@ -58,12 +59,10 @@ in
           options = {
             name = mkOption {
               type = types.str;
-              example = "Forgejo";
             };
 
             id = mkOption {
               type = types.str;
-              example = "forgejo";
             };
 
             policy = mkOption {
@@ -171,8 +170,8 @@ in
               ldap = {
                 address = "ldap://localhost:${toString config.custom.services.lldap.ports.ldap}";
                 implementation = "lldap";
-                base_dn = custom.domainToDn vars.lab.domain;
-                user = "uid=bind,ou=people,${custom.domainToDn vars.lab.domain}";
+                base_dn = dn;
+                user = "uid=bind,ou=people,${dn}";
                 password = "binduser";
                 # allow users to sign in with username, e-mail or first name
                 users_filter = "(&(|({username_attribute}={input})(mail={input})(firstName={input}))(objectClass=person))";
@@ -234,9 +233,8 @@ in
           # so we have to do oidc clients in a separate file
           settingsFiles = [ oidcConfigFile ];
           secrets =
-            with config.sops;
             let
-              mkSecret = path: secrets."${config.networking.hostName}/authelia/${path}".path;
+              mkSecret = path: config.sops.secrets."${config.networking.hostName}/authelia/${path}".path;
             in
             {
               jwtSecretFile = mkSecret "jwt-secret";

@@ -55,7 +55,19 @@
       sabnzbd.enable = true;
       jellyfin = {
         enable = true;
-        id = "2b5e889ac3bc4a228e0789ed5c5020f0";
+        id = "87ee8278880a4b8882e844dc58306a31";
+        libraries = {
+          Filme = {
+            id = "7a2175bccb1f1a94152cbd2b2bae8f6d";
+            type = "movies";
+            path = "movies";
+          };
+          Serien = {
+            id = "43cfe12fe7d9d8d21251e0964e0232e2";
+            type = "tvshows";
+            path = "shows";
+          };
+        };
       };
       jellyseerr.enable = true;
       fileflows.enable = true;
@@ -74,7 +86,6 @@
 
       muse.enable = true;
       multi-scrobbler.enable = true;
-      #tidarr.enable = true;
 
       open-webui.enable = true;
 

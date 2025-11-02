@@ -17,6 +17,12 @@ in
       programs.zed-editor = {
         enable = true;
 
+        extensions = [
+          "nix"
+          "git-firefly"
+          "just"
+        ];
+
         userSettings = {
           ui_font_family = "FiraCode Nerd Font Mono";
           ui_font_size = 16;

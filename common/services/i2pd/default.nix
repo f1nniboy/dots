@@ -24,9 +24,10 @@ in
       enable = true;
       inherit address;
       inherit (cfg) port;
-      bandwidth = 10000; # 10mb/s
-      floodfill = true;
-      nat = false;
+      #bandwidth = 10000; # 10mb/s
+      limits = {
+        transittunnels = 10000;
+      };
       addressbook = {
         subscriptions = [
           "http://notbob.i2p/hosts-all.txt"

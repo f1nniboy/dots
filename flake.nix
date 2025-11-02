@@ -21,7 +21,6 @@
 
     impermanence.url = "github:nix-community/impermanence";
     sops-nix.url = "github:Mic92/sops-nix";
-    caddy.url = "github:vincentbernat/caddy-nix";
     flatpaks.url = "github:in-a-dil-emma/declarative-flatpak/latest";
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
     piped.url = "github:squalus/piped-flake";

@@ -35,7 +35,7 @@ in
         ensureDBOwnership = true;
       }) cfg.users;
 
-      authentication = mkOverride 10 ''
+      authentication = ''
         # TYPE  DATABASE  USER      ADDRESS   		METHOD
         local   all       all                 		peer
         host    all       all       127.0.0.1/32  reject

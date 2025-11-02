@@ -7,6 +7,13 @@
 with lib;
 let
   cfg = config.custom.apps.vesktop;
+
+  mkPlugin =
+    attrs:
+    {
+      enabled = true;
+    }
+    // attrs;
 in
 {
   options.custom.apps.vesktop = {
@@ -34,18 +41,16 @@ in
           enable = true;
           settings = {
             appBadge = false;
-            arRPC = false;
-            checkUpdates = false;
-            customTitleBar = false;
-            disableMinSize = false;
-            minimizeToTray = true;
-            tray = true;
-            splashBackground = "#000000";
-            splashColor = "#ffffff";
-            splashTheming = false;
             staticTitle = true;
-            hardwareAcceleration = true;
-            discordBranch = "stable";
+          };
+          vencord.settings = {
+            plugins = {
+              MessageLogger = mkPlugin { };
+              VolumeBooster = mkPlugin { };
+              SilentTyping = mkPlugin { };
+              NoPendingCount = mkPlugin { };
+              ViewRaw = mkPlugin { };
+            };
           };
         };
       };

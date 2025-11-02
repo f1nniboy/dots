@@ -17,8 +17,6 @@ in
       programs.ghostty = {
         enable = true;
 
-        enableBashIntegration = true;
-
         settings = {
           theme = "Adwaita Dark";
 
