@@ -64,26 +64,17 @@ in
 
     sops = {
       templates."karakeep-secrets" = {
-        content = ''
-          OAUTH_CLIENT_ID="${config.sops.placeholder."${config.networking.hostName}/oidc/karakeep/id"}"
-          OAUTH_CLIENT_SECRET="${
-            config.sops.placeholder."${config.networking.hostName}/oidc/karakeep/secret"
-          }"
+        content =
+          let
+            mkSecret = path: custom.mkSecretPlaceholder config "karakeep/${path}" "karakeep";
+          in
+          ''
+            OAUTH_CLIENT_ID="${custom.mkSecretPlaceholder config "oidc/karakeep/id" "karakeep"}"
+            OAUTH_CLIENT_SECRET="${custom.mkSecretPlaceholder config "oidc/karakeep/secret" "karakeep"}"
 
-          OPENAI_API_KEY="${config.sops.placeholder."${config.networking.hostName}/karakeep/openai-api-key"}"
-        '';
+            OPENAI_API_KEY="${mkSecret "openai-api-key"}"
+          '';
         owner = "karakeep";
-      };
-      secrets = {
-        "${config.networking.hostName}/karakeep/openai-api-key".owner = "karakeep";
-
-        "${config.networking.hostName}/oidc/karakeep/secret".owner = "karakeep";
-        "${config.networking.hostName}/oidc/karakeep/secret-hash".owner = "authelia-main";
-        "${config.networking.hostName}/oidc/karakeep/id".owner = "karakeep";
-        "authelia-${config.networking.hostName}/oidc/karakeep/id" = {
-          key = "${config.networking.hostName}/oidc/karakeep/id";
-          owner = "authelia-main";
-        };
       };
     };
 
@@ -114,21 +105,29 @@ in
         restic.paths = [ "/var/lib/karakeep" ];
       };
 
-      system.persistence.config = {
-        directories = [
+      system = {
+        sops.secrets = [
           {
-            directory = "/var/lib/karakeep";
-            user = "karakeep";
-            group = "karakeep";
-            mode = "0700";
-          }
-          {
-            directory = "/var/lib/karakeep-browser";
-            user = "karakeep";
-            group = "karakeep";
-            mode = "0700";
+            path = "karakeep/openai-api-key";
+            owner = "karakeep";
           }
         ];
+        persistence.config = {
+          directories = [
+            {
+              directory = "/var/lib/karakeep";
+              user = "karakeep";
+              group = "karakeep";
+              mode = "0700";
+            }
+            {
+              directory = "/var/lib/karakeep-browser";
+              user = "karakeep";
+              group = "karakeep";
+              mode = "0700";
+            }
+          ];
+        };
       };
     };
   };
