@@ -330,23 +330,44 @@ in
 
     sops = {
       templates.notesnook-secrets = {
-        content = ''
-          MINIO_ROOT_PASSWORD=${
-            config.sops.placeholder."${config.networking.hostName}/notesnook/minio-password"
-          }
-          NOTESNOOK_API_SECRET=${config.sops.placeholder."${config.networking.hostName}/notesnook/api-secret"}
-          S3_ACCESS_KEY=${config.sops.placeholder."${config.networking.hostName}/notesnook/s3-access-key"}
-        '';
+        content =
+          let
+            mkSecret = path: custom.mkSecretPlaceholder config "notesnook/${path}" "notesnook";
+          in
+          ''
+            MINIO_ROOT_PASSWORD=${mkSecret "minio-password"}
+            NOTESNOOK_API_SECRET=${mkSecret "api-secret"}
+            S3_ACCESS_KEY=${mkSecret "s3-access-key"}
+          '';
         owner = "notesnook";
-      };
-      secrets = {
-        "${config.networking.hostName}/notesnook/minio-password".owner = "notesnook";
-        "${config.networking.hostName}/notesnook/s3-access-key".owner = "notesnook";
-        "${config.networking.hostName}/notesnook/api-secret".owner = "notesnook";
       };
     };
 
     custom = {
+      system = {
+        sops.secrets = [
+          {
+            path = "notesnook/minio-password";
+            owner = "notesnook";
+          }
+          {
+            path = "notesnook/s3-access-key";
+            owner = "notesnook";
+          }
+          {
+            path = "notesnook/api-secret";
+            owner = "notesnook";
+          }
+        ];
+        persistence.config = {
+          directories = [
+            {
+              directory = "/var/lib/notesnook";
+              mode = "0700";
+            }
+          ];
+        };
+      };
       services = {
         caddy.hosts = {
           notesnook-api = {
@@ -370,15 +391,6 @@ in
             target = ":${toString cfg.ports.s3}";
           };
         };
-      };
-
-      system.persistence.config = {
-        directories = [
-          {
-            directory = "/var/lib/notesnook";
-            mode = "0700";
-          }
-        ];
       };
     };
   };

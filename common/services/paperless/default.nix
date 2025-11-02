@@ -39,7 +39,7 @@ in
         mediaDir = docsDir;
         consumptionDir = "/fun/media/shares/paperless";
         database.createLocally = false;
-        passwordFile = config.sops.secrets."${config.networking.hostName}/paperless/admin-password".path;
+        passwordFile = custom.mkSecretPath config "paperless/admin-password" "paperless";
         domain = serviceDomain;
         settings = {
           PAPERLESS_DBHOST = "/run/postgresql";
@@ -77,8 +77,8 @@ in
                   {
                     provider_id = "authelia";
                     name = "Authelia";
-                    client_id = config.sops.placeholder."${config.networking.hostName}/oidc/paperless/id";
-                    secret = config.sops.placeholder."${config.networking.hostName}/oidc/paperless/secret";
+                    client_id = custom.mkSecretPlaceholder config "oidc/paperless/id" "paperless";
+                    secret = custom.mkSecretPlaceholder config "oidc/paperless/secret" "paperless";
                     settings = {
                       server_url = "https://${custom.mkServiceDomain config "authelia"}/.well-known/openid-configuration";
                       token_auth_method = "client_secret_basic";
@@ -91,25 +91,9 @@ in
         '';
         owner = "paperless";
       };
-      secrets = {
-        "${config.networking.hostName}/paperless/admin-password".owner = "paperless";
-
-        "${config.networking.hostName}/oidc/paperless/secret".owner = "paperless";
-        "${config.networking.hostName}/oidc/paperless/secret-hash".owner = "authelia-main";
-        "${config.networking.hostName}/oidc/paperless/id".owner = "paperless";
-        "authelia-${config.networking.hostName}/oidc/paperless/id" = {
-          key = "${config.networking.hostName}/oidc/paperless/id";
-          owner = "authelia-main";
-        };
-      };
     };
 
     custom = {
-      services = {
-        postgresql.users = [ "paperless" ];
-        redis.servers = [ "paperless" ];
-      };
-
       services = {
         caddy.hosts = {
           paperless.target = ":${toString config.services.paperless.port}";
@@ -135,17 +119,27 @@ in
             "/var/lib/paperless/log"
           ];
         };
+        postgresql.users = [ "paperless" ];
+        redis.servers = [ "paperless" ];
       };
 
-      system.persistence.config = {
-        directories = [
+      system = {
+        sops.secrets = [
           {
-            directory = "/var/lib/paperless";
-            user = "paperless";
-            group = "paperless";
-            mode = "0700";
+            path = "paperless/admin-password";
+            owner = "paperless";
           }
         ];
+        persistence.config = {
+          directories = [
+            {
+              directory = "/var/lib/paperless";
+              user = "paperless";
+              group = "paperless";
+              mode = "0700";
+            }
+          ];
+        };
       };
     };
   };

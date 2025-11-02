@@ -1,8 +1,10 @@
 {
+  lib,
   cfg,
   config,
   ...
 }:
+with lib;
 # TODO: fix horrible tab formatting
 let
   mkYamlList =
@@ -12,15 +14,15 @@ let
   mkYamlBoolean = item: if item then "true" else "false";
 
   mkSecret =
-    id: key: base:
-    ''{{ secret "/run/secrets/${
-      if base then "authelia-" else ""
-    }${config.networking.hostName}/oidc/${id}/${key}" | mindent 10 "|" | msquote }}'';
+    id: key:
+    ''{{ secret "${
+      custom.mkSecretPath config "oidc/${id}/${key}" "authelia-main"
+    }" | mindent 10 "|" | msquote }}'';
 
   mkClient = c: ''
           - client_name: ${c.name}
-            client_id: ${mkSecret c.id "id" true}
-            client_secret: ${mkSecret c.id "secret-hash" false}
+            client_id: ${mkSecret c.id "id"}
+            client_secret: ${mkSecret c.id "secret-hash"}
             public: ${mkYamlBoolean c.public}
             authorization_policy: ${c.policy}
             require_pkce: ${mkYamlBoolean c.requirePkce}

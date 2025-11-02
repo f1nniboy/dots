@@ -6,7 +6,7 @@
 }:
 with lib;
 let
-  mkSecret = path: config.sops.placeholder."common/sabnzbd/${path}";
+  mkSecret = path: custom.mkSecretPlaceholder config "sabnzbd/${path}" "sabnzbd";
 
   mkCategories =
     categories:

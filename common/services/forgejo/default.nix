@@ -58,30 +58,36 @@ in
     systemd.services.forgejo.preStart =
       let
         adminCmd = "${lib.getExe config.services.forgejo.package} admin user";
-        pwd = config.sops.secrets."${config.networking.hostName}/forgejo/admin-password";
+        secretPath = custom.mkSecretPath config "forgejo/admin-password" "forgejo";
         user = vars.user.nick;
       in
       ''
-        ${adminCmd} create --admin --email "${config.custom.system.user.email}" --username ${user} --password "$(tr -d '\n' < ${pwd.path})" || true
+        ${adminCmd} create --admin --email "${config.custom.system.user.email}" --username ${user} --password "$(tr -d '\n' < ${secretPath})" || true
         ## uncomment this line to change an admin user which was already created
-        # ${adminCmd} change-password --username ${user} --password "$(tr -d '\n' < ${pwd.path})" || true
+        # ${adminCmd} change-password --username ${user} --password "$(tr -d '\n' < ${secretPath})" || true
       '';
 
-    sops = {
-      secrets = {
-        "${config.networking.hostName}/forgejo/admin-password".owner = "forgejo";
+    custom = {
+      system = {
+        sops.secrets = [
+          {
+            path = "forgejo/admin-password";
+            owner = "forgejo";
+          }
+        ];
 
-        "${config.networking.hostName}/oidc/forgejo/secret".owner = "forgejo";
-        "${config.networking.hostName}/oidc/forgejo/secret-hash".owner = "authelia-main";
-        "${config.networking.hostName}/oidc/forgejo/id".owner = "forgejo";
-        "authelia-${config.networking.hostName}/oidc/forgejo/id" = {
-          key = "${config.networking.hostName}/oidc/forgejo/id";
-          owner = "authelia-main";
+        persistence.config = {
+          directories = [
+            {
+              directory = "/var/lib/forgejo";
+              user = "forgejo";
+              group = "forgejo";
+              mode = "0700";
+            }
+          ];
         };
       };
-    };
 
-    custom = {
       services = {
         caddy.hosts = {
           forgejo.target = ":${toString cfg.port}";
@@ -94,17 +100,6 @@ in
             redirectUris = [
               "https://${serviceDomain}/user/oauth2/Authelia/callback"
             ];
-          }
-        ];
-      };
-
-      system.persistence.config = {
-        directories = [
-          {
-            directory = "/var/lib/forgejo";
-            user = "forgejo";
-            group = "forgejo";
-            mode = "0700";
           }
         ];
       };

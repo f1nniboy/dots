@@ -50,7 +50,7 @@ in
         # otherwise authenticate with tailscale
         # timeout after 10 seconds to avoid hanging the boot process
         ${coreutils}/bin/timeout 10 ${tailscale}/bin/tailscale up \
-          --authkey=$(cat "${config.sops.secrets."common/tailscale/auth-key".path}") \
+          --authkey=$(cat "${custom.mkSecretPath config "tailscale/auth-key" "root"}") \
           --operator=${config.custom.system.user.name}
       '';
     };
@@ -61,10 +61,16 @@ in
       checkReversePath = "loose";
     };
 
-    sops.secrets."common/tailscale/auth-key" = { };
-
-    custom.system.persistence.config = {
-      directories = [ "/var/lib/tailscale" ];
+    custom.system = {
+      sops.secrets = [
+        {
+          path = "tailscale/auth-key";
+          source = "common";
+        }
+      ];
+      persistence.config = {
+        directories = [ "/var/lib/tailscale" ];
+      };
     };
   };
 }

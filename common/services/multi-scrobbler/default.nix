@@ -60,44 +60,62 @@ in
         owner = "multi-scrobbler";
         mode = "0600";
       };
-      secrets = {
-        "${config.networking.hostName}/multi-scrobbler/sources/jellyfin/user".owner = "multi-scrobbler";
-        "multi-scrobbler-${config.networking.hostName}/jellyfin/api-keys/multi-scrobbler" = {
-          key = "${config.networking.hostName}/jellyfin/api-keys/multi-scrobbler";
-          owner = "multi-scrobbler";
-        };
-
-        "${config.networking.hostName}/multi-scrobbler/sources/spotify/client-id".owner = "multi-scrobbler";
-        "${config.networking.hostName}/multi-scrobbler/sources/spotify/client-secret".owner =
-          "multi-scrobbler";
-
-        "${config.networking.hostName}/multi-scrobbler/clients/listenbrainz/token".owner =
-          "multi-scrobbler";
-        "${config.networking.hostName}/multi-scrobbler/clients/listenbrainz/username".owner =
-          "multi-scrobbler";
-
-        "${config.networking.hostName}/multi-scrobbler/clients/lastfm/api-key".owner = "multi-scrobbler";
-        "${config.networking.hostName}/multi-scrobbler/clients/lastfm/secret".owner = "multi-scrobbler";
-      };
     };
 
     custom = {
+      system = {
+        sops.secrets =
+          let
+            entries = [
+              {
+                type = "sources";
+                name = "spotify";
+                secrets = [
+                  "client-id"
+                  "client-secret"
+                ];
+              }
+              {
+                type = "clients";
+                name = "listenbrainz";
+                secrets = [
+                  "token"
+                  "username"
+                ];
+              }
+              {
+                type = "clients";
+                name = "lastfm";
+                secrets = [
+                  "api-key"
+                  "secret"
+                ];
+              }
+            ];
+            mkEntrySecrets =
+              entry:
+              map (secret: {
+                path = "multi-scrobbler/${entry.type}/${entry.name}/${secret}";
+                owner = "multi-scrobbler";
+              }) entry.secrets;
+          in
+          concatLists (map mkEntrySecrets entries);
+        persistence.config = {
+          directories = [
+            {
+              directory = "/var/lib/multi-scrobbler";
+              user = "multi-scrobbler";
+              group = "multi-scrobbler";
+              mode = "0700";
+            }
+          ];
+        };
+      };
       services.caddy.hosts = {
         multi-scrobbler = {
           target = ":${toString cfg.port}";
           import = [ "auth" ];
         };
-      };
-
-      system.persistence.config = {
-        directories = [
-          {
-            directory = "/var/lib/multi-scrobbler";
-            user = "multi-scrobbler";
-            group = "multi-scrobbler";
-            mode = "0700";
-          }
-        ];
       };
     };
   };

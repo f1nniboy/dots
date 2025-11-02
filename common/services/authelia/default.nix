@@ -14,7 +14,7 @@ let
   oidcConfigFile = pkgs.writeTextFile {
     name = "oidc-clients.yaml";
     text = import ./oidcConfig.nix {
-      inherit config cfg;
+      inherit lib config cfg;
     };
   };
 in
@@ -125,13 +125,50 @@ in
   };
 
   config = mkIf cfg.enable {
-    sops.secrets = {
-      "${config.networking.hostName}/authelia/jwt-secret".owner = name;
-      "${config.networking.hostName}/authelia/storage-encryption-key".owner = name;
-      "${config.networking.hostName}/authelia/session-secret".owner = name;
-      "${config.networking.hostName}/authelia/hmac-secret".owner = name;
-      "${config.networking.hostName}/authelia/jwks".owner = name;
-    };
+    custom.system.sops.secrets =
+      let
+        mkClientSecrets = client: [
+          {
+            path = "oidc/${client.id}/secret";
+            owner = client.id;
+          }
+          {
+            path = "oidc/${client.id}/id";
+            owner = client.id;
+          }
+          {
+            path = "oidc/${client.id}/secret-hash";
+            owner = name;
+          }
+          {
+            path = "oidc/${client.id}/id";
+            owner = name;
+          }
+        ];
+      in
+      concatLists (map mkClientSecrets cfg.clients)
+      ++ [
+        {
+          path = "authelia/jwt-secret";
+          owner = name;
+        }
+        {
+          path = "authelia/storage-encryption-key";
+          owner = name;
+        }
+        {
+          path = "authelia/session-secret";
+          owner = name;
+        }
+        {
+          path = "authelia/hmac-secret";
+          owner = name;
+        }
+        {
+          path = "authelia/jwks";
+          owner = name;
+        }
+      ];
 
     systemd.services.${name} =
       let
@@ -234,7 +271,7 @@ in
           settingsFiles = [ oidcConfigFile ];
           secrets =
             let
-              mkSecret = path: config.sops.secrets."${config.networking.hostName}/authelia/${path}".path;
+              mkSecret = path: custom.mkSecretPath config "authelia/${path}" name;
             in
             {
               jwtSecretFile = mkSecret "jwt-secret";

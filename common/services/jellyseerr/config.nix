@@ -1,14 +1,14 @@
 { lib, config, ... }:
-let
-  mkAppSecret = path: config.sops.placeholder."${config.networking.hostName}/jellyseerr/${path}";
-in
 with lib;
+let
+  mkSecret = path: custom.mkSecretPlaceholder config "jellyseerr/${path}" "jellyseerr";
+in
 builtins.toJSON {
-  clientId = mkAppSecret "client-id";
-  vapidPrivate = mkAppSecret "vapid/private";
-  vapidPublic = mkAppSecret "vapid/public";
+  clientId = mkSecret "client-id";
+  vapidPrivate = mkSecret "vapid/private";
+  vapidPublic = mkSecret "vapid/public";
   main = {
-    apiKey = mkAppSecret "api-key";
+    apiKey = mkSecret "api-key";
     applicationTitle = "Jellyseerr";
     applicationUrl = "";
     cacheImages = true;
@@ -31,28 +31,27 @@ builtins.toJSON {
     jellyfinForgotPasswordUrl = "";
     libraries = with config.custom.services.jellyfin; [
       {
-        id = libraries.Filme.id;
+        inherit (libraries.Filme) id;
         name = "Filme";
         enabled = true;
         type = "movie";
       }
       {
-        id = libraries.Serien.id;
+        inherit (libraries.Serien) id;
         name = "Serien";
         enabled = true;
         type = "show";
       }
     ];
     serverId = config.custom.services.jellyfin.id;
-    apiKey =
-      config.sops.placeholder."jellyseerr-${config.networking.hostName}/jellyfin/api-keys/jellyseerr";
+    apiKey = custom.mkSecretPlaceholder config "jellyfin/api-keys/jellyseerr" "jellyseerr";
   };
   radarr = [
     {
       name = "Radarr";
       hostname = "localhost";
       port = 7878;
-      apiKey = config.sops.placeholder."jellyseerr-${config.networking.hostName}/radarr/api-key";
+      apiKey = custom.mkSecretPlaceholder config "radarr/api-key" "jellyseerr";
       useSsl = false;
       activeProfileId = 11;
       activeProfileName = "HD";
@@ -73,7 +72,7 @@ builtins.toJSON {
       name = "Sonarr";
       hostname = "localhost";
       port = 8989;
-      apiKey = config.sops.placeholder."jellyseerr-${config.networking.hostName}/sonarr/api-key";
+      apiKey = custom.mkSecretPlaceholder config "sonarr/api-key" "jellyseerr";
       useSsl = false;
       activeProfileId = 11;
       activeProfileName = "HD";

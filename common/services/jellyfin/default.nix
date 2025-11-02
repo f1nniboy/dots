@@ -63,7 +63,7 @@ in
     };
 
     systemd.tmpfiles.rules = mapAttrsToList (
-      name: l: "d ${mediaDir}/${l.path} 0770 nobody media - -"
+      _: l: "d ${mediaDir}/${l.path} 0770 nobody media - -"
     ) cfg.libraries;
 
     custom = {

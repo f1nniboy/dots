@@ -51,16 +51,6 @@ in
         };
         owner = "immich";
       };
-      secrets = {
-        "authelia-${config.networking.hostName}/oidc/immich/id" = {
-          key = "${config.networking.hostName}/oidc/immich/id";
-          owner = "authelia-main";
-        };
-        "${config.networking.hostName}/oidc/immich/id".owner = "immich";
-
-        "${config.networking.hostName}/oidc/immich/secret".owner = "immich";
-        "${config.networking.hostName}/oidc/immich/secret-hash".owner = "authelia-main";
-      };
     };
 
     custom = {

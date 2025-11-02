@@ -8,8 +8,6 @@
 with lib;
 let
   cfg = config.custom.services.soju;
-
-  hostname = config.networking.hostName;
   serviceDomain = custom.mkServiceDomain config "soju";
 in
 {
@@ -77,21 +75,21 @@ in
         wantedBy = [ "multi-user.target" ];
         script =
           let
-            mkSecretCat = path: "\"$(cat ${config.sops.secrets."${path}".path})\"";
+            mkSecretCat = path: "\"$(cat ${custom.mkSecretPath config "soju/${path}" "soju"})\"";
 
             sojuctl = "${pkgs.soju}/bin/sojuctl -config ${config.services.soju.configFile}";
             userctl = "${sojuctl} user run ${account.username}";
 
             account = {
               username = vars.user.fullName;
-              password = mkSecretCat "common/soju/user/password";
+              password = mkSecretCat "user/password";
             };
 
             net = {
-              name = mkSecretCat "${hostname}/soju/network/name";
-              host = mkSecretCat "${hostname}/soju/network/host";
-              username = mkSecretCat "${hostname}/soju/network/username";
-              password = mkSecretCat "${hostname}/soju/network/password";
+              name = mkSecretCat "network/name";
+              host = mkSecretCat "network/host";
+              username = mkSecretCat "network/username";
+              password = mkSecretCat "network/password";
             };
           in
           ''
@@ -115,37 +113,51 @@ in
       };
     };
 
-    sops = {
-      secrets = {
-        "common/soju/user/password".owner = "soju";
-
-        "${hostname}/soju/network/name".owner = "soju";
-        "${hostname}/soju/network/host".owner = "soju";
-        "${hostname}/soju/network/username".owner = "soju";
-        "${hostname}/soju/network/password".owner = "soju";
-      };
-    };
-
     custom = {
+      system = {
+        sops.secrets = [
+          {
+            path = "soju/user/password";
+            owner = "soju";
+            source = "common";
+          }
+          {
+            path = "soju/network/name";
+            owner = "soju";
+          }
+          {
+            path = "soju/network/host";
+            owner = "soju";
+          }
+          {
+            path = "soju/network/username";
+            owner = "soju";
+          }
+          {
+            path = "soju/network/password";
+            owner = "soju";
+          }
+        ];
+        persistence.config = {
+          directories = [
+            {
+              directory = "/var/lib/soju";
+              user = "soju";
+              group = "soju";
+              mode = "0700";
+            }
+          ];
+        };
+      };
       services = {
         caddy.hosts = {
           soju.target = ":${toString cfg.ports.http}";
         };
         acme.domains = {
-          ${serviceDomain} = {
+          "${serviceDomain}" = {
             group = "soju";
           };
         };
-      };
-      system.persistence.config = {
-        directories = [
-          {
-            directory = "/var/lib/soju";
-            user = "soju";
-            group = "soju";
-            mode = "0700";
-          }
-        ];
       };
     };
   };

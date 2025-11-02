@@ -65,22 +65,11 @@ in
     sops = {
       templates.open-webui-secrets = {
         content = ''
-          OAUTH_CLIENT_ID=${config.sops.placeholder."${config.networking.hostName}/oidc/open-webui/id"}
-          OAUTH_CLIENT_SECRET=${
-            config.sops.placeholder."${config.networking.hostName}/oidc/open-webui/secret"
-          }
+          OAUTH_CLIENT_ID=${custom.mkSecretPath config "oidc/open-webui/id" "open-webui"}
+          OAUTH_CLIENT_SECRET=${custom.mkSecretPath config "oidc/open-webui/secret" "open-webui"}
         '';
         owner = "open-webui";
         mode = "0600";
-      };
-      secrets = {
-        "${config.networking.hostName}/oidc/open-webui/secret".owner = "open-webui";
-        "${config.networking.hostName}/oidc/open-webui/secret-hash".owner = "authelia-main";
-        "${config.networking.hostName}/oidc/open-webui/id".owner = "open-webui";
-        "authelia-${config.networking.hostName}/oidc/open-webui/id" = {
-          key = "${config.networking.hostName}/oidc/open-webui/id";
-          owner = "authelia-main";
-        };
       };
     };
 

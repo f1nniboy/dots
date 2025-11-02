@@ -1,11 +1,23 @@
-keys:
+keys: &keys
   - &desktop age1d7l44trdac37hfx7yrtw4zf7re3k39tzjeav70z9t9xv9ur5wsmshge2pw
   - &laptop age1yqh025casyzy6sw68m08xreftvswjf9eqwnvcaytga6jvehdhejqr6mf04
   - &lab age19f8l20tkls4v0uh3wuucj44pxpsj9l85vj4q2rx03rnag0cpy39swmtyhm
 creation_rules:
-  - path_regex: secrets/[^/]+(\.(yaml|json|env|ini|conf))?$
+  - path_regex: secrets/common.yaml
+    key_groups:
+      - age: *keys
+
+  # hosts
+  - path_regex: secrets/hosts/lab.yaml
     key_groups:
       - age:
           - *desktop
-          - *laptop
           - *lab
+  - path_regex: secrets/hosts/desktop.yaml
+    key_groups:
+      - age:
+          - *desktop
+  - path_regex: secrets/hosts/laptop.yaml
+    key_groups:
+      - age:
+          - *laptop

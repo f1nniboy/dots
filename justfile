@@ -29,11 +29,11 @@ setup-disks machine:
 build-iso:
 	nix build .#nixosConfigurations.iso.config.system.build.isoImage
 
-sops-edit:
-	sops secrets/secrets.yaml
+sops-edit path:
+	sops "secrets/{{path}}.yaml"
 
 sops-rotate:
-	for file in secrets/*; do sops --rotate --in-place "$file"; done
+	for file in secrets/* secrets/hosts/*; do sops --rotate --in-place "$file"; done
 
 sops-update:
-	for file in secrets/*; do sops updatekeys "$file"; done
+	for file in secrets/* secrets/hosts/*; do sops updatekeys "$file"; done

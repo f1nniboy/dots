@@ -72,16 +72,47 @@ in
         };
       };
       recyclarr.serviceConfig.LoadCredential = [
-        "radarr_api-key:${
-          config.sops.secrets."recyclarr-${config.networking.hostName}/radarr/api-key".path
-        }"
-        "sonarr_api-key:${
-          config.sops.secrets."recyclarr-${config.networking.hostName}/sonarr/api-key".path
-        }"
+        "radarr_api-key:${custom.mkSecretPath config "radarr/api-key" "recyclarr"}"
+        "sonarr_api-key:${custom.mkSecretPath config "sonarr/api-key" "recyclarr"}"
       ];
     };
 
     custom = {
+      system = {
+        sops.secrets = [
+          {
+            path = "radarr/api-key";
+            owner = "recyclarr";
+          }
+          {
+            path = "sonarr/api-key";
+            owner = "recyclarr";
+          }
+        ];
+        persistence.config = {
+          directories = [
+            {
+              directory = "/var/lib/prowlarr";
+              user = "prowlarr";
+              group = "media";
+              mode = "0700";
+            }
+            {
+              directory = "/var/lib/radarr";
+              user = "radarr";
+              group = "media";
+              mode = "0700";
+            }
+            {
+              directory = "/var/lib/sonarr";
+              user = "sonarr";
+              group = "media";
+              mode = "0700";
+            }
+          ];
+        };
+      };
+
       services = {
         caddy.hosts = {
           prowlarr = {
@@ -110,29 +141,6 @@ in
         ];
       };
 
-      system.persistence.config = {
-        directories = [
-          {
-            directory = "/var/lib/prowlarr";
-            user = "prowlarr";
-            group = "media";
-            mode = "0700";
-          }
-          {
-            directory = "/var/lib/radarr";
-            user = "radarr";
-            group = "media";
-            mode = "0700";
-          }
-          {
-            directory = "/var/lib/sonarr";
-            user = "sonarr";
-            group = "media";
-            mode = "0700";
-          }
-        ];
-      };
-
       services.restic = {
         paths = [
           "/var/lib/prowlarr"
@@ -152,17 +160,6 @@ in
           "/var/lib/sonarr/.config/NzbDrone/Backups"
           "/var/lib/sonarr/.config/NzbDrone/logs"
         ];
-      };
-    };
-
-    sops.secrets = {
-      "recyclarr-${config.networking.hostName}/radarr/api-key" = {
-        key = "${config.networking.hostName}/radarr/api-key";
-        owner = "recyclarr";
-      };
-      "recyclarr-${config.networking.hostName}/sonarr/api-key" = {
-        key = "${config.networking.hostName}/sonarr/api-key";
-        owner = "authelia-main";
       };
     };
   };

@@ -41,30 +41,45 @@ in
     sops = {
       templates.muse-env = {
         content = ''
-          DISCORD_TOKEN=${config.sops.placeholder."${config.networking.hostName}/muse/discord-token"}
-          YOUTUBE_API_KEY=${config.sops.placeholder."${config.networking.hostName}/muse/youtube-api-key"}
-          SPOTIFY_CLIENT_ID=${config.sops.placeholder."${config.networking.hostName}/muse/spotify/id"}
-          SPOTIFY_CLIENT_SECRET=${config.sops.placeholder."${config.networking.hostName}/muse/spotify/secret"}
+          DISCORD_TOKEN=${custom.mkSecretPlaceholder config "muse/discord-token" "muse"}
+          YOUTUBE_API_KEY=${custom.mkSecretPlaceholder config "muse/youtube-api-key" "muse"}
+          SPOTIFY_CLIENT_ID=${custom.mkSecretPlaceholder config "muse/spotify/id" "muse"}
+          SPOTIFY_CLIENT_SECRET=${custom.mkSecretPlaceholder config "muse/spotify/secret" "muse"}
         '';
         owner = "muse";
       };
-      secrets = {
-        "${config.networking.hostName}/muse/discord-token".owner = "muse";
-        "${config.networking.hostName}/muse/youtube-api-key".owner = "muse";
-        "${config.networking.hostName}/muse/spotify/id".owner = "muse";
-        "${config.networking.hostName}/muse/spotify/secret".owner = "muse";
-      };
     };
 
-    custom.system.persistence.config = {
-      directories = [
+    custom.system = {
+      sops.secrets = [
         {
-          directory = "/var/lib/muse";
-          user = "muse";
-          group = "muse";
-          mode = "0700";
+          path = "muse/discord-token";
+          owner = "muse";
         }
+        {
+          path = "muse/youtube-api-key";
+          owner = "muse";
+        }
+        {
+          path = "muse/spotify/id";
+          owner = "muse";
+        }
+        {
+          path = "muse/spotify/secret";
+          owner = "muse";
+        }
+
       ];
+      persistence.config = {
+        directories = [
+          {
+            directory = "/var/lib/muse";
+            user = "muse";
+            group = "muse";
+            mode = "0700";
+          }
+        ];
+      };
     };
   };
 }

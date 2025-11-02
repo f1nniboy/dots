@@ -106,13 +106,6 @@ in
         };
         owner = "sabnzbd";
       };
-      secrets = {
-        "common/sabnzbd/api-key".owner = "sabnzbd";
-        "common/sabnzbd/nzb-key".owner = "sabnzbd";
-        "common/sabnzbd/server/host".owner = "sabnzbd";
-        "common/sabnzbd/server/username".owner = "sabnzbd";
-        "common/sabnzbd/server/password".owner = "sabnzbd";
-      };
     };
 
     systemd.tmpfiles.rules = [
@@ -122,6 +115,28 @@ in
     ++ categoryTmpfiles;
 
     custom = {
+      system.sops.secrets = [
+        {
+          path = "sabnzbd/api-key";
+          owner = "sabnzbd";
+        }
+        {
+          path = "sabnzbd/nzb-key";
+          owner = "sabnzbd";
+        }
+        {
+          path = "sabnzbd/server/host";
+          owner = "sabnzbd";
+        }
+        {
+          path = "sabnzbd/server/username";
+          owner = "sabnzbd";
+        }
+        {
+          path = "sabnzbd/server/password";
+          owner = "sabnzbd";
+        }
+      ];
       services.caddy.hosts = {
         sabnzbd = {
           target = ":${toString cfg.port}";

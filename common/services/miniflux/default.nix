@@ -38,25 +38,21 @@ in
       enable = true;
       adminCredentialsFile = config.sops.templates.miniflux-creds.path;
       # ref: https://miniflux.app/docs/configuration.html
-      config =
-        let
-          inherit (config.sops) secrets;
-        in
-        {
-          BASE_URL = "https://${serviceDomain}";
-          LISTEN_ADDR = "127.0.0.1:${toString cfg.port}";
+      config = {
+        BASE_URL = "https://${serviceDomain}";
+        LISTEN_ADDR = "127.0.0.1:${toString cfg.port}";
 
-          FETCH_YOUTUBE_WATCH_TIME = "1";
+        FETCH_YOUTUBE_WATCH_TIME = "1";
 
-          OAUTH2_PROVIDER = "oidc";
-          OAUTH2_CLIENT_ID_FILE = secrets."${config.networking.hostName}/oidc/miniflux/id".path;
-          OAUTH2_CLIENT_SECRET_FILE = secrets."${config.networking.hostName}/oidc/miniflux/secret".path;
-          OAUTH2_REDIRECT_URL = "https://${serviceDomain}/oauth2/oidc/callback";
-          OAUTH2_OIDC_DISCOVERY_ENDPOINT = "https://${custom.mkServiceDomain config "authelia"}";
-          OAUTH2_OIDC_PROVIDER_NAME = "Authelia";
-          OAUTH2_USER_CREATION = "1";
-          DISABLE_LOCAL_AUTH = "true";
-        };
+        OAUTH2_PROVIDER = "oidc";
+        OAUTH2_CLIENT_ID_FILE = custom.mkSecretPath config "oidc/miniflux/id" "miniflux";
+        OAUTH2_CLIENT_SECRET_FILE = custom.mkSecretPath config "oidc/miniflux/secret" "miniflux";
+        OAUTH2_REDIRECT_URL = "https://${serviceDomain}/oauth2/oidc/callback";
+        OAUTH2_OIDC_DISCOVERY_ENDPOINT = "https://${custom.mkServiceDomain config "authelia"}";
+        OAUTH2_OIDC_PROVIDER_NAME = "Authelia";
+        OAUTH2_USER_CREATION = "1";
+        DISABLE_LOCAL_AUTH = "true";
+      };
     };
 
     systemd.services.miniflux =
@@ -77,39 +73,37 @@ in
       templates.miniflux-creds = {
         content = ''
           ADMIN_USERNAME="admin"
-          ADMIN_PASSWORD="${config.sops.placeholder."${config.networking.hostName}/miniflux/admin-password"}"
+          ADMIN_PASSWORD="${custom.mkSecretPlaceholder config "miniflux/admin-password" "miniflux"}"
         '';
         owner = "miniflux";
       };
-      secrets = {
-        "${config.networking.hostName}/miniflux/admin-password".owner = "miniflux";
-
-        "authelia-${config.networking.hostName}/oidc/miniflux/id" = {
-          key = "${config.networking.hostName}/oidc/miniflux/id";
-          owner = "authelia-main";
-        };
-        "${config.networking.hostName}/oidc/miniflux/id".owner = "miniflux";
-
-        "${config.networking.hostName}/oidc/miniflux/secret".owner = "miniflux";
-        "${config.networking.hostName}/oidc/miniflux/secret-hash".owner = "authelia-main";
-      };
     };
 
-    custom.services = {
-      caddy.hosts = {
-        miniflux.target = ":${toString cfg.port}";
+    custom = {
+      system = {
+        sops.secrets = [
+          {
+            path = "miniflux/admin-password";
+            owner = "miniflux";
+          }
+        ];
       };
-      authelia.clients = [
-        {
-          name = "Miniflux";
-          id = "miniflux";
-          requirePkce = true;
-          redirectUris = [
-            "https://${serviceDomain}/oauth2/oidc/callback"
-          ];
-        }
-      ];
-      postgresql.users = [ "miniflux" ];
+      services = {
+        caddy.hosts = {
+          miniflux.target = ":${toString cfg.port}";
+        };
+        authelia.clients = [
+          {
+            name = "Miniflux";
+            id = "miniflux";
+            requirePkce = true;
+            redirectUris = [
+              "https://${serviceDomain}/oauth2/oidc/callback"
+            ];
+          }
+        ];
+        postgresql.users = [ "miniflux" ];
+      };
     };
 
     security.apparmor.policies."bin.miniflux".profile =
@@ -128,7 +122,8 @@ in
           rw /run/miniflux/**,
 
           # make secrets & db accessible
-          r /run/secrets.d/*/lab/oidc/miniflux/*,
+          r /run/secrets.d/*/miniflux-oidc/miniflux/id,
+          r /run/secrets.d/*/miniflux-oidc/miniflux/secret,
           rw /run/postgresql/*,
         }
       '';

@@ -101,28 +101,34 @@ in
     sops = {
       templates.caddy-secrets = {
         content = ''
-          PORKBUN_API_KEY=${config.sops.placeholder."${config.networking.hostName}/caddy/porkbun/api-key"}
-          PORKBUN_API_SECRET_KEY=${
-            config.sops.placeholder."${config.networking.hostName}/caddy/porkbun/api-secret-key"
-          }
+          PORKBUN_API_KEY=${custom.mkSecretPlaceholder config "porkbun/api-key" "caddy"}
+          PORKBUN_API_SECRET_KEY=${custom.mkSecretPlaceholder config "porkbun/api-secret-key" "caddy"}
         '';
         owner = "caddy";
       };
-      secrets = {
-        "${config.networking.hostName}/caddy/porkbun/api-key".owner = "caddy";
-        "${config.networking.hostName}/caddy/porkbun/api-secret-key".owner = "caddy";
-      };
     };
 
-    custom.system.persistence.config = {
-      directories = [
+    custom.system = {
+      sops.secrets = [
         {
-          directory = "/var/lib/caddy";
-          user = "caddy";
-          group = "caddy";
-          mode = "0700";
+          path = "porkbun/api-key";
+          owner = "caddy";
+        }
+        {
+          path = "porkbun/api-secret-key";
+          owner = "caddy";
         }
       ];
+      persistence.config = {
+        directories = [
+          {
+            directory = "/var/lib/caddy";
+            user = "caddy";
+            group = "caddy";
+            mode = "0700";
+          }
+        ];
+      };
     };
 
     #networking.firewall = {

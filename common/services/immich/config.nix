@@ -7,8 +7,8 @@ builtins.toJSON {
   oauth = {
     enabled = true;
     buttonText = "Mit Authelia anmelden";
-    clientId = config.sops.placeholder."${config.networking.hostName}/oidc/immich/id";
-    clientSecret = config.sops.placeholder."${config.networking.hostName}/oidc/immich/secret";
+    clientId = custom.mkSecretPlaceholder config "oidc/immich/id" "immich";
+    clientSecret = custom.mkSecretPlaceholder config "oidc/immich/secret" "immich";
     issuerUrl = "https://${custom.mkServiceDomain config "authelia"}";
     tokenEndpointAuthMethod = "client_secret_basic";
   };

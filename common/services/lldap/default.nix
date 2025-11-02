@@ -56,7 +56,7 @@ in
     services = {
       lldap =
         let
-          mkSecret = path: config.sops.secrets."${config.networking.hostName}/lldap/${path}".path;
+          mkSecret = path: custom.mkSecretPath config "lldap/${path}" "lldap";
         in
         {
           enable = true;
@@ -76,17 +76,29 @@ in
         };
     };
 
-    sops.secrets = {
-      "${config.networking.hostName}/lldap/admin-password".owner = "lldap";
-      "${config.networking.hostName}/lldap/jwt-secret".owner = "lldap";
-      "${config.networking.hostName}/lldap/key-seed".owner = "lldap";
-    };
-
-    custom.services = {
-      caddy.hosts = {
-        lldap.target = ":${toString cfg.ports.http}";
+    custom = {
+      system = {
+        sops.secrets = [
+          {
+            path = "lldap/admin-password";
+            owner = "lldap";
+          }
+          {
+            path = "lldap/jwt-secret";
+            owner = "lldap";
+          }
+          {
+            path = "lldap/key-seed";
+            owner = "lldap";
+          }
+        ];
       };
-      postgresql.users = [ "lldap" ];
+      services = {
+        caddy.hosts = {
+          lldap.target = ":${toString cfg.ports.http}";
+        };
+        postgresql.users = [ "lldap" ];
+      };
     };
   };
 }

@@ -33,10 +33,6 @@ in
   };
 
   config = {
-    sops.secrets = {
-      "common/user/hashed-password".neededForUsers = true;
-    };
-
     users = {
       mutableUsers = false;
 
@@ -46,8 +42,19 @@ in
         extraGroups = cfg.extraGroups ++ [
           "wheel"
         ];
-        hashedPasswordFile = config.sops.secrets."common/user/hashed-password".path;
+        hashedPasswordFile = custom.mkSecretPath config "user/hashed-password" "users";
       };
+    };
+
+    custom = {
+      system.sops.secrets = [
+        {
+          path = "user/hashed-password";
+          owner = "users";
+          source = "common";
+          forUsers = true;
+        }
+      ];
     };
   };
 }

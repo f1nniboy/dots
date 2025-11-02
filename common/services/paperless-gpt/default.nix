@@ -61,12 +61,8 @@ in
             PAPERLESS_BASE_URL=${serviceUrl}
             PAPERLESS_PUBLIC_URL=${serviceUrl}
 
-            PAPERLESS_API_TOKEN=${
-              config.sops.placeholder."${config.networking.hostName}/paperless-gpt/paperless-api-token"
-            }
-            OPENAI_API_KEY=${
-              config.sops.placeholder."${config.networking.hostName}/paperless-gpt/openai-api-key"
-            }
+            PAPERLESS_API_TOKEN=${custom.mkSecretPlaceholder config "paperless/api-token" "paperless-gpt"}
+            OPENAI_API_KEY=${custom.mkSecretPlaceholder config "paperless-gpt/openai-api-key" "paperless-gpt"}
 
             MANUAL_TAG=ai
             AUTO_TAG=ai-auto
@@ -77,29 +73,36 @@ in
           '';
         owner = "paperless-gpt";
       };
-      secrets = {
-        "${config.networking.hostName}/paperless-gpt/paperless-api-token".owner = "paperless-gpt";
-        "${config.networking.hostName}/paperless-gpt/openai-api-key".owner = "paperless-gpt";
-      };
     };
 
     custom = {
+      system = {
+        sops.secrets = [
+          {
+            path = "paperless/api-token";
+            owner = "paperless-gpt";
+          }
+          {
+            path = "paperless-gpt/openai-api-key";
+            owner = "paperless-gpt";
+          }
+        ];
+        persistence.config = {
+          directories = [
+            {
+              directory = "/var/lib/paperless-gpt";
+              user = "paperless-gpt";
+              group = "paperless-gpt";
+              mode = "0700";
+            }
+          ];
+        };
+      };
       services.caddy.hosts = {
         paperless-gpt = {
           target = ":${toString cfg.port}";
           import = [ "auth" ];
         };
-      };
-
-      system.persistence.config = {
-        directories = [
-          {
-            directory = "/var/lib/paperless-gpt";
-            user = "paperless-gpt";
-            group = "paperless-gpt";
-            mode = "0700";
-          }
-        ];
       };
     };
   };

@@ -5,21 +5,10 @@ let
 
   mkSecret =
     type: client: path:
-    config.sops.placeholder."${config.networking.hostName}/multi-scrobbler/${type}/${client}/${path}";
+    custom.mkSecretPlaceholder config "multi-scrobbler/${type}/${client}/${path}" "multi-scrobbler";
 in
 builtins.toJSON {
   sources = [
-    {
-      name = "Jellyfin";
-      type = "jellyfin";
-      enable = true;
-      data = {
-        url = "https://${custom.mkServiceDomain config "jellyfin"}:443";
-        user = mkSecret "sources" "jellyfin" "user";
-        apiKey =
-          config.sops.placeholder."multi-scrobbler-${config.networking.hostName}/jellyfin/api-keys/multi-scrobbler";
-      };
-    }
     {
       name = "Spotify";
       type = "spotify";

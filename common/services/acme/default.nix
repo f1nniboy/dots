@@ -35,26 +35,34 @@ in
     sops = {
       templates.acme-porkbun-secrets = {
         content = ''
-          PORKBUN_API_KEY=${config.sops.placeholder."common/acme/porkbun/api-key"}
-          PORKBUN_SECRET_API_KEY=${config.sops.placeholder."common/acme/porkbun/api-secret-key"}
+          PORKBUN_API_KEY=${custom.mkSecretPlaceholder config "porkbun/api-key" "acme"}
+          PORKBUN_API_SECRET_KEY=${custom.mkSecretPlaceholder config "porkbun/api-secret-key" "acme"}
         '';
         owner = "acme";
       };
-      secrets = {
-        "common/acme/porkbun/api-key".owner = "acme";
-        "common/acme/porkbun/api-secret-key".owner = "acme";
-      };
     };
 
-    custom.system.persistence.config = {
-      directories = [
+    custom.system = {
+      sops.secrets = [
         {
-          directory = "/var/lib/acme";
-          user = "acme";
-          group = "acme";
-          mode = "0770";
+          path = "porkbun/api-key";
+          owner = "acme";
+        }
+        {
+          path = "porkbun/api-secret-key";
+          owner = "acme";
         }
       ];
+      persistence.config = {
+        directories = [
+          {
+            directory = "/var/lib/acme";
+            user = "acme";
+            group = "acme";
+            mode = "0770";
+          }
+        ];
+      };
     };
   };
 }

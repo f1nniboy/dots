@@ -33,8 +33,6 @@ in
   config = mkIf cfg.enable {
     services.restic.backups =
       let
-        inherit (config.sops) secrets;
-
         pruneOpts = [
           "--keep-daily 7"
           "--keep-weekly 4"
@@ -45,19 +43,25 @@ in
       {
         borgbase = mkIf cfg.repos.borgbase {
           initialize = true;
-          repositoryFile = secrets."${config.networking.hostName}/restic/borgbase/url".path;
-          passwordFile = secrets."${config.networking.hostName}/restic/borgbase/password".path;
+          repositoryFile = custom.mkSecretPath config "restic/borgbase/url" "root";
+          passwordFile = custom.mkSecretPath config "restic/borgbase/password" "root";
           timerConfig.OnCalendar = cfg.frequency;
           inherit (cfg) paths exclude;
           inherit pruneOpts;
         };
       };
 
-    sops.secrets = mkMerge [
-      (mkIf cfg.repos.borgbase {
-        "${config.networking.hostName}/restic/borgbase/url" = { };
-        "${config.networking.hostName}/restic/borgbase/password" = { };
-      })
-    ];
+    custom.system = {
+      sops.secrets = mkMerge [
+        (mkIf cfg.repos.borgbase [
+          {
+            path = "restic/borgbase/url";
+          }
+          {
+            path = "restic/borgbase/password";
+          }
+        ])
+      ];
+    };
   };
 }

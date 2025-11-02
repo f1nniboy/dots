@@ -1,6 +1,6 @@
 { lib, ... }:
 with lib;
-{
+rec {
   # pre-defined mkEnableOption without a description
   enableOption = mkOption {
     default = false;
@@ -16,4 +16,12 @@ with lib;
 
   mkServiceDomain =
     config: name: "${config.custom.services.${name}.subdomain}.${config.custom.services.caddy.domain}";
+
+  mkSecretString = path: service: "${service}-${path}";
+  mkSecretPlaceholder =
+    config: path: service:
+    config.sops.placeholder."${mkSecretString path service}";
+  mkSecretPath =
+    config: path: service:
+    config.sops.secrets."${mkSecretString path service}".path;
 }

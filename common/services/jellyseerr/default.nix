@@ -65,41 +65,55 @@ in
           inherit lib config;
         };
       };
-      secrets = {
-        "${config.networking.hostName}/jellyseerr/api-key".owner = "jellyseerr";
-        "${config.networking.hostName}/jellyseerr/client-id".owner = "jellyseerr";
-        "${config.networking.hostName}/jellyseerr/vapid/public".owner = "jellyseerr";
-        "${config.networking.hostName}/jellyseerr/vapid/private".owner = "jellyseerr";
-
-        "jellyseerr-${config.networking.hostName}/jellyfin/api-keys/jellyseerr" = {
-          key = "${config.networking.hostName}/jellyfin/api-keys/jellyseerr";
-          owner = "jellyseerr";
-        };
-        "jellyseerr-${config.networking.hostName}/radarr/api-key" = {
-          key = "${config.networking.hostName}/radarr/api-key";
-          owner = "jellyseerr";
-        };
-        "jellyseerr-${config.networking.hostName}/sonarr/api-key" = {
-          key = "${config.networking.hostName}/sonarr/api-key";
-          owner = "jellyseerr";
-        };
-      };
     };
 
     custom = {
-      services.caddy.hosts = {
-        jellyseerr.target = ":${toString cfg.port}";
-      };
-
-      system.persistence.config = {
-        directories = [
+      system = {
+        sops.secrets = [
           {
-            directory = "/var/lib/jellyseerr";
-            user = "jellyseerr";
-            group = "media";
-            mode = "0700";
+            path = "jellyseerr/api-key";
+            owner = "jellyseerr";
+          }
+          {
+            path = "jellyseerr/client-id";
+            owner = "jellyseerr";
+          }
+          {
+            path = "jellyseerr/vapid/public";
+            owner = "jellyseerr";
+          }
+          {
+            path = "jellyseerr/vapid/private";
+            owner = "jellyseerr";
+          }
+
+          # api keys
+          {
+            path = "jellyfin/api-keys/jellyseerr";
+            owner = "jellyseerr";
+          }
+          {
+            path = "radarr/api-key";
+            owner = "jellyseerr";
+          }
+          {
+            path = "sonarr/api-key";
+            owner = "jellyseerr";
           }
         ];
+        persistence.config = {
+          directories = [
+            {
+              directory = "/var/lib/jellyseerr";
+              user = "jellyseerr";
+              group = "media";
+              mode = "0700";
+            }
+          ];
+        };
+      };
+      services.caddy.hosts = {
+        jellyseerr.target = ":${toString cfg.port}";
       };
     };
   };
