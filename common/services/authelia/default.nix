@@ -13,7 +13,7 @@ let
   dn = custom.domainToDn vars.lab.domain;
   oidcConfigFile = pkgs.writeTextFile {
     name = "oidc-clients.yaml";
-    text = import ./oidcConfig.nix {
+    text = import ./oidc-config.nix {
       inherit lib config cfg;
     };
   };
