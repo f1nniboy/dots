@@ -37,6 +37,7 @@ in
     networking.nftables = {
       # TODO: always enable when docker gets nftables support
       enable = !config.custom.services.docker.enable;
+      # ref: https://theorangeone.net/posts/tailscale-mullvad
       ruleset = ''
         table inet mullvad_tailscale {
           chain output {
