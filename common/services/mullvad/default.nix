@@ -18,14 +18,13 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-      mullvad-vpn
-      mullvad
+    environment.systemPackages = [
       mullvad-autostart
     ];
 
     services.mullvad-vpn = {
       enable = true;
+      package = pkgs.mullvad-vpn;
     };
 
     systemd = {
@@ -36,13 +35,18 @@ in
 
     # make mullvad work simultaneously with tailscale
     networking.nftables = {
-      # TODO: ENABLE AGAIN (doesnt work with docker)
-      enable = false;
+      # TODO: always enable when docker gets nftables support
+      enable = !config.custom.services.docker.enable;
       ruleset = ''
         table inet mullvad_tailscale {
           chain output {
-            type route hook output priority 0; policy accept;
+            type route hook output priority -100; policy accept;
             ip daddr 100.64.0.0/10 ct mark set 0x00000f41 meta mark set 0x6d6f6c65;
+          }
+
+          chain input {
+            type filter hook input priority -100; policy accept;
+            ip saddr 100.64.0.0/10 ct mark set 0x00000f41 meta mark set 0x6d6f6c65;
           }
         }
       '';
@@ -62,7 +66,7 @@ in
               enableSystemNotifications = true;
               unpinnedWindow = true;
               browsedForSplitTunnelingApplications = [ ];
-              changelogDisplayedForVersion = "2025.7";
+              changelogDisplayedForVersion = config.services.mullvad-vpn.package.version;
             };
           };
         };

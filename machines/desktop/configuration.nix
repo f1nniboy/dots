@@ -61,10 +61,8 @@ in
       };
 
       openssh.enable = true;
-      docker.enable = true;
-      gow = {
-        enable = true;
-      };
+      #docker.enable = true;
+      #gow.enable = true;
 
       syncthing = {
         devices = {
