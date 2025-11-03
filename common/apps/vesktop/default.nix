@@ -35,6 +35,7 @@ in
             firstLaunch = false;
           };
         };
+        "vesktop/settings/settings.json".force = true;
       };
       extraOptions = {
         programs.vesktop = {
