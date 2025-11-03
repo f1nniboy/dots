@@ -36,14 +36,6 @@
       };
     };
 
-    piped = {
-      url = "github:squalus/piped-flake";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        systems.follows = "systems";
-      };
-    };
-
     impermanence.url = "github:nix-community/impermanence";
     flatpaks.url = "github:in-a-dil-emma/declarative-flatpak/latest";
 

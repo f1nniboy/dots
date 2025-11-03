@@ -28,7 +28,6 @@
     ./paperless
     ./paperless-gpt
     ./pinchflat
-    ./piped
     ./postgresql
     ./printing
     ./radicale

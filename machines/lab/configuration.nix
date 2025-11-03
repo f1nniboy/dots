@@ -72,7 +72,6 @@
       jellyseerr.enable = true;
       fileflows.enable = true;
       pinchflat.enable = true;
-      #piped.enable = true;
 
       immich.enable = true;
       samba.enable = true;
