@@ -16,6 +16,7 @@
         "ahci"
         "nvme"
         "sd_mod"
+        "r8169"
       ];
       luks = {
         reusePassphrases = true;
