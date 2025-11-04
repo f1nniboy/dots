@@ -121,6 +121,7 @@ in
         };
         postgresql.users = [ "paperless" ];
         redis.servers = [ "paperless" ];
+        samba.users = [ "paperless" ];
       };
 
       system = {
