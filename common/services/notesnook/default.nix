@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   vars,
   ...
 }:
@@ -9,46 +8,61 @@ with lib;
 let
   cfg = config.custom.services.notesnook;
 
-  inherit (vars.docker) images;
+  mkNotesnookDomain = sub: "https://${sub}.${custom.mkServiceDomain config "notesnook"}";
 
-  # TODO: clean up this mess (check docs/default compose.yml)
   env = {
-    "API_HOST" = "http://api:5264/";
-    "ATTACHMENTS_SERVER_PUBLIC_URL" = "https://${mkNotesnookDomain "files"}";
-    "AUTH_SERVER_PUBLIC_URL" = "https://a${mkNotesnookDomain "auth"}";
-    "DISABLE_ACCOUNT_CREATION" = "1";
-    "DISABLE_SIGNUPS" = "1";
-    "IDENTITY_SERVER_HOST" = "auth";
-    "IDENTITY_SERVER_PORT" = "8264";
-    "IDENTITY_SERVER_URL" = "https://${mkNotesnookDomain "auth"}";
-    "INSTANCE_NAME" = "${config.networking.hostName}";
-    "MINIO_ROOT_USER" = "admin";
-    "MONOGRAPH_PUBLIC_URL" = "https://${mkNotesnookDomain "mono"}";
-    "NOTESNOOK_APP_HOST" = "https://${mkNotesnookDomain "api"}";
-    "NOTESNOOK_APP_PUBLIC_URL" = "https://${mkNotesnookDomain "api"}";
-    "NOTESNOOK_SERVER_HOST" = "api";
-    "NOTESNOOK_SERVER_PORT" = "5264";
-    "SELF_HOSTED" = "1";
-    "SSE_SERVER_HOST" = "sse";
-    "SSE_SERVER_PORT" = "7264";
-    "TZ" = config.time.timeZone;
-    "MONGODB_CONNECTION_STRING" = "mongodb://db:27017/?replSet=rs0";
-  };
+    common = {
+      INSTANCE_NAME = "notesnook";
+      DISABLE_SIGNUPS = "true";
+      SELF_HOSTED = "1";
 
-  commonServiceConfig = {
-    serviceConfig = {
-      Restart = lib.mkOverride 90 "always";
-      RestartMaxDelaySec = lib.mkOverride 90 "1m";
-      RestartSec = lib.mkOverride 90 "100ms";
-      RestartSteps = lib.mkOverride 90 9;
+      AUTH_SERVER_PUBLIC_URL = mkNotesnookDomain "auth";
+      NOTESNOOK_APP_PUBLIC_URL = mkNotesnookDomain "api";
+      MONOGRAPH_PUBLIC_URL = mkNotesnookDomain "mono";
+      ATTACHMENTS_SERVER_PUBLIC_URL = mkNotesnookDomain "files";
+
+      IDENTITY_SERVER_URL = env.common.AUTH_SERVER_PUBLIC_URL;
+      NOTESNOOK_APP_HOST = env.common.NOTESNOOK_APP_PUBLIC_URL;
+
+      MINIO_ROOT_USER = "minioadmin";
+      MINIO_ROOT_PASSWORD = "minioadmin";
+
+      NOTESNOOK_SERVER_PORT = "5264";
+      NOTESNOOK_SERVER_HOST = "notesnook-api";
+      IDENTITY_SERVER_PORT = "8264";
+      IDENTITY_SERVER_HOST = "notesnook-auth";
+      SSE_SERVER_PORT = "7264";
+      SSE_SERVER_HOST = "notesnook-sse";
     };
-    after = [ "docker-network-notesnook.service" ];
-    requires = [ "docker-network-notesnook.service" ];
-    partOf = [ "docker-compose-notesnook-root.target" ];
-    wantedBy = [ "docker-compose-notesnook-root.target" ];
-  };
 
-  mkNotesnookDomain = sub: "${sub}.${custom.mkServiceDomain config "notesnook"}";
+    auth = env.common // {
+      MONGODB_CONNECTION_STRING = "mongodb://notesnook-db:27017/identity?replSet=rs0";
+      MONGODB_DATABASE_NAME = "identity";
+    };
+
+    api = env.common // {
+      MONGODB_CONNECTION_STRING = "mongodb://notesnook-db:27017/?replSet=rs0";
+      MONGODB_DATABASE_NAME = "notesnook";
+      S3_INTERNAL_SERVICE_URL = "http://notesnook-s3:9000";
+      S3_INTERNAL_BUCKET_NAME = "attachments";
+      S3_ACCESS_KEY_ID = env.common.MINIO_ROOT_USER;
+      S3_ACCESS_KEY = env.common.MINIO_ROOT_PASSWORD;
+      S3_SERVICE_URL = env.common.ATTACHMENTS_SERVER_PUBLIC_URL;
+      S3_REGION = "us-east-1";
+      S3_BUCKET_NAME = "attachments";
+    };
+
+    s3 = env.common // {
+      MINIO_BROWSER = "on";
+    };
+
+    sse = env.common;
+
+    mono = env.common // {
+      API_HOST = "http://notesnook-api:5264";
+      PUBLIC_URL = "${env.common.MONOGRAPH_PUBLIC_URL}";
+    };
+  };
 in
 {
   options.custom.services.notesnook = {
@@ -60,26 +74,26 @@ in
     };
 
     ports = mkOption {
-      type = lib.types.submodule {
+      type = types.submodule {
         options = {
-          api = lib.mkOption {
-            type = lib.types.port;
+          api = mkOption {
+            type = types.port;
             default = 5001;
           };
-          auth = lib.mkOption {
-            type = lib.types.port;
+          auth = mkOption {
+            type = types.port;
             default = 5002;
           };
-          mono = lib.mkOption {
-            type = lib.types.port;
+          mono = mkOption {
+            type = types.port;
             default = 5003;
           };
-          sse = lib.mkOption {
-            type = lib.types.port;
+          sse = mkOption {
+            type = types.port;
             default = 5004;
           };
-          s3 = lib.mkOption {
-            type = lib.types.port;
+          s3 = mkOption {
+            type = types.port;
             default = 5005;
           };
         };
@@ -100,232 +114,168 @@ in
       };
     };
 
-    # containers
-    virtualisation.oci-containers.containers = {
-      "notesnook-api" = {
-        image = "streetwriters/notesnook-sync:${images.notesnook-sync}";
-        ports = [ "127.0.0.1:${toString cfg.ports.api}:5264" ];
-        environment = lib.mkMerge [
-          env
-          {
-            "MONGODB_DATABASE_NAME" = "notesnook";
-            "S3_ACCESS_KEY_ID" = "admin";
-            "S3_BUCKET_NAME" = "attachments";
-            "S3_INTERNAL_BUCKET_NAME" = "attachments";
-            "S3_INTERNAL_SERVICE_URL" = "http://s3:9000/";
-            "S3_REGION" = "us-east-1";
-            "S3_SERVICE_URL" = "https://${mkNotesnookDomain "files"}";
-          }
-        ];
-        dependsOn = [
-          "notesnook-auth"
-          "notesnook-s3"
-          "notesnook-setup-s3"
-        ];
-        extraOptions = [
-          "--network-alias=api"
-          "--network=notesnook"
-        ];
-        environmentFiles = [
-          config.sops.templates.notesnook-secrets.path
-        ];
-      };
-      "notesnook-auth" = {
-        image = "streetwriters/identity:${images.notesnook-identity}";
-        ports = [ "127.0.0.1:${toString cfg.ports.auth}:8264" ];
-        environment = lib.mkMerge [
-          env
-          {
-            "MONGODB_CONNECTION_STRING" = mkForce "mongodb://db:27017/identity?replSet=rs0";
-            "MONGODB_DATABASE_NAME" = "identity";
-          }
-        ];
-        dependsOn = [
-          "notesnook-db"
-        ];
-        extraOptions = [
-          "--network-alias=auth"
-          "--network=notesnook"
-        ];
-        environmentFiles = [
-          config.sops.templates.notesnook-secrets.path
-        ];
-      };
-      "notesnook-mono" = {
-        image = "streetwriters/monograph:${images.notesnook-monograph}";
-        ports = [ "127.0.0.1:${toString cfg.ports.mono}:3000" ];
-        environment = lib.mkMerge [
-          env
-          {
-            "PUBLIC_URL" = "https://${mkNotesnookDomain "mono"}";
-          }
-        ];
-        dependsOn = [
-          "notesnook-api"
-        ];
-        extraOptions = [
-          "--network-alias=mono"
-          "--network=notesnook"
-        ];
-        environmentFiles = [
-          config.sops.templates.notesnook-secrets.path
-        ];
-      };
-      "notesnook-sse" = {
-        image = "streetwriters/sse:${images.notesnook-sse}";
-        ports = [ "127.0.0.1:${toString cfg.ports.sse}:7264" ];
-        environment = env;
-        dependsOn = [
-          "notesnook-api"
-          "notesnook-auth"
-        ];
-        extraOptions = [
-          "--network-alias=sse"
-          "--network=notesnook"
-        ];
-        environmentFiles = [
-          config.sops.templates.notesnook-secrets.path
-        ];
-      };
+    virtualisation.arion.projects."notesnook".settings = {
+      project.name = "notesnook";
 
-      ### backend
-
-      "notesnook-db" = {
-        image = "mongo:${images.mongo}";
-        environment = env;
-        volumes = [
-          "/var/lib/notesnook/db:/data/configdb:rw"
-          "/var/lib/notesnook/db:/data/db:rw"
-        ];
-        cmd = [
-          "--replSet"
-          "rs0"
-          "--bind_ip_all"
-        ];
-        extraOptions = [
-          "--hostname=notesnook-db"
-          "--network-alias=db"
-          "--network=notesnook"
-        ];
-        environmentFiles = [
-          config.sops.templates.notesnook-secrets.path
-        ];
-      };
-      "notesnook-s3" = {
-        image = "minio/minio:${images.minio}";
-        ports = [
-          "127.0.0.1:${toString cfg.ports.s3}:9000"
-          "9090:9090"
-        ];
-        environment = env;
-        volumes = [
-          "/var/lib/notesnook/s3:/data/s3:rw"
-        ];
-        cmd = [
-          "server"
-          "/data/s3"
-          "--console-address"
-          ":9090"
-        ];
-        extraOptions = [
-          "--network-alias=s3"
-          "--network=notesnook"
-        ];
-        environmentFiles = [
-          config.sops.templates.notesnook-secrets.path
-        ];
-      };
-
-      ### setup scripts
-
-      "notesnook-initiate-rs0" = {
-        image = "mongo:${images.mongo}";
-        environment = env;
-        entrypoint = "/bin/sh";
-        cmd = [
-          "-c"
-          "mongosh mongodb://db:27017 <<EOF
-        rs.initiate();
-        rs.status();
-      EOF
-      "
-        ];
-        dependsOn = [
-          "notesnook-db"
-        ];
-        extraOptions = [
-          "--network-alias=initiate-rs0"
-          "--network=notesnook"
-        ];
-      };
-      "notesnook-setup-s3" = {
-        image = "minio/mc:${images.minio-mc}";
-        environment = env;
-        entrypoint = "/bin/bash";
-        cmd = [
-          "-c"
-          # TODO: get rid of secret in config file
-          "until mc alias set minio http://s3:9000 admin n2QkzrlneGwi2eIj19w9itoXA4zDNThDlsXM994; do
-        sleep 1;
-      done;
-      mc mb minio/attachments -p
-      "
-        ];
-        dependsOn = [
-          "notesnook-s3"
-        ];
-        extraOptions = [
-          "--network-alias=setup-s3"
-          "--network=notesnook"
-        ];
-      };
-    };
-
-    systemd = {
       services = {
-        "docker-notesnook-api" = commonServiceConfig;
-        "docker-notesnook-auth" = commonServiceConfig;
-        "docker-notesnook-db" = commonServiceConfig;
-        "docker-notesnook-mono" = commonServiceConfig;
-        "docker-notesnook-s3" = commonServiceConfig;
-        "docker-notesnook-sse" = commonServiceConfig;
-        "docker-notesnook-initiate-rs0" = lib.mkMerge [
-          commonServiceConfig
-          {
-            serviceConfig = {
-              Restart = "no";
-            };
-          }
-        ];
-        "docker-notesnook-setup-s3" = lib.mkMerge [
-          commonServiceConfig
-          {
-            serviceConfig = {
-              Restart = "no";
-            };
-          }
-        ];
-
-        # network
-        "docker-network-notesnook" = {
-          path = [ pkgs.docker ];
-          serviceConfig = {
-            Type = "oneshot";
-            RemainAfterExit = true;
-            ExecStop = "docker network rm -f notesnook";
+        db.service = {
+          container_name = "notesnook-db";
+          image = custom.mkDockerImage vars "mongo";
+          volumes = [ "/var/lib/notesnook/db:/data/db" ];
+          networks = [ "notesnook" ];
+          command = "--replSet rs0 --bind_ip_all";
+          healthcheck = {
+            test = [
+              "CMD-SHELL"
+              "echo 'try { rs.status() } catch (err) { rs.initiate() }; db.runCommand(\"ping\").ok' | mongosh mongodb://localhost:27017 --quiet"
+            ];
+            interval = "40s";
+            timeout = "30s";
+            retries = 3;
+            start_period = "60s";
           };
-          script = ''
-            docker network inspect notesnook || docker network create notesnook
-          '';
-          partOf = [ "docker-compose-notesnook-root.target" ];
-          wantedBy = [ "docker-compose-notesnook-root.target" ];
+        };
+
+        s3.service = {
+          container_name = "notesnook-s3";
+          image = custom.mkDockerImage vars "minio/minio";
+          ports = [ "${toString cfg.ports.s3}:9000" ];
+          networks = [ "notesnook" ];
+          volumes = [ "/var/lib/notesnook/s3:/data/s3" ];
+          environment = env.s3;
+          command = [
+            "server"
+            "/data/s3"
+            "--console-address"
+            ":9090"
+          ];
+          healthcheck = {
+            test = [
+              "CMD"
+              "curl"
+              "-f"
+              "http://localhost:9000/minio/health/live"
+            ];
+            interval = "40s";
+            timeout = "30s";
+            retries = 3;
+            start_period = "60s";
+          };
+        };
+
+        setup-s3.service = {
+          image = custom.mkDockerImage vars "minio/mc";
+          depends_on = [ "s3" ];
+          networks = [ "notesnook" ];
+          entrypoint = "/bin/bash";
+          environment = env.common;
+          command = [
+            "-c"
+            ''
+              until mc alias set minio http://notesnook-s3:9000 ${env.common.MINIO_ROOT_USER} ${env.common.MINIO_ROOT_PASSWORD}; do
+                sleep 1;
+              done;
+              mc mb minio/attachments -p
+            ''
+          ];
+        };
+
+        auth.service = {
+          container_name = "notesnook-auth";
+          image = custom.mkDockerImage vars "streetwriters/identity";
+          ports = [ "${toString cfg.ports.auth}:8264" ];
+          networks = [ "notesnook" ];
+          env_file = [ config.sops.templates.notesnook-secrets.path ];
+          environment = env.auth;
+          depends_on = [ "db" ];
+          healthcheck = {
+            test = [
+              "CMD"
+              "curl"
+              "-f"
+              "http://localhost:8264/health"
+            ];
+            interval = "40s";
+            timeout = "30s";
+            retries = 3;
+            start_period = "60s";
+          };
+        };
+
+        api.service = {
+          container_name = "notesnook-api";
+          image = custom.mkDockerImage vars "streetwriters/notesnook-sync";
+          ports = [ "${toString cfg.ports.api}:5264" ];
+          networks = [ "notesnook" ];
+          env_file = [ config.sops.templates.notesnook-secrets.path ];
+          environment = env.api;
+          depends_on = [
+            "s3"
+            "setup-s3"
+            "auth"
+          ];
+          healthcheck = {
+            test = [
+              "CMD"
+              "curl"
+              "-f"
+              "http://localhost:5264/health"
+            ];
+            interval = "40s";
+            timeout = "30s";
+            retries = 3;
+            start_period = "60s";
+          };
+        };
+
+        sse.service = {
+          container_name = "notesnook-sse";
+          image = custom.mkDockerImage vars "streetwriters/sse";
+          ports = [ "${toString cfg.ports.sse}:7264" ];
+          env_file = [ config.sops.templates.notesnook-secrets.path ];
+          environment = env.sse;
+          depends_on = [
+            "auth"
+            "api"
+          ];
+          networks = [ "notesnook" ];
+          healthcheck = {
+            test = [
+              "CMD"
+              "curl"
+              "-f"
+              "http://localhost:7264/health"
+            ];
+            interval = "40s";
+            timeout = "30s";
+            retries = 3;
+            start_period = "60s";
+          };
+        };
+
+        mono.service = {
+          container_name = "notesnook-mono";
+          image = custom.mkDockerImage vars "streetwriters/monograph";
+          ports = [ "${toString cfg.ports.mono}:3000" ];
+          environment = env.mono;
+          depends_on = [ "api" ];
+          networks = [ "notesnook" ];
+          healthcheck = {
+            test = [
+              "CMD"
+              "curl"
+              "-f"
+              "http://localhost:3000/api/health"
+            ];
+            interval = "40s";
+            timeout = "30s";
+            retries = 3;
+            start_period = "60s";
+          };
         };
       };
 
-      # root service
-      targets."docker-compose-notesnook-root" = {
-        wantedBy = [ "multi-user.target" ];
-      };
+      networks.notesnook = { };
     };
 
     sops = {
@@ -335,7 +285,6 @@ in
             mkSecret = path: custom.mkSecretPlaceholder config "notesnook/${path}" "notesnook";
           in
           ''
-            MINIO_ROOT_PASSWORD=${mkSecret "minio-password"}
             NOTESNOOK_API_SECRET=${mkSecret "api-secret"}
             S3_ACCESS_KEY=${mkSecret "s3-access-key"}
           '';
@@ -346,10 +295,6 @@ in
     custom = {
       system = {
         sops.secrets = [
-          {
-            path = "notesnook/minio-password";
-            owner = "notesnook";
-          }
           {
             path = "notesnook/s3-access-key";
             owner = "notesnook";

@@ -27,23 +27,22 @@ rec {
   # TODO: reduce docker usage
   docker = {
     images = {
-      fileflows = "latest";
-      multi-scrobbler = "latest";
-      muse = "latest";
-      mongo = "latest";
-      paperless-gpt = "latest";
-      tidarr = "latest";
+      "revenz/fileflows" = "latest";
+      "foxxmd/multi-scrobbler" = "latest";
+      "dovah/muse" = "latest";
+      "mongo" = "latest";
+      "icereed/paperless-gpt" = "latest";
 
-      wolf = "wolf-ui";
-      wolfmanager = "latest";
+      "ghcr.io/games-on-whales/wolf" = "wolf-ui";
+      "ghcr.io/games-on-whales/wolfmanager/wolfmanager" = "latest";
 
-      notesnook-sync = "latest";
-      notesnook-identity = "latest";
-      notesnook-monograph = "latest";
-      notesnook-sse = "latest";
+      "streetwriters/notesnook-sync" = "latest";
+      "streetwriters/identity" = "latest";
+      "streetwriters/monograph" = "latest";
+      "streetwriters/sse" = "latest";
 
-      minio = "latest";
-      minio-mc = "latest";
+      "minio/minio" = "latest";
+      "minio/mc" = "latest";
     };
   };
 }

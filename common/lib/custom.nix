@@ -28,4 +28,6 @@ rec {
   mkDockerUser =
     config: name:
     "${toString config.users.users."${name}".uid}:${toString config.users.groups."${name}".gid}";
+
+  mkDockerImage = vars: name: "${name}:${vars.docker.images."${name}"}";
 }

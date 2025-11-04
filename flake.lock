@@ -1,5 +1,29 @@
 {
   "nodes": {
+    "arion": {
+      "inputs": {
+        "flake-parts": [
+          "flake-parts"
+        ],
+        "haskell-flake": "haskell-flake",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1759632323,
+        "narHash": "sha256-TzLTfXxhOkR/8oOoVEAYQWb81ADGHdKsQXGicC7kR+M=",
+        "owner": "hercules-ci",
+        "repo": "arion",
+        "rev": "24658a03be2d1a6e1e02c01524775d960a82309c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "arion",
+        "type": "github"
+      }
+    },
     "declarative-jellyfin": {
       "inputs": {
         "nixpkgs": [
@@ -43,16 +67,15 @@
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
-          "nur",
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1733312601,
-        "narHash": "sha256-4pDvzqnegAfRkPwO3wmwBhVi/Sye1mzps0zHWYnP88c=",
+        "lastModified": 1762040540,
+        "narHash": "sha256-z5PlZ47j50VNF3R+IMS9LmzI5fYRGY/Z5O5tol1c9I4=",
         "owner": "hercules-ci",
         "repo": "flake-parts",
-        "rev": "205b12d8b7cd4802fbcb8e8ef6a0f1408781a4f9",
+        "rev": "0010412d62a25d959151790968765a70c436598b",
         "type": "github"
       },
       "original": {
@@ -77,6 +100,22 @@
         "type": "github"
       }
     },
+    "haskell-flake": {
+      "locked": {
+        "lastModified": 1675296942,
+        "narHash": "sha256-u1X1sblozi5qYEcLp1hxcyo8FfDHnRUVX3dJ/tW19jY=",
+        "owner": "srid",
+        "repo": "haskell-flake",
+        "rev": "c2cafce9d57bfca41794dc3b99c593155006c71e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "srid",
+        "ref": "0.1.0",
+        "repo": "haskell-flake",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -84,11 +123,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1762183399,
-        "narHash": "sha256-vr2aL1QLfERYTfYBgK8cW3T9eSdSEThH462wKaGlmEU=",
+        "lastModified": 1762286824,
+        "narHash": "sha256-xwfiYyn210aNIE/JKc6qmU7qd0619JaYMOGuFKNm9oc=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "a5fee077929ae2f2800c3087dce5e1abb4edfbc6",
+        "rev": "1c75dd70229171f47ff10f4ed184101af7c7a392",
         "type": "github"
       },
       "original": {
@@ -146,17 +185,19 @@
     },
     "nur": {
       "inputs": {
-        "flake-parts": "flake-parts",
+        "flake-parts": [
+          "flake-parts"
+        ],
         "nixpkgs": [
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1762198473,
-        "narHash": "sha256-7BHlXpB5UJyL6ed3bIGbFPuzh+GTRG0gN8MR2CIKwyY=",
+        "lastModified": 1762285499,
+        "narHash": "sha256-6Is8JZxZPGMqeT3Da4k8ch0HUuLFQbJVpVznAk19GH0=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "d52665e4e5ee9923c464d036a9ca6f6ac856ef4e",
+        "rev": "c32d01501dcca7892017c58bfe55d3cb2b8a470e",
         "type": "github"
       },
       "original": {
@@ -167,8 +208,10 @@
     },
     "root": {
       "inputs": {
+        "arion": "arion",
         "declarative-jellyfin": "declarative-jellyfin",
         "firefox-gnome-theme": "firefox-gnome-theme",
+        "flake-parts": "flake-parts",
         "flatpaks": "flatpaks",
         "home-manager": "home-manager",
         "impermanence": "impermanence",
