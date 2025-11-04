@@ -7,7 +7,7 @@ rec {
     type = types.bool;
   };
 
-  # "f1nn.space" -> "dc=f1nn,dc=space"
+  # "example.com" -> "dc=example,dc=com"
   domainToDn =
     domain:
     lib.concatMapStringsSep "," (part: "dc=${part}") (

@@ -28,67 +28,53 @@ in
   };
 
   config = mkIf cfg.enable {
-    systemd = {
-      services =
-        let
-          rootDeps = [ "docker-compose-wolf-root.target" ];
-          serviceConfig = {
-            partOf = rootDeps;
-            wantedBy = rootDeps;
+    virtualisation.arion.projects."wolf".settings = {
+      project.name = "wolf";
+
+      services = {
+        backend.service = {
+          container_name = "wolf-backend";
+          image = custom.mkDockerImage vars "ghcr.io/games-on-whales/wolf";
+          volumes = [
+            "${paths.backend}:/etc/wolf:rw"
+            "/var/run/wolf:/var/run/wolf"
+            "/dev:/dev:rw"
+            "/run/udev:/run/udev:rw"
+            "/var/run/docker.sock:/var/run/docker.sock:rw"
+          ];
+          environment = {
+            WOLF_SOCKET_PATH = "/var/run/wolf/wolf.sock";
+            WOLF_HTTP_PORT = toString ports.http;
+            WOLF_HTTPS_PORT = toString ports.https;
+            WOLF_CONTROL_PORT = toString ports.control;
+            WOLF_RTSP_SETUP_PORT = toString ports.rtsp;
+            WOLF_VIDEO_PING_PORT = toString ports.video;
+            WOLF_AUDIO_PING_PORT = toString ports.audio;
           };
-        in
-        {
-          "docker-wolf" = serviceConfig;
-          "docker-wolf-manager" = serviceConfig;
+          devices = [
+            "/dev/dri:/dev/dri:rwm"
+            "/dev/uhid:/dev/uhid:rwm"
+            "/dev/uinput:/dev/uinput:rwm"
+          ];
+          network_mode = "host";
         };
-
-      # root service
-      targets."docker-compose-wolf-root" = {
-        wantedBy = [ "multi-user.target" ];
-      };
-    };
-
-    # containers
-    virtualisation.oci-containers.containers = {
-      "wolf" = {
-        image = custom.mkDockerImage vars "ghcr.io/games-on-whales/wolf";
-        environment = {
-          WOLF_SOCKET_PATH = "/var/run/wolf/wolf.sock";
-          WOLF_HTTP_PORT = toString ports.http;
-          WOLF_HTTPS_PORT = toString ports.https;
-          WOLF_CONTROL_PORT = toString ports.control;
-          WOLF_RTSP_SETUP_PORT = toString ports.rtsp;
-          WOLF_VIDEO_PING_PORT = toString ports.video;
-          WOLF_AUDIO_PING_PORT = toString ports.audio;
+        manager.service = {
+          container_name = "wolf-manager";
+          image = custom.mkDockerImage vars "ghcr.io/games-on-whales/wolfmanager/wolfmanager";
+          depends_on = [ "backend" ];
+          ports = [
+            "${toString ports.manager}:3000"
+          ];
+          environment = {
+            NODE_ENV = "production";
+            NEXTAUTH_URL = "http://localhost:${toString ports.manager}";
+          };
+          volumes = [
+            "/var/run/wolf:/var/run/wolf"
+            "/var/run/docker.sock:/var/run/docker.sock:rw"
+            "${paths.manager}:/app/config"
+          ];
         };
-        volumes = [
-          "${paths.backend}:/etc/wolf:rw"
-          "/var/run/wolf:/var/run/wolf"
-          "/dev:/dev:rw"
-          "/run/udev:/run/udev:rw"
-          "/var/run/docker.sock:/var/run/docker.sock:rw"
-        ];
-        extraOptions = [
-          "--device=/dev/dri:/dev/dri:rwm"
-          "--device=/dev/uhid:/dev/uhid:rwm"
-          "--device=/dev/uinput:/dev/uinput:rwm"
-          "--network=host"
-        ];
-      };
-      "wolf-manager" = {
-        image = custom.mkDockerImage vars "ghcr.io/games-on-whales/wolfmanager/wolfmanager";
-        ports = [
-          "${toString ports.manager}:3000"
-        ];
-        environment = {
-          NODE_ENV = "production";
-          NEXTAUTH_URL = "http://localhost:${toString ports.manager}";
-        };
-        volumes = [
-          "/var/run/wolf:/var/run/wolf"
-          "/var/run/docker.sock:/var/run/docker.sock:rw"
-          "${paths.manager}:/app/config"
-        ];
       };
     };
 
@@ -102,7 +88,7 @@ in
       };
 
     systemd.tmpfiles.rules = [
-      "d /fun/games 0770 ${config.custom.system.user.name} users - -"
+      "d /fun/games 0700 ${config.custom.system.user.name} users - -"
     ];
 
     custom.system.persistence.config = {

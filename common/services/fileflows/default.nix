@@ -41,28 +41,37 @@ in
       image = custom.mkDockerImage vars "revenz/fileflows";
       ports = [ "127.0.0.1:${toString cfg.port}:5000" ];
       environment = {
-        "PGID" = toString config.users.groups.media.gid;
-        "PUID" = toString config.users.users.fileflows.uid;
-        "TZ" = config.time.timeZone;
+        PGID = toString config.users.groups.media.gid;
+        PUID = toString config.users.users.fileflows.uid;
+        TZ = config.time.timeZone;
       };
-      volumes = [
-        "${config.custom.system.media.baseDir}:/media:rw"
-        "/var/lib/fileflows:/app/Data:rw"
-        "${config.custom.system.media.baseDir}/tmp:/temp:rw"
-      ];
+      volumes =
+        let
+          baseDir = config.custom.system.media.baseDir;
+        in
+        [
+          "${baseDir}/downloads/complete:/media/complete:rw"
+          "${baseDir}/downloads/converted:/media/converted:rw"
+          "${baseDir}/tmp:/temp:rw"
+          "/var/lib/fileflows:/app/Data:rw"
+        ];
       extraOptions = [
         "--device=/dev/dri:/dev/dri:rwm"
       ];
     };
 
     custom = {
-      services.caddy.hosts = {
-        fileflows = {
-          target = ":${toString cfg.port}";
-          import = [ "auth" ];
+      services = {
+        caddy.hosts = {
+          fileflows = {
+            target = ":${toString cfg.port}";
+            import = [ "auth" ];
+          };
         };
+        restic.paths = [
+          "/var/lib/fileflows"
+        ];
       };
-
       system.persistence.config = {
         directories = [
           {
@@ -73,10 +82,6 @@ in
           }
         ];
       };
-
-      services.restic.paths = [
-        "/var/lib/fileflows"
-      ];
     };
 
     systemd.tmpfiles.rules = [
