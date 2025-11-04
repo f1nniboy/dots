@@ -28,8 +28,8 @@ in
     };
 
     custom.system.home = {
-      # disable the initial setup prompt
       configFiles = {
+        # disable the initial setup prompt
         "vesktop/state.json" = {
           text = builtins.toJSON {
             firstLaunch = false;

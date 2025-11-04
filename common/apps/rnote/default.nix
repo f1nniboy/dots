@@ -8,7 +8,7 @@ with lib;
 let
   cfg = config.custom.apps.rnote;
 
-  homeDir = config.users.users."${config.custom.system.user.name}".home;
+  homeDir = config.custom.system.home.dir;
   notesDir = "${homeDir}/Documents/Notes";
 in
 {
