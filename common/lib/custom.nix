@@ -24,4 +24,8 @@ rec {
   mkSecretPath =
     config: path: service:
     config.sops.secrets."${mkSecretString path service}".path;
+
+  mkDockerUser =
+    config: name:
+    "${toString config.users.users."${name}".uid}:${toString config.users.groups."${name}".gid}";
 }

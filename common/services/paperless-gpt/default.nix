@@ -38,11 +38,16 @@ in
     virtualisation.oci-containers.containers = {
       "paperless-gpt" = {
         image = "icereed/paperless-gpt:${vars.docker.images.paperless-gpt}";
-        # TODO: level=fatal msg="Failed to create db directory: mkdir db: permission denied"
-        #user = "${toString config.users.users.paperless-gpt.uid}:${toString config.users.groups.paperless-gpt.gid}";
-        volumes = [
-          "/var/lib/paperless-gpt/prompts:/app/prompts"
-        ];
+        user = custom.mkDockerUser config "paperless-gpt";
+        volumes =
+          let
+            mkDir = path: "/var/lib/paperless-gpt/${path}:/app/${path}";
+          in
+          [
+            (mkDir "prompts")
+            (mkDir "config")
+            (mkDir "db")
+          ];
         environmentFiles = [
           config.sops.templates.paperless-gpt-env.path
         ];
