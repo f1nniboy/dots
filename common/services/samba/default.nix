@@ -24,7 +24,6 @@ in
     };
 
     # declaratively set samba account passwords
-    # TODO: doesn't work reliably (on boot/when updating secrets)
     system.activationScripts = {
       init-smbpasswd.text = builtins.concatStringsSep "\n" (
         map (
@@ -45,7 +44,7 @@ in
         let
           mkUserSecret = name: {
             path = "samba/users/${name}";
-            owner = "root";
+            forUsers = true; # activation scripts run before users get set up
           };
         in
         map mkUserSecret cfg.users;
