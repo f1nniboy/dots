@@ -38,7 +38,7 @@ in
     };
 
     virtualisation.oci-containers.containers."fileflows" = {
-      image = "revenz/fileflows:${vars.docker.images.fileflows}";
+      image = custom.mkDockerImage vars "revenz/fileflows";
       ports = [ "127.0.0.1:${toString cfg.port}:5000" ];
       environment = {
         "PGID" = toString config.users.groups.media.gid;

@@ -27,7 +27,7 @@ in
 
     virtualisation.oci-containers.containers = {
       "muse" = {
-        image = "dovah/muse:${vars.docker.images.muse}";
+        image = custom.mkDockerImage vars "dovah/muse";
         user = custom.mkDockerUser config "muse";
         volumes = [
           "/var/lib/muse:/data:rw"

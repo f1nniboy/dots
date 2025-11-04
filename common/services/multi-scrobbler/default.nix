@@ -37,7 +37,7 @@ in
 
     virtualisation.oci-containers.containers = {
       "multi-scrobbler" = {
-        image = "foxxmd/multi-scrobbler:${vars.docker.images.multi-scrobbler}";
+        image = custom.mkDockerImage vars "foxxmd/multi-scrobbler";
         volumes = [
           "/var/lib/multi-scrobbler:/config"
           "/var/lib/multi-scrobbler/config.json:/config/config.json"

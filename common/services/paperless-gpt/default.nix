@@ -37,7 +37,7 @@ in
 
     virtualisation.oci-containers.containers = {
       "paperless-gpt" = {
-        image = "icereed/paperless-gpt:${vars.docker.images.paperless-gpt}";
+        image = custom.mkDockerImage vars "icereed/paperless-gpt";
         user = custom.mkDockerUser config "paperless-gpt";
         volumes =
           let

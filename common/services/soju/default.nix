@@ -69,6 +69,7 @@ in
           Group = mkForce "soju";
         };
       };
+      # TODO: doesn't work reliably (few secs timeout to wait for soju?)
       soju-user-setup = {
         description = "Setup Soju users";
         after = [ "soju.service" ];

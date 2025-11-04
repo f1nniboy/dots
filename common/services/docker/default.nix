@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  inputs,
+  config,
+  lib,
+  ...
+}:
 with lib;
 let
   cfg = config.custom.services.docker;
@@ -8,6 +13,10 @@ in
     enable = custom.enableOption;
   };
 
+  imports = [
+    inputs.arion.nixosModules.arion
+  ];
+
   config = mkIf cfg.enable {
     virtualisation = {
       docker = {
@@ -15,6 +24,7 @@ in
         autoPrune.enable = true;
       };
       oci-containers.backend = "docker";
+      arion.backend = "docker";
     };
 
     custom.system = {

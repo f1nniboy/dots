@@ -24,6 +24,7 @@ in
     };
 
     # declaratively set samba account passwords
+    # TODO: doesn't work reliably (on boot/when updating secrets)
     system.activationScripts = {
       init-smbpasswd.text = builtins.concatStringsSep "\n" (
         map (

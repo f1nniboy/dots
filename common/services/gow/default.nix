@@ -51,7 +51,7 @@ in
     # containers
     virtualisation.oci-containers.containers = {
       "wolf" = {
-        image = "ghcr.io/games-on-whales/wolf:${vars.docker.images.wolf}";
+        image = custom.mkDockerImage vars "ghcr.io/games-on-whales/wolf";
         environment = {
           WOLF_SOCKET_PATH = "/var/run/wolf/wolf.sock";
           WOLF_HTTP_PORT = toString ports.http;
@@ -76,7 +76,7 @@ in
         ];
       };
       "wolf-manager" = {
-        image = "ghcr.io/games-on-whales/wolfmanager/wolfmanager:${vars.docker.images.wolfmanager}";
+        image = custom.mkDockerImage vars "ghcr.io/games-on-whales/wolfmanager/wolfmanager";
         ports = [
           "${toString ports.manager}:3000"
         ];
