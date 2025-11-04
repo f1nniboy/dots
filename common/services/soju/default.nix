@@ -69,10 +69,10 @@ in
           Group = mkForce "soju";
         };
       };
-      # TODO: doesn't work reliably (few secs timeout to wait for soju?)
       soju-user-setup = {
         description = "Setup Soju users";
         after = [ "soju.service" ];
+        requires = [ "soju.service" ];
         wantedBy = [ "multi-user.target" ];
         script =
           let
@@ -110,6 +110,7 @@ in
           Type = "oneshot";
           User = "soju";
           Group = "soju";
+          ExecStartPre = "${pkgs.coreutils-full}/bin/sleep 15";
         };
       };
     };
