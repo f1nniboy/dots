@@ -82,7 +82,7 @@ in
             userctl = "${sojuctl} user run ${account.username}";
 
             account = {
-              username = vars.user.fullName;
+              username = vars.user.nick;
               password = mkSecretCat "user/password";
             };
 
