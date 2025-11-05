@@ -12,6 +12,10 @@ rec {
     ];
   };
 
+  git = {
+    email = "odd.mime93770@fastmail.com";
+  };
+
   lab = {
     domain = "f1nn.space";
   };
