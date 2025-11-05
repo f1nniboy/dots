@@ -18,7 +18,7 @@ in
       pkgs.bottom
 
       # remove desktop shortcut
-      (lib.hiPrio (
+      (hiPrio (
         pkgs.runCommand "bottom.desktop-hide" { } ''
           mkdir -p "$out/share/applications"
           cat "${pkgs.bottom}/share/applications/bottom.desktop" > "$out/share/applications/bottom.desktop"

@@ -57,7 +57,7 @@ in
     # ensure admin account
     systemd.services.forgejo.preStart =
       let
-        adminCmd = "${lib.getExe config.services.forgejo.package} admin user";
+        adminCmd = "${getExe config.services.forgejo.package} admin user";
         secretPath = custom.mkSecretPath config "forgejo/admin-password" "forgejo";
         user = vars.user.nick;
       in

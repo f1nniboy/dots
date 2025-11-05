@@ -17,7 +17,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) cfg.unfreePackages;
+    nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (getName pkg) cfg.unfreePackages;
 
     environment = {
       defaultPackages = mkForce [ ];

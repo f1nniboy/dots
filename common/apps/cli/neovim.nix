@@ -20,7 +20,7 @@ in
     environment = {
       systemPackages = [
         # remove desktop shortcut
-        (lib.hiPrio (
+        (hiPrio (
           pkgs.runCommand "nvim.desktop-hide" { } ''
             mkdir -p "$out/share/applications"
             cat "${config.programs.neovim.finalPackage}/share/applications/nvim.desktop" > "$out/share/applications/nvim.desktop"

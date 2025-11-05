@@ -9,10 +9,7 @@ rec {
 
   # "example.com" -> "dc=example,dc=com"
   domainToDn =
-    domain:
-    lib.concatMapStringsSep "," (part: "dc=${part}") (
-      lib.filter (p: p != "") (lib.splitString "." domain)
-    );
+    domain: concatMapStringsSep "," (part: "dc=${part}") (filter (p: p != "") (splitString "." domain));
 
   mkServiceDomain =
     config: name: "${config.custom.services.${name}.subdomain}.${config.custom.services.caddy.domain}";
