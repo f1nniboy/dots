@@ -10,11 +10,20 @@ let
 
   mkNotesnookDomain = sub: "https://${sub}.${custom.mkServiceDomain config "notesnook"}";
 
+  mkPortOption =
+    default:
+    mkOption {
+      type = types.port;
+      inherit default;
+    };
+
   env = {
     common = {
       INSTANCE_NAME = "notesnook";
       DISABLE_SIGNUPS = "true";
       SELF_HOSTED = "1";
+
+      NOTESNOOK_CORS_ORIGINS = "https://app.notesnook.com";
 
       AUTH_SERVER_PUBLIC_URL = mkNotesnookDomain "auth";
       NOTESNOOK_APP_PUBLIC_URL = mkNotesnookDomain "api";
@@ -76,26 +85,11 @@ in
     ports = mkOption {
       type = types.submodule {
         options = {
-          api = mkOption {
-            type = types.port;
-            default = 5001;
-          };
-          auth = mkOption {
-            type = types.port;
-            default = 5002;
-          };
-          mono = mkOption {
-            type = types.port;
-            default = 5003;
-          };
-          sse = mkOption {
-            type = types.port;
-            default = 5004;
-          };
-          s3 = mkOption {
-            type = types.port;
-            default = 5005;
-          };
+          api = mkPortOption 5001;
+          auth = mkPortOption 5002;
+          mono = mkPortOption 5003;
+          sse = mkPortOption 5004;
+          s3 = mkPortOption 5005;
         };
       };
       default = { };
@@ -122,7 +116,6 @@ in
           container_name = "notesnook-db";
           image = custom.mkDockerImage vars "mongo";
           volumes = [ "/var/lib/notesnook/db:/data/db" ];
-          networks = [ "notesnook" ];
           command = "--replSet rs0 --bind_ip_all";
           healthcheck = {
             test = [
@@ -140,7 +133,6 @@ in
           container_name = "notesnook-s3";
           image = custom.mkDockerImage vars "minio/minio";
           ports = [ "${toString cfg.ports.s3}:9000" ];
-          networks = [ "notesnook" ];
           volumes = [ "/var/lib/notesnook/s3:/data/s3" ];
           environment = env.s3;
           command = [
@@ -166,7 +158,6 @@ in
         setup-s3.service = {
           image = custom.mkDockerImage vars "minio/mc";
           depends_on = [ "s3" ];
-          networks = [ "notesnook" ];
           entrypoint = "/bin/bash";
           environment = env.common;
           command = [
@@ -184,7 +175,6 @@ in
           container_name = "notesnook-auth";
           image = custom.mkDockerImage vars "streetwriters/identity";
           ports = [ "${toString cfg.ports.auth}:8264" ];
-          networks = [ "notesnook" ];
           env_file = [ config.sops.templates.notesnook-secrets.path ];
           environment = env.auth;
           depends_on = [ "db" ];
@@ -206,7 +196,6 @@ in
           container_name = "notesnook-api";
           image = custom.mkDockerImage vars "streetwriters/notesnook-sync";
           ports = [ "${toString cfg.ports.api}:5264" ];
-          networks = [ "notesnook" ];
           env_file = [ config.sops.templates.notesnook-secrets.path ];
           environment = env.api;
           depends_on = [
@@ -238,7 +227,6 @@ in
             "auth"
             "api"
           ];
-          networks = [ "notesnook" ];
           healthcheck = {
             test = [
               "CMD"
@@ -259,7 +247,6 @@ in
           ports = [ "${toString cfg.ports.mono}:3000" ];
           environment = env.mono;
           depends_on = [ "api" ];
-          networks = [ "notesnook" ];
           healthcheck = {
             test = [
               "CMD"
@@ -275,7 +262,7 @@ in
         };
       };
 
-      networks.notesnook = { };
+      enableDefaultNetwork = true;
     };
 
     sops = {
