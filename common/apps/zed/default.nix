@@ -52,6 +52,16 @@ in
             diagnostics = false;
             metrics = false;
           };
+
+          languages = {
+            Nix = {
+              # only use nixd as lsp
+              language_servers = [
+                "nixd"
+                "!nil"
+              ];
+            };
+          };
         };
       };
     };

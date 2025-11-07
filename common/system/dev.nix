@@ -15,11 +15,8 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      # language servers
-      nil
-      nixd
-
       nixfmt-rfc-style # formatter
+      nixd # language server
       statix # linter
 
       just

@@ -22,10 +22,12 @@ in
     environment = {
       defaultPackages = mkForce [ ];
       systemPackages = with pkgs; [
-        # utilities
         efibootmgr
         just
         fd
+
+        ffmpeg
+        yt-dlp
       ];
     };
   };
