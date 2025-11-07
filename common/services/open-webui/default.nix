@@ -65,8 +65,8 @@ in
     sops = {
       templates.open-webui-secrets = {
         content = ''
-          OAUTH_CLIENT_ID=${custom.mkSecretPath config "oidc/open-webui/id" "open-webui"}
-          OAUTH_CLIENT_SECRET=${custom.mkSecretPath config "oidc/open-webui/secret" "open-webui"}
+          OAUTH_CLIENT_ID=${custom.mkSecretPlaceholder config "oidc/open-webui/id" "open-webui"}
+          OAUTH_CLIENT_SECRET=${custom.mkSecretPlaceholder config "oidc/open-webui/secret" "open-webui"}
         '';
         owner = "open-webui";
         mode = "0600";
@@ -100,6 +100,7 @@ in
             redirectUris = [
               "https://${serviceDomain}/oauth/oidc/callback"
             ];
+            requirePkce = true;
           }
         ];
         #postgresql.users = [ "open-webui" ];
