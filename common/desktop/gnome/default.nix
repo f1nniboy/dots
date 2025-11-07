@@ -224,7 +224,9 @@ in
             workspace-switcher-size = 10;
             world-clock = false;
             events-button = false;
+            weather = false;
             show-apps-icon = false;
+            window-preview-caption = false;
 
             # disable donation popup
             support-notifier-type = 0;
