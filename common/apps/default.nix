@@ -13,6 +13,7 @@
     ./haveno
     ./monero
     ./moonlight
+    ./mosh
     ./mullvad-browser
     ./notesnook
     ./obs

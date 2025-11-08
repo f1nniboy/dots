@@ -18,6 +18,7 @@ in
         };
         yazi.enable = true;
         bottom.enable = true;
+        mosh.enable = true;
       };
 
       system = {
