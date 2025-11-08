@@ -3,6 +3,7 @@
     ./acme
     ./arr
     ./authelia
+    ./blog
     ./caddy
     ./convoyeur
     ./docker

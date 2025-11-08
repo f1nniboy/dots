@@ -24,6 +24,27 @@
         "type": "github"
       }
     },
+    "blog": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": [
+          "systems"
+        ],
+        "theme": "theme"
+      },
+      "locked": {
+        "lastModified": 1762642675,
+        "narHash": "sha256-p5Lu6H0tHctc4Nf9uq4Qv99sRMVmt6JLrEH9EFvT3jc=",
+        "path": "/home/me/Projects/blog",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/me/Projects/blog",
+        "type": "path"
+      }
+    },
     "declarative-jellyfin": {
       "inputs": {
         "nixpkgs": [
@@ -193,11 +214,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1762501568,
-        "narHash": "sha256-kXu7v2+oiocHC+VAL9ZPvV5LpTAQ6vaD4WaXS9sC7HA=",
+        "lastModified": 1762641887,
+        "narHash": "sha256-owXprdtO+bDV6LM9Dv5LUhHOTuF5p8GI6E14dHUvq0Q=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "fada3c996d48503e346badf124366f656a174c0a",
+        "rev": "853639eea83335c78dd6ee2e3bd286e98180367a",
         "type": "github"
       },
       "original": {
@@ -209,6 +230,7 @@
     "root": {
       "inputs": {
         "arion": "arion",
+        "blog": "blog",
         "declarative-jellyfin": "declarative-jellyfin",
         "firefox-gnome-theme": "firefox-gnome-theme",
         "flake-parts": "flake-parts",
@@ -278,6 +300,22 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "theme": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1759091670,
+        "narHash": "sha256-HR134y15obVQImFU7ofFWsX1jeKve7NEnFt+jbDw4CI=",
+        "owner": "ebkalderon",
+        "repo": "terminus",
+        "rev": "b008df4445bda4111f462828df9b11e576957a25",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ebkalderon",
+        "repo": "terminus",
         "type": "github"
       }
     },

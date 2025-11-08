@@ -21,7 +21,7 @@ in
           {
             options = {
               subdomain = mkOption {
-                type = types.str;
+                type = types.nullOr types.str;
                 default = config.custom.services.${name}.subdomain;
               };
               target = mkOption {
@@ -72,7 +72,7 @@ in
       '';
 
       virtualHosts = mapAttrs' (_: service: {
-        name = "${service.subdomain}.${cfg.domain}";
+        name = if service.subdomain != null then "${service.subdomain}.${cfg.domain}" else cfg.domain;
         value = {
           logFormat = ''
             output discard

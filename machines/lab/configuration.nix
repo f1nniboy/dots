@@ -95,6 +95,8 @@
       soju.enable = true;
       convoyeur.enable = true;
 
+      blog.enable = true;
+
       monero = {
         enable = true;
         whitelist = with vars.net.hosts; [

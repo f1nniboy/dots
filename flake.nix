@@ -64,6 +64,14 @@
       url = "github:cynicsketch/nix-mineral";
       flake = false;
     };
+
+    blog = {
+      url = "path:/home/me/Projects/blog";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        systems.follows = "systems";
+      };
+    };
   };
 
   outputs =
@@ -80,18 +88,19 @@
       vars = import ./vars.nix;
 
       mkSystem =
-        hostname: arch:
+        hostname: system:
         let
           path = ./machines/${hostname};
         in
         nixpkgs.lib.nixosSystem {
-          system = arch;
+          inherit system;
           specialArgs = {
             inherit
               lib
               inputs
               outputs
               vars
+              system
               ;
           };
           modules = [
