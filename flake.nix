@@ -125,7 +125,7 @@
         desktop = mkSystem "desktop" "x86_64-linux";
         laptop = mkSystem "laptop" "x86_64-linux";
         lab = mkSystem "lab" "x86_64-linux";
-        vps = mkSystem "lab" "x86_64-linux";
+        vps = mkSystem "vps" "x86_64-linux";
 
         iso = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
