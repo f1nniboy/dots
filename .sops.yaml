@@ -2,7 +2,7 @@ keys: &keys
   - &desktop age1d7l44trdac37hfx7yrtw4zf7re3k39tzjeav70z9t9xv9ur5wsmshge2pw
   - &laptop age1yqh025casyzy6sw68m08xreftvswjf9eqwnvcaytga6jvehdhejqr6mf04
   - &lab age19f8l20tkls4v0uh3wuucj44pxpsj9l85vj4q2rx03rnag0cpy39swmtyhm
-  - &vps age1fwntxgz0yf0vwl0an6y4ptzelsu70asj5yq4ag7eglftjy0ye32s367d3v
+  - &vps age17zujvv98knpzwa8aqqe2cw7v5v08t34qkd5vruyzjczwzat8usnq6la3ry
 creation_rules:
   - path_regex: secrets/common.yaml
     key_groups:
