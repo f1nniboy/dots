@@ -66,6 +66,7 @@ in
               };
             };
             dns = {
+              # TODO: enable
               magic_dns = false;
               nameservers.global = [
                 "1.1.1.1"

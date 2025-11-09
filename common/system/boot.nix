@@ -18,18 +18,22 @@ in
     boot = {
       kernelPackages = pkgs.linuxPackages_latest;
       loader = mkMerge [
-        (mkIf (!cfg.legacy) {
-          systemd-boot = {
-            enable = true;
-            configurationLimit = 5;
-          };
-        })
-        (mkIf cfg.legacy {
-          grub = {
-            enable = true;
-            device = "/dev/sda";
-          };
-        })
+        (
+          if cfg.legacy then
+            {
+              grub = {
+                enable = true;
+                device = "/dev/sda";
+              };
+            }
+          else
+            {
+              systemd-boot = {
+                enable = true;
+                configurationLimit = 5;
+              };
+            }
+        )
         {
           efi.canTouchEfiVariables = true;
           timeout = 10;
