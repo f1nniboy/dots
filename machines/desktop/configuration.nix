@@ -1,12 +1,9 @@
-{ config, inputs, ... }:
+{ config, ... }:
 let
   homeDir = config.custom.system.home.dir;
 in
 {
   imports = [
-    inputs.impermanence.nixosModules.impermanence
-    inputs.home-manager.nixosModules.home-manager
-
     ../../common
   ];
 

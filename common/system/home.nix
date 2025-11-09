@@ -1,4 +1,5 @@
 {
+  inputs,
   options,
   config,
   lib,
@@ -30,6 +31,10 @@ in
       default = config.users.users."${config.custom.system.user.name}".home;
     };
   };
+
+  imports = [
+    inputs.home-manager.nixosModules.home-manager
+  ];
 
   config = mkIf cfg.enable {
     custom.system.home = {

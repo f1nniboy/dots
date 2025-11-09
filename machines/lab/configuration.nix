@@ -1,13 +1,9 @@
 {
-  inputs,
   vars,
   ...
 }:
 {
   imports = [
-    inputs.impermanence.nixosModules.impermanence
-    inputs.home-manager.nixosModules.home-manager
-
     ../../common
   ];
 

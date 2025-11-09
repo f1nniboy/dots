@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  inputs,
+  config,
+  lib,
+  ...
+}:
 with lib;
 let
   cfg = config.custom.system.persistence;
@@ -71,6 +76,10 @@ in
       default = { };
     };
   };
+
+  imports = [
+    inputs.impermanence.nixosModules.impermanence
+  ];
 
   config = mkIf cfg.enable {
     environment.persistence."/nix/persist" = {
