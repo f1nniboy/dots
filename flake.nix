@@ -66,7 +66,7 @@
     };
 
     blog = {
-      url = "path:/home/me/Projects/blog";
+      url = "github:f1nniboy/blog";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         systems.follows = "systems";

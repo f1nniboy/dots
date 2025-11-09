@@ -35,14 +35,17 @@
         "theme": "theme"
       },
       "locked": {
-        "lastModified": 1762642675,
-        "narHash": "sha256-p5Lu6H0tHctc4Nf9uq4Qv99sRMVmt6JLrEH9EFvT3jc=",
-        "path": "/home/me/Projects/blog",
-        "type": "path"
+        "lastModified": 1762640494,
+        "narHash": "sha256-OQ2q5kRNH68BRX7J8NYApAbLbZLjWY7AhZ/VetyZEzc=",
+        "owner": "f1nniboy",
+        "repo": "blog",
+        "rev": "c30fdb2cf2e875b0ed17b165120c97bb73a89f7b",
+        "type": "github"
       },
       "original": {
-        "path": "/home/me/Projects/blog",
-        "type": "path"
+        "owner": "f1nniboy",
+        "repo": "blog",
+        "type": "github"
       }
     },
     "declarative-jellyfin": {
