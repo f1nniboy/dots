@@ -1,5 +1,6 @@
 {
   config,
+  vars,
   lib,
   pkgs,
   ...
@@ -11,49 +12,57 @@ in
 {
   options.custom.services.tailscale = {
     enable = custom.enableOption;
+
+    loginServer = mkOption {
+      type = types.str;
+      default = "https://net.${vars.lab.domain}";
+    };
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [
-      pkgs.jq
-      pkgs.tailscale
+    environment.systemPackages = with pkgs; [
+      tailscale
+      jq
     ];
 
     services = {
       tailscale.enable = true;
     };
 
-    systemd.services.tailscale-autoconnect = {
-      description = "Automatic connection to Tailscale";
+    systemd.services.tailscale-autoconnect =
+      let
+        deps = [
+          "network-pre.target"
+          "tailscale.service"
+        ];
+      in
+      {
+        description = "Automatic connection to Tailscale";
 
-      # make sure tailscale is running before trying to connect to tailscale
-      after = [
-        "network-pre.target"
-        "tailscale.service"
-      ];
-      wants = [
-        "network-pre.target"
-        "tailscale.service"
-      ];
-      wantedBy = [ "multi-user.target" ];
+        # make sure tailscale is running before trying to connect to tailscale
+        wantedBy = [ "multi-user.target" ];
+        after = deps;
+        wants = deps;
 
-      serviceConfig.Type = "oneshot";
+        serviceConfig.Type = "oneshot";
 
-      script = with pkgs; ''
-        # wait for tailscaled to settle
-        sleep 2
+        script = with pkgs; ''
+          # wait for tailscaled to settle
+          sleep 2
 
-        # check if we are already authenticated to tailscale
-        status="$(${tailscale}/bin/tailscale status -json | ${jq}/bin/jq -r .BackendState)"
-        [ "$status" != "NeedsLogin" ] && exit 0
+          # check if we are already authenticated to tailscale
+          status="$(${tailscale}/bin/tailscale status -json | ${jq}/bin/jq -r .BackendState)"
+          [ "$status" != "NeedsLogin" ] && exit 0
 
-        # otherwise authenticate with tailscale
-        # timeout after 10 seconds to avoid hanging the boot process
-        ${coreutils}/bin/timeout 10 ${tailscale}/bin/tailscale up \
-          --authkey=$(cat "${custom.mkSecretPath config "tailscale/auth-key" "root"}") \
-          --operator=${config.custom.system.user.name}
-      '';
-    };
+          # otherwise authenticate with tailscale
+          # timeout after 10 seconds to avoid hanging the boot process
+          ${coreutils}/bin/timeout 10 ${tailscale}/bin/tailscale up \
+            --authkey=file:${custom.mkSecretPath config "tailscale/auth-key" "root"} \
+            --login-server=${cfg.loginServer} \
+            --hostname=${config.networking.hostName} \
+            --operator=${config.custom.system.user.name}
+        '';
+      };
 
     networking.firewall = {
       trustedInterfaces = [ "tailscale0" ];

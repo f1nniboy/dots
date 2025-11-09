@@ -21,11 +21,19 @@ in
       };
       settings = {
         allowed-users = [ "@wheel" ];
+        trusted-users = [ "@wheel" ];
+        extra-substituters = [
+          "https://colmena.cachix.org"
+        ];
+        extra-trusted-public-keys = [
+          "colmena.cachix.org-1:7BzpDnjjH8ki2CT3f6GdOk7QAzPOl+1t3LvTLXqYcSg="
+        ];
         experimental-features = [
           "nix-command"
           "flakes"
         ];
         auto-optimise-store = true;
+        warn-dirty = false;
       };
     };
   };

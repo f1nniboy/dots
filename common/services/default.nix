@@ -10,6 +10,7 @@
     ./fileflows
     ./forgejo
     ./gow
+    ./headscale
     ./i2pd
     ./immich
     ./jellyfin

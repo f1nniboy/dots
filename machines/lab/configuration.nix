@@ -3,10 +3,6 @@
   ...
 }:
 {
-  imports = [
-    ../../common
-  ];
-
   custom = {
     presets = {
       base.enable = true;
@@ -43,8 +39,6 @@
       redis.enable = true;
       docker.enable = true;
 
-      authelia.enable = true;
-      lldap.enable = true;
       vaultwarden.enable = true;
 
       arr.enable = true;

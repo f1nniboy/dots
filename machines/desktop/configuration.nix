@@ -3,10 +3,6 @@ let
   homeDir = config.custom.system.home.dir;
 in
 {
-  imports = [
-    ../../common
-  ];
-
   custom = {
     presets = {
       base.enable = true;

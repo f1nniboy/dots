@@ -54,7 +54,7 @@ in
     };
 
     clients = mkOption {
-      type = types.listOf (
+      type = types.attrsOf (
         types.submodule {
           options = {
             name = mkOption {
@@ -63,6 +63,12 @@ in
 
             id = mkOption {
               type = types.str;
+            };
+
+            makeSecrets = mkOption {
+              type = types.bool;
+              description = "whether secrets used by the client should be created";
+              default = false;
             };
 
             policy = mkOption {
@@ -121,187 +127,204 @@ in
           };
         }
       );
+      default = { };
     };
   };
 
-  config = mkIf cfg.enable {
-    custom.system.sops.secrets =
-      let
-        mkClientSecrets = client: [
-          {
-            path = "oidc/${client.id}/secret";
-            owner = client.id;
-          }
-          {
-            path = "oidc/${client.id}/id";
-            owner = client.id;
-          }
-          {
-            path = "oidc/${client.id}/secret-hash";
-            owner = name;
-          }
-          {
-            path = "oidc/${client.id}/id";
-            owner = name;
-          }
-        ];
-      in
-      concatLists (map mkClientSecrets cfg.clients)
-      ++ [
-        {
-          path = "authelia/jwt-secret";
-          owner = name;
-        }
-        {
-          path = "authelia/storage-encryption-key";
-          owner = name;
-        }
-        {
-          path = "authelia/session-secret";
-          owner = name;
-        }
-        {
-          path = "authelia/hmac-secret";
-          owner = name;
-        }
-        {
-          path = "authelia/jwks";
-          owner = name;
-        }
-      ];
+  config = mkMerge [
+    # regardless of authelia being enabled, create the requested secrets
+    {
+      custom.system.sops.secrets =
+        let
+          mkClientSecrets = client: [
+            # secrets to be used by the client
+            (mkIf client.makeSecrets {
+              path = "oidc/${client.id}/secret";
+              owner = client.id;
+              source = "common";
+            })
+            (mkIf client.makeSecrets {
+              path = "oidc/${client.id}/id";
+              owner = client.id;
+              source = "common";
+            })
 
-    systemd.services.${name} =
-      let
-        deps = [
-          "lldap.service"
-          "postgresql.service"
-          "redis-${name}.service"
-        ];
-      in
-      {
-        requires = deps;
-        after = deps;
+            # secrets to be used by authelia
+            (mkIf cfg.enable {
+              path = "oidc/${client.id}/secret-hash";
+              owner = name;
+              source = "common";
+            })
+            (mkIf cfg.enable {
+              path = "oidc/${client.id}/id";
+              owner = name;
+              source = "common";
+            })
+          ];
+          clientSecretLists = map mkClientSecrets (builtins.attrValues cfg.clients);
+        in
+        concatLists clientSecretLists;
+    }
+    (mkIf cfg.enable {
+      systemd.services.${name} =
+        let
+          deps = [
+            "lldap.service"
+            "postgresql.service"
+            "redis-${name}.service"
+          ];
+        in
+        {
+          requires = deps;
+          after = deps;
 
-        serviceConfig.Environment = "X_AUTHELIA_CONFIG_FILTERS=template";
+          serviceConfig.Environment = "X_AUTHELIA_CONFIG_FILTERS=template";
+        };
+
+      users.users.${name} = {
+        extraGroups = [
+          "postgres"
+          "redis-${name}"
+        ];
       };
 
-    users.users.${name} = {
-      extraGroups = [
-        "postgres"
-        "redis-${name}"
-      ];
-    };
-
-    services = {
-      authelia = {
-        instances.main = {
-          enable = true;
-          settings = {
-            server = {
-              address = "tcp://127.0.0.1:${toString cfg.port}";
-            };
-            theme = "dark";
-            authentication_backend = {
-              password_change.disable = true;
-              password_reset.disable = true;
-              ldap = {
-                address = "ldap://localhost:${toString config.custom.services.lldap.ports.ldap}";
-                implementation = "lldap";
-                base_dn = dn;
-                user = "uid=bind,ou=people,${dn}";
-                password = "binduser";
-                # allow users to sign in with username, e-mail or first name
-                users_filter = "(&(|({username_attribute}={input})(mail={input})(firstName={input}))(objectClass=person))";
+      services = {
+        authelia = {
+          instances.main = {
+            enable = true;
+            settings = {
+              server = {
+                address = "tcp://127.0.0.1:${toString cfg.port}";
               };
-            };
-            session = {
-              redis = {
-                host = config.services.redis.servers.${name}.unixSocket;
+              theme = "dark";
+              authentication_backend = {
+                password_change.disable = true;
+                password_reset.disable = true;
+                ldap = {
+                  address = "ldap://localhost:${toString config.custom.services.lldap.ports.ldap}";
+                  implementation = "lldap";
+                  base_dn = dn;
+                  user = "uid=bind:authelia,ou=people,${dn}";
+                  password = "binduser";
+                  # allow users to sign in with username, e-mail or first name
+                  users_filter = "(&(|({username_attribute}={input})(mail={input})(firstName={input}))(objectClass=person))";
+                };
               };
-              cookies = [
-                {
-                  inherit (config.custom.services.caddy) domain;
-                  authelia_url = "https://${custom.mkServiceDomain config "authelia"}";
-
-                  # the period of time the user can be inactive for before the session is destroyed
-                  inactivity = "1M";
-                  # the period of time before the cookie expires and the session is destroyed
-                  expiration = "3M";
-                  # the period of time before the cookie expires and the session is destroyed,
-                  # when the remember me box is checked
-                  remember_me = "1y";
-                }
-              ];
-            };
-            storage.postgres = {
-              address = "unix:///var/run/postgresql";
-              database = name;
-              username = name;
-              password = "";
-            };
-            notifier.filesystem = {
-              filename = "/tmp/authelia-notification.txt";
-            };
-            access_control = {
-              default_policy = "one_factor";
-              inherit (cfg) rules;
-            };
-            identity_providers.oidc = {
-              # ref: https://www.authelia.com/integration/openid-connect/openid-connect-1.0-claims/#restore-functionality-prior-to-claims-parameter
-              claims_policies = {
-                karakeep.id_token = [ "email" ];
-              };
-              cors = {
-                endpoints = [ "token" ];
-                allowed_origins_from_client_redirect_uris = true;
-              };
-              authorization_policies.default = {
-                default_policy = "one_factor";
-                rules = [
+              session = {
+                redis = {
+                  host = config.services.redis.servers.${name}.unixSocket;
+                };
+                cookies = [
                   {
-                    policy = "deny";
-                    subject = "group:lldap_strict_readonly";
+                    inherit (config.custom.services.caddy) domain;
+                    authelia_url = "https://${custom.mkServiceDomain config "authelia"}";
+
+                    # the period of time the user can be inactive for before the session is destroyed
+                    inactivity = "1M";
+                    # the period of time before the cookie expires and the session is destroyed
+                    expiration = "3M";
+                    # the period of time before the cookie expires and the session is destroyed,
+                    # when the remember me box is checked
+                    remember_me = "1y";
                   }
                 ];
               };
+              storage.postgres = {
+                address = "unix:///var/run/postgresql";
+                database = name;
+                username = name;
+                password = "";
+              };
+              notifier.filesystem = {
+                filename = "/tmp/authelia-notification.txt";
+              };
+              access_control = {
+                default_policy = "one_factor";
+                inherit (cfg) rules;
+              };
+              identity_providers.oidc = {
+                # ref: https://www.authelia.com/integration/openid-connect/openid-connect-1.0-claims/#restore-functionality-prior-to-claims-parameter
+                claims_policies = {
+                  karakeep.id_token = [ "email" ];
+                };
+                cors = {
+                  endpoints = [ "token" ];
+                  allowed_origins_from_client_redirect_uris = true;
+                };
+                authorization_policies.default = {
+                  default_policy = "one_factor";
+                  rules = [
+                    {
+                      policy = "deny";
+                      subject = "group:lldap_strict_readonly";
+                    }
+                  ];
+                };
+              };
             };
+            # templates don't work correctly when parsed from nix,
+            # so we have to do oidc clients in a separate file
+            settingsFiles = [ oidcConfigFile ];
+            secrets =
+              let
+                mkSecret = path: custom.mkSecretPath config "authelia/${path}" name;
+              in
+              {
+                jwtSecretFile = mkSecret "jwt-secret";
+                storageEncryptionKeyFile = mkSecret "storage-encryption-key";
+                sessionSecretFile = mkSecret "session-secret";
+                oidcIssuerPrivateKeyFile = mkSecret "jwks";
+                oidcHmacSecretFile = mkSecret "hmac-secret";
+              };
           };
-          # templates don't work correctly when parsed from nix,
-          # so we have to do oidc clients in a separate file
-          settingsFiles = [ oidcConfigFile ];
-          secrets =
-            let
-              mkSecret = path: custom.mkSecretPath config "authelia/${path}" name;
-            in
-            {
-              jwtSecretFile = mkSecret "jwt-secret";
-              storageEncryptionKeyFile = mkSecret "storage-encryption-key";
-              sessionSecretFile = mkSecret "session-secret";
-              oidcIssuerPrivateKeyFile = mkSecret "jwks";
-              oidcHmacSecretFile = mkSecret "hmac-secret";
-            };
+        };
+        caddy = {
+          # snippet that can be imported to enable authelia in front of a service
+          # ref: https://www.authelia.com/integration/proxies/caddy/#subdomain
+          extraConfig = ''
+            (auth) {
+                forward_auth :${toString cfg.port} {
+                    uri /api/authz/forward-auth
+                    copy_headers Remote-User Remote-Groups Remote-Email Remote-Name
+                }
+            }
+          '';
         };
       };
-      caddy = {
-        # snippet that can be imported to enable authelia in front of a service
-        # ref: https://www.authelia.com/integration/proxies/caddy/#subdomain
-        extraConfig = ''
-          (auth) {
-              forward_auth :${toString cfg.port} {
-                  uri /api/authz/forward-auth
-                  copy_headers Remote-User Remote-Groups Remote-Email Remote-Name
-              }
-          }
-        '';
-      };
-    };
 
-    custom.services = {
-      caddy.hosts = {
-        authelia.target = ":${toString cfg.port}";
+      custom = {
+        system = {
+          sops.secrets = [
+            {
+              path = "authelia/jwt-secret";
+              owner = name;
+            }
+            {
+              path = "authelia/storage-encryption-key";
+              owner = name;
+            }
+            {
+              path = "authelia/session-secret";
+              owner = name;
+            }
+            {
+              path = "authelia/hmac-secret";
+              owner = name;
+            }
+            {
+              path = "authelia/jwks";
+              owner = name;
+            }
+          ];
+        };
+        services = {
+          caddy.hosts = {
+            authelia.target = ":${toString cfg.port}";
+          };
+          postgresql.users = [ name ];
+          redis.servers = [ name ];
+        };
       };
-      postgresql.users = [ name ];
-      redis.servers = [ name ];
-    };
-  };
+    })
+  ];
 }

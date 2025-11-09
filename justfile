@@ -1,18 +1,20 @@
 default:
     just --list
 
-deploy machine ip='':
+deploy-remote on='':
     #!/usr/bin/env sh
-    if [ -z "{{ ip }}" ]; then
-    	sudo nixos-rebuild switch --no-reexec --show-trace --flake ".#{{ machine }}"
+    if [ -z "{{ on }}" ]; then
+        nix run github:zhaofengli/colmena -- apply
     else
-    	nixos-rebuild switch --no-reexec --flake ".#{{ machine }}" \
-    		--target-host "me@{{ ip }}" --build-host "me@{{ ip }}" \
-    		--sudo --show-trace
+        nix run github:zhaofengli/colmena -- apply --on="{{ on }}"
     fi
 
+deploy-local:
+    # TODO: run rootless
+    sudo nix run github:zhaofengli/colmena -- apply-local --verbose
+
 up input='':
-    nix flake update {{ input }}
+    nix flake update "{{ input }}"
 
 lint:
     statix check .

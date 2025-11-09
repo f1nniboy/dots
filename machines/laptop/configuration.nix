@@ -3,10 +3,6 @@
   ...
 }:
 {
-  imports = [
-    ../../common
-  ];
-
   custom = {
     presets = {
       base.enable = true;

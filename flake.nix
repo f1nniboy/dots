@@ -5,6 +5,11 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     systems.url = "github:nix-systems/default";
 
+    colmena = {
+      url = "github:zhaofengli/colmena";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
@@ -66,7 +71,7 @@
     };
 
     blog = {
-      url = "github:f1nniboy/blog";
+      url = "path:/home/me/Projects/blog";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         systems.follows = "systems";
@@ -78,6 +83,7 @@
     {
       self,
       nixpkgs,
+      colmena,
       nur,
       ...
     }@inputs:
@@ -87,13 +93,48 @@
       lib = import ./common/lib { inherit inputs; };
       vars = import ./vars.nix;
 
-      mkSystem =
-        hostname: system:
+      system = "x86_64-linux";
+
+      mkMachine =
+        {
+          hostname,
+        }:
         let
           path = ./machines/${hostname};
         in
-        nixpkgs.lib.nixosSystem {
-          inherit system;
+        {
+          deployment = lib.mkMerge [
+            {
+              targetUser = "me";
+            }
+            (import (path + "/deployment.nix") {
+              inherit vars;
+            })
+          ];
+
+          nixpkgs.system = system;
+          networking.hostName = hostname;
+
+          nixpkgs.overlays = [
+            nur.overlays.default
+          ];
+
+          imports = [
+            ./common
+
+            (path + "/configuration.nix")
+            (path + "/hardware.nix")
+          ];
+        };
+    in
+    {
+      colmenaHive = colmena.lib.makeHive self.outputs.colmena;
+      colmena = {
+        meta = {
+          nixpkgs = import nixpkgs {
+            inherit system;
+          };
+
           specialArgs = {
             inherit
               lib
@@ -103,30 +144,18 @@
               system
               ;
           };
-          modules = [
-            {
-              networking.hostName = hostname;
-            }
-
-            (path + "/configuration.nix")
-            (path + "/hardware.nix")
-
-            {
-              nixpkgs.overlays = [
-                nur.overlays.default
-              ];
-            }
-          ];
         };
 
-    in
-    {
-      nixosConfigurations = {
-        desktop = mkSystem "desktop" "x86_64-linux";
-        laptop = mkSystem "laptop" "x86_64-linux";
-        lab = mkSystem "lab" "x86_64-linux";
-        vps = mkSystem "vps" "x86_64-linux";
+        # personal
+        desktop = mkMachine { hostname = "desktop"; };
+        laptop = mkMachine { hostname = "laptop"; };
 
+        # servers
+        vps = mkMachine { hostname = "vps"; };
+        lab = mkMachine { hostname = "lab"; };
+      };
+
+      nixosConfigurations = {
         iso = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = {

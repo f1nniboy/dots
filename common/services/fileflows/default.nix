@@ -47,7 +47,7 @@ in
       };
       volumes =
         let
-          baseDir = config.custom.system.media.baseDir;
+          inherit (config.custom.system.media) baseDir;
         in
         [
           "${baseDir}/downloads/complete:/media/complete:rw"

@@ -44,5 +44,5 @@ in
   identity_providers:
     oidc:
       clients:
-  ${(builtins.concatStringsSep "" (map mkClient cfg.clients))}
+  ${builtins.concatStringsSep "" (map mkClient (builtins.attrValues cfg.clients))}
 ''
