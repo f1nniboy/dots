@@ -7,6 +7,9 @@
 with lib;
 let
   cfg = config.custom.services.caddy;
+  mkLogFile =
+    service:
+    "/var/log/caddy/access/${if service.subdomain != null then service.subdomain else "root"}.log";
 in
 {
   options.custom.services.caddy = {
@@ -21,7 +24,7 @@ in
           {
             options = {
               subdomain = mkOption {
-                type = types.nullOr types.str;
+                type = types.str;
                 default = config.custom.services.${name}.subdomain;
               };
               target = mkOption {
@@ -33,8 +36,8 @@ in
                 description = "list of Caddy snippets to import for this host";
               };
               extra = mkOption {
-                type = types.str;
-                default = "";
+                type = types.nullOr types.str;
+                default = null;
                 description = "additional directives";
               };
               type = mkOption {
@@ -43,6 +46,10 @@ in
                   "root"
                 ];
                 default = "http";
+              };
+              enableLogging = mkOption {
+                type = types.bool;
+                default = false;
               };
             };
           }
@@ -71,14 +78,36 @@ in
         }
       '';
 
+      # snippet that can be imported to enable authelia in front of a service
+      # ref: https://www.authelia.com/integration/proxies/caddy/#subdomain
+      extraConfig = ''
+        (auth) {
+            forward_auth https://auth.f1nn.space {
+                header_up Host {upstream_hostport}
+                uri /api/authz/forward-auth
+                copy_headers Remote-User Remote-Groups Remote-Email Remote-Name
+            }
+        }
+      '';
+
       virtualHosts = mapAttrs' (_: service: {
-        name = if service.subdomain != null then "${service.subdomain}.${cfg.domain}" else cfg.domain;
+        name = if service.subdomain != "root" then "${service.subdomain}.${cfg.domain}" else cfg.domain;
         value = {
           logFormat = ''
-            output discard
+            ${
+              if service.enableLogging then
+                ''
+                  output file ${mkLogFile service}
+                ''
+              else
+                ''
+                  output discard
+                ''
+            }
           '';
           extraConfig = ''
             ${concatStringsSep "\n" (map (snippet: "import ${snippet}") service.import)}
+
             ${
               if service.type == "root" then
                 ''
@@ -90,7 +119,8 @@ in
                   reverse_proxy ${toString service.target}
                 ''
             }
-            ${service.extra}
+
+            ${if service.extra != null then service.extra else ""}
           '';
         };
       }) cfg.hosts;
@@ -108,26 +138,28 @@ in
       };
     };
 
-    custom.system = {
-      sops.secrets = [
-        {
-          path = "porkbun/api-key";
-          owner = "caddy";
-        }
-        {
-          path = "porkbun/api-secret-key";
-          owner = "caddy";
-        }
-      ];
-      persistence.config = {
-        directories = [
+    custom = {
+      system = {
+        sops.secrets = [
           {
-            directory = "/var/lib/caddy";
-            user = "caddy";
-            group = "caddy";
-            mode = "0700";
+            path = "porkbun/api-key";
+            owner = "caddy";
+          }
+          {
+            path = "porkbun/api-secret-key";
+            owner = "caddy";
           }
         ];
+        persistence.config = {
+          directories = [
+            {
+              directory = "/var/lib/caddy";
+              user = "caddy";
+              group = "caddy";
+              mode = "0700";
+            }
+          ];
+        };
       };
     };
 

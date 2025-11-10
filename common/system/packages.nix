@@ -1,4 +1,6 @@
 {
+  system,
+  inputs,
   config,
   lib,
   pkgs,
@@ -28,6 +30,8 @@ in
 
         ffmpeg
         yt-dlp
+
+        inputs.colmena.packages.${system}.colmena
       ];
     };
   };

@@ -41,7 +41,6 @@
     ./syncthing
     ./tailscale
     ./tor
-    ./unbound
     ./vaultwarden
     ./xmrig
   ];

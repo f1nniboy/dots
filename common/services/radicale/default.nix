@@ -33,8 +33,8 @@ in
         auth = {
           type = "ldap";
           ldap_uri = "ldap://localhost:${toString config.custom.services.lldap.ports.ldap}";
-          ldap_base = custom.domainToDn vars.lab.domain;
-          ldap_reader_dn = "uid=bind,ou=people,${custom.domainToDn vars.lab.domain}";
+          ldap_base = custom.domainToDn vars.net.domain;
+          ldap_reader_dn = "uid=bind,ou=people,${custom.domainToDn vars.net.domain}";
           ldap_secret = "binduser";
           ldap_filter = "(&(|(uid={0})(mail={0})(firstName={0}))(objectClass=person))";
           ldap_user_attribute = "uid";

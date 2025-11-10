@@ -9,8 +9,8 @@
     };
 
     services = {
-      tailscale.enable = true;
       headscale.enable = true;
+      tailscale.enable = true;
 
       openssh.enable = true;
       postgresql.enable = true;
@@ -18,7 +18,7 @@
 
       caddy = {
         enable = true;
-        inherit (vars.lab) domain;
+        inherit (vars.net) domain;
       };
 
       authelia.enable = true;
@@ -26,7 +26,7 @@
 
       blog.enable = true;
 
-      # make secrets for services using oidc accessible
+      # make secrets of services using oidc accessible
       immich.forOidc = true;
       paperless.forOidc = true;
       miniflux.forOidc = true;

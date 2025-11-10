@@ -10,7 +10,7 @@ let
   cfg = config.custom.services.authelia;
 
   name = "authelia-main";
-  dn = custom.domainToDn vars.lab.domain;
+  dn = custom.domainToDn vars.net.domain;
   oidcConfigFile = pkgs.writeTextFile {
     name = "oidc-clients.yaml";
     text = import ./oidc-config.nix {
@@ -278,18 +278,6 @@ in
               };
           };
         };
-        caddy = {
-          # snippet that can be imported to enable authelia in front of a service
-          # ref: https://www.authelia.com/integration/proxies/caddy/#subdomain
-          extraConfig = ''
-            (auth) {
-                forward_auth :${toString cfg.port} {
-                    uri /api/authz/forward-auth
-                    copy_headers Remote-User Remote-Groups Remote-Email Remote-Name
-                }
-            }
-          '';
-        };
       };
 
       custom = {
@@ -319,7 +307,10 @@ in
         };
         services = {
           caddy.hosts = {
-            authelia.target = ":${toString cfg.port}";
+            authelia = {
+              target = ":${toString cfg.port}";
+              enableLogging = true;
+            };
           };
           postgresql.users = [ name ];
           redis.servers = [ name ];

@@ -15,7 +15,7 @@ in
 
     loginServer = mkOption {
       type = types.str;
-      default = "https://net.${vars.lab.domain}";
+      default = "https://net.${vars.net.domain}";
     };
   };
 

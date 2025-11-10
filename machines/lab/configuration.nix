@@ -29,7 +29,7 @@
 
       caddy = {
         enable = true;
-        inherit (vars.lab) domain;
+        inherit (vars.net) domain;
       };
       acme = {
         enable = true;
@@ -84,8 +84,6 @@
 
       soju.enable = true;
       convoyeur.enable = true;
-
-      blog.enable = true;
 
       monero = {
         enable = true;

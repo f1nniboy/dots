@@ -2,7 +2,7 @@ rec {
   user = {
     fullName = "Finn";
     nick = "finn";
-    email = "me@${lab.domain}";
+    email = "me@${net.domain}";
   };
 
   ssh = {
@@ -16,16 +16,14 @@ rec {
     email = "odd.mime93770@fastmail.com";
   };
 
-  lab = {
-    domain = "f1nn.space";
-  };
-
   net = {
+    domain = "f1nn.space";
     hosts = {
-      lab = "100.64.0.9";
       desktop = "100.64.0.6";
+      laptop = "100.64.0.16";
+
+      lab = "100.64.0.9";
       vps = "100.64.0.8";
-      laptop = "100.81.153.30"; # TODO: change
     };
   };
 

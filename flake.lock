@@ -35,8 +35,8 @@
         "theme": "theme"
       },
       "locked": {
-        "lastModified": 1762726910,
-        "narHash": "sha256-s5Wx30gVcBJUv2QxW4cURyHtDxo2XpGyoD+ME9RAUvE=",
+        "lastModified": 1762802187,
+        "narHash": "sha256-FnLkr/xv2qvbTXHN6yorM4qkJPTEQi5fKnYXGT7Ci14=",
         "path": "/home/me/Projects/blog",
         "type": "path"
       },
@@ -199,11 +199,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1762704774,
-        "narHash": "sha256-iodz4xQbULkHqetbPu5BCSWsVEzZiiNSv0/dzfH4XiE=",
+        "lastModified": 1762721397,
+        "narHash": "sha256-E428EuouA4nFTNlLuqlL4lVR78X+EbBIqDqsBFnB79w=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "be4a9233dd3f6104c9b0fdd3d56f953eb519a4c7",
+        "rev": "b8645b18b0f5374127bbade6de7381ef0b3d5720",
         "type": "github"
       },
       "original": {
@@ -290,11 +290,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1762703197,
-        "narHash": "sha256-MZK6or9Vpe5reoVTD2wq0LzXs3OdObV1c9jZ0aCrjzI=",
+        "lastModified": 1762770405,
+        "narHash": "sha256-HJo5R+/+LOhALb8PF16YaR983+HscBgMAJKUaVfNhik=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "bf6811d0b9915c3cf6c65495c13968dbf8cfe665",
+        "rev": "552b8fe95b4befc7078b9d6c971b65989657c158",
         "type": "github"
       },
       "original": {
@@ -352,11 +352,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1762662552,
-        "narHash": "sha256-2uNkeyrn5z0TTXcT/Qr03/Ox2drGYoSZr5G0Cb9QkT0=",
+        "lastModified": 1762718300,
+        "narHash": "sha256-oOQimZTaV1jCw0OBmmK2g7Rdj3E8YGVpkJYD32BWKRQ=",
         "owner": "Gerg-L",
         "repo": "spicetify-nix",
-        "rev": "effee117984c2740d532b9e0c2a63ff1b57c8120",
+        "rev": "c7175bd485ed5052df5075fcdde395b631316e94",
         "type": "github"
       },
       "original": {
@@ -399,16 +399,17 @@
     "theme": {
       "flake": false,
       "locked": {
-        "lastModified": 1759091670,
-        "narHash": "sha256-HR134y15obVQImFU7ofFWsX1jeKve7NEnFt+jbDw4CI=",
+        "lastModified": 1756088499,
+        "narHash": "sha256-cFSgwY0NpQcHMiRng2tpGR0GMQtzkUu5H+6m2DJ8ImI=",
         "owner": "ebkalderon",
         "repo": "terminus",
-        "rev": "b008df4445bda4111f462828df9b11e576957a25",
+        "rev": "d401cd0dc8464f16f602a286797f9d99c0b9eb44",
         "type": "github"
       },
       "original": {
         "owner": "ebkalderon",
         "repo": "terminus",
+        "rev": "d401cd0dc8464f16f602a286797f9d99c0b9eb44",
         "type": "github"
       }
     },

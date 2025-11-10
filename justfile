@@ -4,17 +4,17 @@ default:
 deploy-remote on='':
     #!/usr/bin/env sh
     if [ -z "{{ on }}" ]; then
-        nix run github:zhaofengli/colmena -- apply
+        colmena apply
     else
-        nix run github:zhaofengli/colmena -- apply --on="{{ on }}"
+        colmena apply --on="{{ on }}"
     fi
 
 deploy-local:
     # TODO: run rootless
-    sudo nix run github:zhaofengli/colmena -- apply-local --verbose
+    sudo colmena apply-local --verbose
 
 up input='':
-    nix flake update "{{ input }}"
+    nix flake update {{ input }}
 
 lint:
     statix check .

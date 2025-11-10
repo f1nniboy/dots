@@ -28,8 +28,8 @@ in
       dbBackend = "postgresql";
       config = {
         DATABASE_URL = "postgresql://vaultwarden:@/vaultwarden";
-        _ENABLE_SMTP = "false";
         ROCKET_PORT = cfg.port;
+        _ENABLE_SMTP = "false";
       };
     };
 

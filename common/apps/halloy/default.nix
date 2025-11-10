@@ -25,7 +25,7 @@ in
             settings = {
               # servers
               servers.bouncer = {
-                server = "irc.${vars.lab.domain}";
+                server = "irc.${vars.net.domain}";
                 nickname = vars.user.nick;
                 port = 6697;
                 sasl.plain = {

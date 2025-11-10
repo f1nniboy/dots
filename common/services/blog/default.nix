@@ -19,9 +19,10 @@ in
       services = {
         caddy.hosts = {
           blog = {
-            subdomain = null;
-            target = toString inputs.blog.packages.${system}.default;
+            subdomain = "root";
             type = "root";
+            target = toString inputs.blog.packages.${system}.default;
+            enableLogging = true;
             extra = ''
               # cache static assets
               @static {

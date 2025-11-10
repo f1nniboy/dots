@@ -164,6 +164,7 @@
               inputs
               outputs
               vars
+              system
               ;
           };
           modules = [

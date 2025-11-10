@@ -27,6 +27,11 @@ in
       type = types.port;
       default = 8090;
     };
+
+    nameservers = mkOption {
+      type = types.listOf types.str;
+      default = [ "9.9.9.9" ];
+    };
   };
 
   config = mkMerge [
@@ -66,16 +71,14 @@ in
               };
             };
             dns = {
-              # TODO: enable
-              magic_dns = false;
-              nameservers.global = [
-                "1.1.1.1"
-                "8.8.8.8"
-              ];
+              magic_dns = true;
+              base_domain = "net.local";
+              nameservers.global = cfg.nameservers;
             };
             oidc = {
               issuer = "https://${custom.mkServiceDomain config "authelia"}";
-              client_id = "z1LAjliTV6kTSNH.lYCg3J1LOy3PU9pJvJscUbzw9xqSG9tr21vDJrfpnPzpPGJjf1wjxwZC"; # TODO: read from secrets
+              # TODO: read from secrets
+              client_id = "z1LAjliTV6kTSNH.lYCg3J1LOy3PU9pJvJscUbzw9xqSG9tr21vDJrfpnPzpPGJjf1wjxwZC";
               client_secret_path = custom.mkSecretPath config "oidc/headscale/secret" "headscale";
               pkce.enabled = true;
             };

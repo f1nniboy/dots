@@ -65,7 +65,7 @@ in
             http_port = cfg.ports.http;
             database_url = "postgres://lldap?host=/var/run/postgresql";
             ldap_port = cfg.ports.ldap;
-            ldap_base_dn = custom.domainToDn vars.lab.domain;
+            ldap_base_dn = custom.domainToDn vars.net.domain;
             ldap_user_pass_file = mkSecret "admin-password";
             force_ldap_user_pass_reset = "always";
             jwt_secret_file = mkSecret "jwt-secret";
