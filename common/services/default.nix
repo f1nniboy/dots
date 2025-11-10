@@ -40,7 +40,6 @@
     ./soju
     ./syncthing
     ./tailscale
-    ./tor
     ./vaultwarden
     ./xmrig
   ];
