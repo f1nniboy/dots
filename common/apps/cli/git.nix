@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  vars,
   ...
 }:
 with lib;
@@ -11,11 +10,6 @@ in
 {
   options.custom.apps.git = {
     enable = custom.enableOption;
-
-    email = mkOption {
-      type = types.str;
-      default = vars.git.email;
-    };
   };
 
   config = mkIf cfg.enable {
@@ -29,7 +23,7 @@ in
         settings = {
           user = {
             name = config.custom.system.user.fullName;
-            inherit (cfg) email;
+            inherit (config.custom.system.user) email;
           };
           gpg.format = "ssh";
           commit.gpgsign = true;

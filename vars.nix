@@ -12,11 +12,7 @@ rec {
     ];
   };
 
-  git = {
-    email = "odd.mime93770@fastmail.com";
-  };
-
-  net = {
+  net = rec {
     domain = "f1nn.space";
     hosts = {
       desktop = "100.64.0.6";
@@ -24,6 +20,10 @@ rec {
 
       lab = "100.64.0.9";
       vps = "100.64.0.8";
+    };
+    services = {
+      lldap = hosts.lab;
+      p2pool = hosts.lab;
     };
   };
 
