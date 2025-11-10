@@ -33,7 +33,7 @@ in
         };
         auth = {
           type = "ldap";
-          ldap_uri = "ldap://${vars.net.hosts.vps}:${toString config.custom.services.lldap.ports.ldap}";
+          ldap_uri = "ldap://${vars.net.services.lldap}:${toString config.custom.services.lldap.ports.ldap}";
           ldap_base = dn;
           ldap_reader_dn = "uid=bind:radicale,ou=people,${dn}";
           ldap_secret = "binduser";

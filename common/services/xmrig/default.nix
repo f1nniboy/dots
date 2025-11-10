@@ -15,7 +15,7 @@ in
     host = mkOption {
       description = "IP or hostname of P2Pool instance";
       type = types.str;
-      default = vars.net.hosts.lab;
+      default = vars.net.services.p2pool;
     };
     port = mkOption {
       type = types.port;

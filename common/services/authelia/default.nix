@@ -201,7 +201,7 @@ in
                 password_change.disable = true;
                 password_reset.disable = true;
                 ldap = {
-                  address = "ldap://localhost:${toString config.custom.services.lldap.ports.ldap}";
+                  address = "ldap://${vars.net.services.lldap}:${toString config.custom.services.lldap.ports.ldap}";
                   implementation = "lldap";
                   base_dn = dn;
                   user = "uid=bind:authelia,ou=people,${dn}";
