@@ -35,6 +35,9 @@ in
                	rewrite * /{err.status_code}.html
                	file_server
               }
+
+              # compression
+              encode zstd gzip
             '';
           };
         };
