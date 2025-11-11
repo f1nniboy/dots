@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, ... }:
 with lib;
 let
   cfg = config.custom.services.paperless;
@@ -30,19 +25,13 @@ in
     (mkIf cfg.forOidc {
       custom.services.authelia.clients.paperless = {
         name = "Paperless";
-        id = "paperless";
-        policy = "one_factor";
-        requirePkce = true;
         redirectUris = [
           "https://${serviceDomain}/accounts/oidc/authelia/login/callback/"
         ];
+        makeSecrets = cfg.enable;
       };
     })
     (mkIf cfg.enable {
-      environment.systemPackages = [
-        pkgs.paperless-ngx
-      ];
-
       users.users.paperless = {
         extraGroups = [
           "postgres"
@@ -115,7 +104,6 @@ in
           caddy.hosts = {
             paperless.target = ":${toString config.services.paperless.port}";
           };
-          authelia.clients.paperless.makeSecrets = true;
           restic = {
             paths = [
               "/var/lib/paperless"

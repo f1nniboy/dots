@@ -61,10 +61,6 @@ in
               type = types.str;
             };
 
-            id = mkOption {
-              type = types.str;
-            };
-
             makeSecrets = mkOption {
               type = types.bool;
               description = "whether secrets used by the client should be created";
@@ -83,7 +79,7 @@ in
 
             requirePkce = mkOption {
               type = types.bool;
-              default = false;
+              default = true;
             };
 
             scopes = mkOption {
@@ -136,32 +132,32 @@ in
     {
       custom.system.sops.secrets =
         let
-          mkClientSecrets = client: [
+          mkClientSecrets = id: client: [
             # secrets to be used by the client
             (mkIf client.makeSecrets {
-              path = "oidc/${client.id}/secret";
-              owner = client.id;
+              path = "oidc/${id}/secret";
+              owner = id;
               source = "common";
             })
             (mkIf client.makeSecrets {
-              path = "oidc/${client.id}/id";
-              owner = client.id;
+              path = "oidc/${id}/id";
+              owner = id;
               source = "common";
             })
 
             # secrets to be used by authelia
             (mkIf cfg.enable {
-              path = "oidc/${client.id}/secret-hash";
+              path = "oidc/${id}/secret-hash";
               owner = name;
               source = "common";
             })
             (mkIf cfg.enable {
-              path = "oidc/${client.id}/id";
+              path = "oidc/${id}/id";
               owner = name;
               source = "common";
             })
           ];
-          clientSecretLists = map mkClientSecrets (builtins.attrValues cfg.clients);
+          clientSecretLists = mapAttrsToList mkClientSecrets cfg.clients;
         in
         concatLists clientSecretLists;
     }

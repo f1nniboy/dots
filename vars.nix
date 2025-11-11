@@ -22,7 +22,7 @@ rec {
       vps = "100.64.0.8";
     };
     services = {
-      lldap = hosts.lab;
+      lldap = hosts.vps;
       p2pool = hosts.lab;
     };
   };

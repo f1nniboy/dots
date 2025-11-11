@@ -34,11 +34,10 @@ in
     (mkIf cfg.forOidc {
       custom.services.authelia.clients.forgejo = {
         name = "Forgejo";
-        id = "forgejo";
-        requirePkce = true;
         redirectUris = [
           "https://${serviceDomain}/user/oauth2/Authelia/callback"
         ];
+        makeSecrets = cfg.enable;
       };
     })
     (mkIf cfg.enable {
@@ -108,7 +107,6 @@ in
           caddy.hosts = {
             forgejo.target = ":${toString cfg.port}";
           };
-          authelia.clients.forgejo.makeSecrets = true;
         };
       };
     })

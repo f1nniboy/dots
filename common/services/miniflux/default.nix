@@ -33,11 +33,10 @@ in
     (mkIf cfg.forOidc {
       custom.services.authelia.clients.miniflux = {
         name = "Miniflux";
-        id = "miniflux";
-        requirePkce = true;
         redirectUris = [
           "https://${serviceDomain}/oauth2/oidc/callback"
         ];
+        makeSecrets = cfg.enable;
       };
     })
     (mkIf cfg.enable {
@@ -108,7 +107,6 @@ in
           caddy.hosts = {
             miniflux.target = ":${toString cfg.port}";
           };
-          authelia.clients.miniflux.makeSecrets = true;
           postgresql.users = [ "miniflux" ];
         };
       };

@@ -19,10 +19,10 @@ let
       custom.mkSecretPath config "oidc/${id}/${key}" "authelia-main"
     }" | mindent 10 "|" | msquote }}'';
 
-  mkClient = c: ''
+  mkClient = id: c: ''
           - client_name: ${c.name}
-            client_id: ${mkSecret c.id "id"}
-            client_secret: ${mkSecret c.id "secret-hash"}
+            client_id: ${mkSecret id "id"}
+            client_secret: ${mkSecret id "secret-hash"}
             public: ${mkYamlBoolean c.public}
             authorization_policy: ${c.policy}
             require_pkce: ${mkYamlBoolean c.requirePkce}
@@ -44,5 +44,5 @@ in
   identity_providers:
     oidc:
       clients:
-  ${builtins.concatStringsSep "" (map mkClient (builtins.attrValues cfg.clients))}
+  ${concatStringsSep "" (mapAttrsToList mkClient cfg.clients)}
 ''

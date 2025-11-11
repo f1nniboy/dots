@@ -95,7 +95,6 @@ in
           clients = [
             {
               name = "Karakeep";
-              id = "karakeep";
               redirectUris = [
                 "https://${serviceDomain}/api/auth/callback/custom"
               ];

@@ -111,8 +111,13 @@ in
             ${
               if service.type == "root" then
                 ''
+                  header {
+                    -Last-Modified
+                  }
                   root * ${toString service.target}
-                  file_server
+                  file_server {
+                    etag_file_extensions .etag
+                  }
                 ''
               else
                 ''

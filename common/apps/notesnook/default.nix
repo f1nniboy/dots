@@ -21,7 +21,9 @@ in
         directories = [ ".config/Notesnook" ];
       };
       home = {
-        # TODO: figure out how to declaratively configure api urls
+        # it's pretty much impossible to configure the api urls declaratively,
+        # as the sqlite db is encrypted using a random password stored in
+        # local storage
         configFiles = {
           "Notesnook/config.json" = {
             text = builtins.toJSON {

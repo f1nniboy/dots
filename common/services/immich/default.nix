@@ -23,13 +23,12 @@ in
     (mkIf cfg.forOidc {
       custom.services.authelia.clients.immich = {
         name = "Immich";
-        id = "immich";
-        requirePkce = true;
         redirectUris = [
           "app.immich:///oauth-callback"
           "https://${custom.mkServiceDomain config "immich"}/auth/login"
           "https://${custom.mkServiceDomain config "immich"}/user-settings"
         ];
+        makeSecrets = cfg.enable;
       };
     })
     (mkIf cfg.enable {
@@ -76,7 +75,6 @@ in
           caddy.hosts = {
             immich.target = ":${toString config.services.immich.port}";
           };
-          authelia.clients.immich.makeSecrets = true;
           postgresql.users = [ "immich" ];
           redis.servers = [ "immich" ];
           restic = {

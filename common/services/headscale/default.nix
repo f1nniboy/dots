@@ -38,12 +38,10 @@ in
     (mkIf cfg.forOidc {
       custom.services.authelia.clients.headscale = {
         name = "Headscale";
-        id = "headscale";
-        requirePkce = true;
         redirectUris = [
           "https://${serviceDomain}/oidc/callback"
         ];
-        makeSecrets = true;
+        makeSecrets = cfg.enable;
       };
     })
     (mkIf cfg.enable {
@@ -92,7 +90,6 @@ in
           caddy.hosts = {
             headscale.target = ":${toString cfg.port}";
           };
-          authelia.clients.headscale.makeSecrets = true;
           postgresql.users = [ "headscale" ];
         };
         system = {

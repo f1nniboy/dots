@@ -28,11 +28,10 @@ in
     (mkIf cfg.forOidc {
       custom.services.authelia.clients.open-webui = {
         name = "Open WebUI";
-        id = "open-webui";
         redirectUris = [
           "https://${serviceDomain}/oauth/oidc/callback"
         ];
-        requirePkce = true;
+        makeSecrets = cfg.enable;
       };
     })
     (mkIf cfg.enable {
@@ -109,7 +108,6 @@ in
           caddy.hosts = {
             open-webui.target = ":${toString cfg.port}";
           };
-          authelia.clients.open-webui.makeSecrets = true;
           #postgresql.users = [ "open-webui" ];
         };
       };
