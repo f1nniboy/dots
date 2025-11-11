@@ -28,14 +28,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    declarative-jellyfin = {
-      url = "github:Sveske-Juice/declarative-jellyfin";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        systems.follows = "systems";
-      };
-    };
-
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -71,6 +63,7 @@
     };
 
     blog = {
+      # TODO: change to github source
       url = "path:/home/me/Projects/blog";
       inputs = {
         nixpkgs.follows = "nixpkgs";
