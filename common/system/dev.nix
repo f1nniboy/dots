@@ -18,8 +18,6 @@ in
       nixfmt-rfc-style # formatter
       nixd # language server
       statix # linter
-
-      just
     ];
   };
 }

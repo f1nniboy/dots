@@ -24,14 +24,14 @@ in
     environment = {
       defaultPackages = mkForce [ ];
       systemPackages = with pkgs; [
-        efibootmgr
-        just
+        ripgrep
         fd
 
         ffmpeg
         yt-dlp
 
         inputs.colmena.packages.${system}.colmena
+        just
       ];
     };
   };

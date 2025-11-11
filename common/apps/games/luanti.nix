@@ -14,9 +14,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [
-      pkgs.luanti
-    ];
+    environment.systemPackages = [ pkgs.luanti ];
 
     custom.system.persistence.userConfig = {
       directories = [ ".minetest" ];

@@ -14,9 +14,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [
-      pkgs.moonlight-qt
-    ];
+    environment.systemPackages = [ pkgs.moonlight-qt ];
 
     custom.system.persistence.userConfig = {
       directories = [ ".config/Moonlight Game Streaming Project" ];

@@ -14,9 +14,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [
-      pkgs.superTuxKart
-    ];
+    environment.systemPackages = [ pkgs.superTuxKart ];
 
     custom.system.persistence.userConfig = {
       directories = [

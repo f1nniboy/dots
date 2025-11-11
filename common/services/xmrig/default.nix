@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   vars,
   ...
 }:
@@ -29,8 +28,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.xmrig ];
-
     services.xmrig = {
       enable = true;
       settings = {

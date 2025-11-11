@@ -20,9 +20,8 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-      tailscale
-      jq
+    environment.systemPackages = [
+      pkgs.tailscale
     ];
 
     services = {

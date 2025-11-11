@@ -39,14 +39,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.p2pool ];
-
     users = {
       users.p2pool = {
         isSystemUser = true;
         group = "p2pool";
-        home = cfg.dataDir;
-        createHome = true;
       };
       groups.p2pool = { };
     };
@@ -64,15 +60,13 @@ in
       };
     };
 
-    networking.firewall = {
-      allowedTCPPorts = [
-        cfg.ports.stratum
-        cfg.ports.p2p
-      ];
-      allowedUDPPorts = [
-        cfg.ports.stratum
-        cfg.ports.p2p
-      ];
-    };
+    networking.firewall =
+      let
+        ports = builtins.attrValues cfg.ports;
+      in
+      {
+        allowedTCPPorts = ports;
+        allowedUDPPorts = ports;
+      };
   };
 }

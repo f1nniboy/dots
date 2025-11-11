@@ -14,9 +14,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [
-      pkgs.easyeffects
-    ];
+    environment.systemPackages = [ pkgs.easyeffects ];
 
     custom.system.persistence.userConfig = {
       directories = [ ".config/easyeffects" ];

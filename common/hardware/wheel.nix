@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 with lib;
@@ -15,7 +14,5 @@ in
 
   config = mkIf cfg.enable {
     hardware.usb-modeswitch.enable = true;
-    services.udev.packages = [ pkgs.oversteer ];
-    environment.systemPackages = [ pkgs.logiops ];
   };
 }

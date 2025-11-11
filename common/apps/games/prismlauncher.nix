@@ -14,9 +14,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [
-      pkgs.prismlauncher
-    ];
+    environment.systemPackages = [ pkgs.prismlauncher ];
 
     custom.system.persistence.userConfig = {
       directories = [ ".local/share/PrismLauncher" ];

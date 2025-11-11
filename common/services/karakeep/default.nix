@@ -25,11 +25,12 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-      yt-dlp # video downloading
-    ];
-
     systemd.services = {
+      karakeep = {
+        path = [
+          pkgs.yt-dlp # video downloading
+        ];
+      };
       karakeep-browser = {
         serviceConfig = {
           DynamicUser = mkForce false;

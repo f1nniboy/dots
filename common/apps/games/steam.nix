@@ -18,9 +18,7 @@ in
       { assertion = config.custom.system.flatpak.enable; }
     ];
 
-    environment.systemPackages = [
-      pkgs.steam-devices-udev-rules
-    ];
+    environment.systemPackages = [ pkgs.steam-devices-udev-rules ];
 
     services.flatpak.packages = [
       "flathub:app/com.valvesoftware.Steam//stable"

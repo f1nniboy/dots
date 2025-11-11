@@ -14,9 +14,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [
-      pkgs.superTux
-    ];
+    environment.systemPackages = [ pkgs.superTux ];
 
     custom.system.persistence.userConfig = {
       directories = [ ".local/share/supertux2" ];
