@@ -14,10 +14,12 @@
       luanti.enable = true;
       prismlauncher.enable = true;
       supertux.enable = true;
+      supertuxkart.enable = true;
       moonlight.enable = true;
     };
 
     services = {
+      openssh.enable = true;
       mullvad.enable = true;
 
       syncthing = {

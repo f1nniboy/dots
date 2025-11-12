@@ -1,5 +1,5 @@
-_:
+{ vars, ... }:
 {
   allowLocalDeployment = true;
-  targetHost = null;
+  targetHost = vars.net.hosts.laptop;
 }

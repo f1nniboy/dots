@@ -3,6 +3,20 @@ with lib;
 let
   cfg = config.custom.services.syncthing;
   homeDir = config.custom.system.home.dir;
+
+  mkFolder =
+    _: folder:
+    folder
+    // {
+      autoAcceptFolders = true;
+      versioning = {
+        type = "simple";
+        params = {
+          keep = "10";
+          cleanoutDays = "0";
+        };
+      };
+    };
 in
 {
   options.custom.services.syncthing = {
@@ -47,7 +61,11 @@ in
       overrideDevices = true;
       overrideFolders = true;
       settings = {
-        inherit (cfg) devices folders;
+        options = {
+          urAccepted = -1;
+        };
+        inherit (cfg) devices;
+        folders = mapAttrs mkFolder cfg.folders;
       };
     };
 
