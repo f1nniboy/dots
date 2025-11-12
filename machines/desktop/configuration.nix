@@ -68,6 +68,10 @@ in
             id = "wallets";
             devices = [ "laptop" ];
           };
+          "${homeDir}/Documents/Notes" = {
+            id = "notes";
+            devices = [ "laptop" ];
+          };
         };
       };
     };

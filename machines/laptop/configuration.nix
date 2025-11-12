@@ -35,6 +35,10 @@
               id = "wallets";
               devices = [ "desktop" ];
             };
+            "${homeDir}/Documents/Notes" = {
+              id = "notes";
+              devices = [ "desktop" ];
+            };
           };
       };
     };

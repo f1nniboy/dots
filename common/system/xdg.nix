@@ -35,8 +35,6 @@ in
         "Pictures"
         "Videos"
         "Projects"
-
-        "source" # temp
       ];
       files = [
         ".bash_history"
