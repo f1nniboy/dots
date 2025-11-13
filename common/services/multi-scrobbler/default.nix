@@ -7,6 +7,12 @@
 with lib;
 let
   cfg = config.custom.services.multi-scrobbler;
+
+  configContent = builtins.toJSON (
+    import ./config.nix {
+      inherit lib config;
+    }
+  );
 in
 {
   options.custom.services.multi-scrobbler = {
@@ -54,9 +60,7 @@ in
     sops = {
       templates.multi-scrobbler-config = {
         path = "/var/lib/multi-scrobbler/config.json";
-        content = import ./config.nix {
-          inherit lib config;
-        };
+        content = configContent;
         owner = "multi-scrobbler";
         mode = "0600";
       };

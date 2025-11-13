@@ -1,13 +1,19 @@
 {
   config,
   lib,
-  pkgs,
+  vars,
   ...
 }:
 with lib;
 let
   cfg = config.custom.services.headscale;
   serviceDomain = custom.mkServiceDomain config "headscale";
+
+  policyContent = builtins.toJSON (
+    import ./acl-config.nix {
+      inherit config lib vars;
+    }
+  );
 in
 {
   options.custom.services.headscale = {
@@ -58,12 +64,7 @@ in
             database = {
               type = "postgres";
               postgres = {
-                password_file = pkgs.writeTextFile {
-                  name = "headscale-password";
-                  text = "headscale";
-                };
                 host = "/run/postgresql";
-                port = null;
                 name = "headscale";
                 user = "headscale";
               };
@@ -80,8 +81,18 @@ in
               client_secret_path = custom.mkSecretPath config "oidc/headscale/secret" "headscale";
               pkce.enabled = true;
             };
+            policy = {
+              path = config.sops.templates.headscale-acl-config.path;
+            };
             server_url = "https://${serviceDomain}";
           };
+        };
+      };
+
+      sops = {
+        templates.headscale-acl-config = {
+          content = policyContent;
+          owner = "headscale";
         };
       };
 
@@ -93,6 +104,18 @@ in
           postgresql.users = [ "headscale" ];
         };
         system = {
+          sops.secrets =
+            let
+              mkUserSecret = key: {
+                path = "tailscale/acl/users/${key}";
+                owner = "headscale";
+                source = "common";
+              };
+            in
+            [
+              (mkUserSecret "a")
+              (mkUserSecret "b")
+            ];
           persistence.config = {
             directories = [ "/var/lib/headscale" ];
           };

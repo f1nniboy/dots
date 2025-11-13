@@ -24,17 +24,24 @@ in
     nix-mineral = {
       enable = true;
       overrides = {
+        # net.ipv4.conf.all.forwarding=0 breaks the 'docker0' network bridge
+        compatibility.allow-ip-forward = true;
+
         desktop.tmp-exec = true;
       };
     };
 
     # nix-mineral filesystem settings are incompatible with impermanence
-    fileSystems = {
-      "/home" = mkForce { enable = false; };
-      "/root" = mkForce { enable = false; };
-      "/var" = mkForce { enable = false; };
-      "/srv" = mkForce { enable = false; };
-      "/etc" = mkForce { enable = false; };
-    };
+    fileSystems =
+      let
+        d = mkForce { enable = false; };
+      in
+      {
+        "/home" = d;
+        "/root" = d;
+        "/var" = d;
+        "/srv" = d;
+        "/etc" = d;
+      };
   };
 }

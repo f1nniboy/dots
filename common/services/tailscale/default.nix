@@ -8,6 +8,7 @@
 with lib;
 let
   cfg = config.custom.services.tailscale;
+  tagString = builtins.concatStringsSep "," (map (tag: "tag:${tag}") cfg.tags);
 in
 {
   options.custom.services.tailscale = {
@@ -16,6 +17,11 @@ in
     loginServer = mkOption {
       type = types.str;
       default = "https://net.${vars.net.domain}";
+    };
+
+    tags = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
     };
   };
 
@@ -30,15 +36,13 @@ in
 
     systemd.services.tailscale-autoconnect =
       let
+        # make sure tailscale is running before trying to connect
         deps = [
           "network-pre.target"
           "tailscale.service"
         ];
       in
       {
-        description = "Automatic connection to Tailscale";
-
-        # make sure tailscale is running before trying to connect to tailscale
         wantedBy = [ "multi-user.target" ];
         after = deps;
         wants = deps;
@@ -47,18 +51,15 @@ in
 
         script = with pkgs; ''
           # wait for tailscaled to settle
-          sleep 2
-
-          # check if we are already authenticated to tailscale
-          status="$(${tailscale}/bin/tailscale status -json | ${jq}/bin/jq -r .BackendState)"
-          [ "$status" != "NeedsLogin" ] && exit 0
+          sleep 3
 
           # otherwise authenticate with tailscale
-          # timeout after 10 seconds to avoid hanging the boot process
-          ${coreutils}/bin/timeout 10 ${tailscale}/bin/tailscale up \
+          # timeout after a while to avoid hanging the boot process
+          ${coreutils}/bin/timeout 15 ${tailscale}/bin/tailscale up \
             --authkey=file:${custom.mkSecretPath config "tailscale/auth-key" "root"} \
-            --login-server=${cfg.loginServer} \
-            --hostname=${config.networking.hostName} \
+            --login-server="${cfg.loginServer}" \
+            --hostname="${config.networking.hostName}" \
+            --advertise-tags="${tagString}" \
             --operator=${config.custom.system.user.name}
         '';
       };

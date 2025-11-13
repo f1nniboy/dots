@@ -74,15 +74,16 @@ in
     };
 
     networking.firewall = {
-      allowedTCPPorts = [
-        7070 # web interface port
-        4447 # socks proxy
-        4444 # http proxy
-        cfg.port
-      ];
-      allowedUDPPorts = [
-        cfg.port
-      ];
+      allowedTCPPorts = [ cfg.port ];
+      allowedUDPPorts = [ cfg.port ];
+
+      interfaces."${config.services.tailscale.interfaceName}" = {
+        allowedTCPPorts = [
+          7070 # web interface port
+          4447 # socks proxy
+          4444 # http proxy
+        ];
+      };
     };
   };
 }

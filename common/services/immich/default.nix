@@ -3,6 +3,12 @@ with lib;
 let
   cfg = config.custom.services.immich;
   mediaDir = "/fun/media/gallery";
+
+  configContent = builtins.toJSON (
+    import ./config.nix {
+      inherit lib config;
+    }
+  );
 in
 {
   options.custom.services.immich = {
@@ -63,9 +69,7 @@ in
 
       sops = {
         templates.immich-config = {
-          content = import ./config.nix {
-            inherit lib config;
-          };
+          content = configContent;
           owner = "immich";
         };
       };

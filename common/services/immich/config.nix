@@ -1,6 +1,6 @@
 { lib, config, ... }:
 with lib;
-builtins.toJSON {
+{
   newVersionCheck = {
     enabled = false;
   };

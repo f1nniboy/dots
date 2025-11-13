@@ -7,7 +7,7 @@ let
     type: client: path:
     custom.mkSecretPlaceholder config "multi-scrobbler/${type}/${client}/${path}" "multi-scrobbler";
 in
-builtins.toJSON {
+{
   sources = [
     {
       name = "Spotify";

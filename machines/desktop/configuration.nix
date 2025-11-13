@@ -12,7 +12,6 @@ in
     apps = {
       # games
       sober.enable = true;
-      steam.enable = true;
       luanti.enable = true;
       prismlauncher.enable = true;
       supertux.enable = true;
@@ -54,8 +53,8 @@ in
       };
 
       openssh.enable = true;
-      #docker.enable = true;
-      #gow.enable = true;
+      docker.enable = true;
+      gow.enable = true;
 
       syncthing = {
         devices = {

@@ -10,7 +10,10 @@
 
     services = {
       headscale.enable = true;
-      tailscale.enable = true;
+      tailscale = {
+        enable = true;
+        tags = [ "server" ];
+      };
 
       openssh.enable = true;
       postgresql.enable = true;

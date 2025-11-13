@@ -56,7 +56,7 @@ in
         )
       );
       default = { };
-      description = "services to reverse proxy or serve statically";
+      description = "hosts to reverse proxy or serve statically";
     };
   };
 

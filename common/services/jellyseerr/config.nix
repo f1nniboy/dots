@@ -3,7 +3,7 @@ with lib;
 let
   mkSecret = path: custom.mkSecretPlaceholder config "jellyseerr/${path}" "jellyseerr";
 in
-builtins.toJSON {
+{
   clientId = mkSecret "client-id";
   vapidPrivate = mkSecret "vapid/private";
   vapidPublic = mkSecret "vapid/public";

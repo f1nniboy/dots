@@ -31,6 +31,10 @@ in
     virtualisation.arion.projects."wolf".settings = {
       project.name = "wolf";
 
+      networks = {
+        gow.name = "gow";
+      };
+
       services = {
         backend.service = {
           container_name = "wolf-backend";
@@ -65,9 +69,9 @@ in
           ports = [
             "${toString ports.manager}:3000"
           ];
+          networks = [ "gow" ];
           environment = {
             NODE_ENV = "production";
-            NEXTAUTH_URL = "http://localhost:${toString ports.manager}";
           };
           volumes = [
             "/var/run/wolf:/var/run/wolf"
@@ -78,9 +82,9 @@ in
       };
     };
 
-    networking.firewall =
+    networking.firewall.interfaces."${config.services.tailscale.interfaceName}" =
       let
-        p = builtins.attrValues (builtins.removeAttrs ports [ "manager" ]);
+        p = builtins.attrValues ports;
       in
       {
         allowedTCPPorts = p;
@@ -91,13 +95,34 @@ in
       "d /fun/games 0700 ${config.custom.system.user.name} users - -"
     ];
 
-    custom.system.persistence.config = {
-      directories = [
-        {
-          directory = "/var/lib/wolf";
-          mode = "0700";
-        }
-      ];
+    services.udev = {
+      extraRules = ''
+        # Allows Wolf to acces /dev/uinput
+        KERNEL=="uinput", SUBSYSTEM=="misc", MODE="0660", GROUP="input", OPTIONS+="static_node=uinput"
+
+        # Allows Wolf to access /dev/uhid
+        KERNEL=="uhid", TAG+="uaccess"
+
+        # Move virtual keyboard and mouse into a different seat
+        SUBSYSTEMS=="input", ATTRS{id/vendor}=="ab00", MODE="0660", ENV{ID_SEAT}="seat9"
+
+        # Joypads
+        SUBSYSTEMS=="input", ATTRS{name}=="Wolf X-Box One (virtual) pad", MODE="0660", ENV{ID_SEAT}="seat9"
+        SUBSYSTEMS=="input", ATTRS{name}=="Wolf PS5 (virtual) pad", MODE="0660", ENV{ID_SEAT}="seat9"
+        SUBSYSTEMS=="input", ATTRS{name}=="Wolf gamepad (virtual) motion sensors", MODE="0660", ENV{ID_SEAT}="seat9"
+        SUBSYSTEMS=="input", ATTRS{name}=="Wolf Nintendo (virtual) pad", MODE="0660", ENV{ID_SEAT}="seat9"
+      '';
+    };
+
+    custom.system = {
+      persistence.config = {
+        directories = [
+          {
+            directory = "/var/lib/wolf";
+            mode = "0700";
+          }
+        ];
+      };
     };
   };
 }

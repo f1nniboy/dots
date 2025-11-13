@@ -2,6 +2,12 @@
 with lib;
 let
   cfg = config.custom.services.jellyseerr;
+
+  configContent = builtins.toJSON (
+    import ./config.nix {
+      inherit lib config;
+    }
+  );
 in
 {
   options.custom.services.jellyseerr = {
@@ -61,9 +67,7 @@ in
 
     sops = {
       templates.jellyseerr-config = {
-        content = import ./config.nix {
-          inherit lib config;
-        };
+        content = configContent;
       };
     };
 

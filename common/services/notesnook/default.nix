@@ -20,7 +20,7 @@ let
   env = {
     common = {
       INSTANCE_NAME = "notesnook";
-      DISABLE_SIGNUPS = "true";
+      DISABLE_SIGNUPS = "false";
       SELF_HOSTED = "1";
 
       NOTESNOOK_CORS_ORIGINS = "https://app.notesnook.com";
