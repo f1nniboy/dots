@@ -51,13 +51,7 @@ in
     }
   ];
 
-  hosts =
-    let
-      inherit (vars.net) hosts;
-    in
-    {
-      desktop = hosts.desktop;
-      lab = hosts.lab;
-      vps = hosts.vps;
-    };
+  hosts = {
+    inherit (vars.net.hosts) lab vps;
+  };
 }
