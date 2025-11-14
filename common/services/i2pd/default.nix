@@ -78,11 +78,14 @@ in
       allowedUDPPorts = [ cfg.port ];
 
       interfaces."${config.services.tailscale.interfaceName}" = {
-        allowedTCPPorts = [
-          7070 # web interface port
-          4447 # socks proxy
-          4444 # http proxy
-        ];
+        allowedTCPPorts =
+          let
+            inherit (config.services.i2pd) proto;
+          in
+          [
+            proto.socksProxy.port
+            proto.httpProxy.port
+          ];
       };
     };
   };
