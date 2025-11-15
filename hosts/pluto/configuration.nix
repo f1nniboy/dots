@@ -24,7 +24,7 @@
 
       syncthing = {
         devices = {
-          desktop = {
+          diana = {
             id = "C6VRY6R-ZTMNATF-IQRP4XP-3DMFGM7-BVNDS5C-OINP5IC-RIQNQT5-R4T4ZQ4";
           };
         };
@@ -35,11 +35,11 @@
           {
             "${homeDir}/Documents/Wallets" = {
               id = "wallets";
-              devices = [ "desktop" ];
+              devices = [ "diana" ];
             };
             "${homeDir}/Documents/Notes" = {
               id = "notes";
-              devices = [ "desktop" ];
+              devices = [ "diana" ];
             };
           };
       };

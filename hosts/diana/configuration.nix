@@ -58,18 +58,18 @@ in
 
       syncthing = {
         devices = {
-          laptop = {
+          pluto = {
             id = "J72PQBN-T4JUXSX-QPAGJ6K-SCFU4GS-CKLHRNJ-H3KW5YX-LRTT43Y-KGX2DQU";
           };
         };
         folders = {
           "${homeDir}/Documents/Wallets" = {
             id = "wallets";
-            devices = [ "laptop" ];
+            devices = [ "pluto" ];
           };
           "${homeDir}/Documents/Notes" = {
             id = "notes";
-            devices = [ "laptop" ];
+            devices = [ "pluto" ];
           };
         };
       };

@@ -15,6 +15,11 @@ with lib;
   passwordLogin = {
     enabled = false;
   };
+  backup = {
+    database = {
+      enabled = false;
+    };
+  };
   machineLearning = {
     clip = {
       enabled = true;

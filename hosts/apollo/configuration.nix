@@ -91,8 +91,8 @@
       monero = {
         enable = true;
         whitelist = with vars.net.hosts; [
-          desktop
-          laptop
+          diana
+          pluto
         ];
       };
       p2pool = {

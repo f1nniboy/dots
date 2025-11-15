@@ -26,7 +26,7 @@ repair:
     sudo nix-store --verify --check-contents --repair
 
 setup-disks machine:
-    sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko/latest -- --mode destroy,format,mount ./machines/{{ machine }}/disk.nix
+    sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko/latest -- --mode destroy,format,mount ./hosts/{{ machine }}/disk.nix
 
 build-iso:
     nix build .#nixosConfigurations.iso.config.system.build.isoImage

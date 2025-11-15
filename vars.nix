@@ -15,15 +15,15 @@ rec {
   net = rec {
     domain = "f1nn.space";
     hosts = {
-      desktop = "100.64.0.6";
-      laptop = "100.64.0.16";
+      diana = "100.64.0.6"; # desktop
+      pluto = "100.64.0.16"; # laptop
 
-      lab = "100.64.0.9";
-      vps = "100.64.0.8";
+      jupiter = "100.64.0.8"; # vps
+      apollo = "100.64.0.9"; # lab
     };
     services = {
-      lldap = hosts.vps;
-      p2pool = hosts.lab;
+      lldap = hosts.jupiter;
+      p2pool = hosts.apollo;
     };
   };
 

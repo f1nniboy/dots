@@ -1,29 +1,31 @@
 keys: &keys
-  - &desktop age1d7l44trdac37hfx7yrtw4zf7re3k39tzjeav70z9t9xv9ur5wsmshge2pw
-  - &laptop age1yqh025casyzy6sw68m08xreftvswjf9eqwnvcaytga6jvehdhejqr6mf04
-  - &lab age19f8l20tkls4v0uh3wuucj44pxpsj9l85vj4q2rx03rnag0cpy39swmtyhm
-  - &vps age17zujvv98knpzwa8aqqe2cw7v5v08t34qkd5vruyzjczwzat8usnq6la3ry
+  - &diana age1d7l44trdac37hfx7yrtw4zf7re3k39tzjeav70z9t9xv9ur5wsmshge2pw
+  - &pluto age1yqh025casyzy6sw68m08xreftvswjf9eqwnvcaytga6jvehdhejqr6mf04
+  - &apollo age19f8l20tkls4v0uh3wuucj44pxpsj9l85vj4q2rx03rnag0cpy39swmtyhm
+  - &jupiter age17zujvv98knpzwa8aqqe2cw7v5v08t34qkd5vruyzjczwzat8usnq6la3ry
 creation_rules:
   - path_regex: secrets/common.yaml
     key_groups:
       - age: *keys
 
   # hosts
-  - path_regex: secrets/hosts/lab.yaml
+  - path_regex: secrets/hosts/apollo.yaml
     key_groups:
       - age:
-          - *desktop
-          - *lab
-  - path_regex: secrets/hosts/vps.yaml
+          - *apollo
+          - *diana
+  - path_regex: secrets/hosts/jupiter.yaml
     key_groups:
       - age:
-          - *desktop
-          - *vps
-  - path_regex: secrets/hosts/desktop.yaml
+          - *jupiter
+          - *diana
+  - path_regex: secrets/hosts/diana.yaml
     key_groups:
       - age:
-          - *desktop
-  - path_regex: secrets/hosts/laptop.yaml
+          - *diana
+          - *pluto
+  - path_regex: secrets/hosts/pluto.yaml
     key_groups:
       - age:
-          - *laptop
+          - *pluto
+          #- *diana TODO: change on laptop

@@ -25,6 +25,11 @@ in
   };
 
   config = mkMerge [
+    # TODO: fix oauth
+    #
+    # The request is missing a required parameter, includes an invalid parameter value,
+    # includes a parameter more than once, or is otherwise malformed. Clients must
+    # include a 'code_challenge' when performing the authorize code flow, but it is missing.
     (mkIf cfg.forOidc {
       custom.services.authelia.clients.open-webui = {
         name = "Open WebUI";

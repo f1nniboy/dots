@@ -40,18 +40,18 @@ in
     {
       action = "accept";
       src = [ "group:family" ];
-      dst = [ "lab:80,443" ];
+      dst = [ "apollo:80,443" ];
     }
 
     # family can access all Wolf streaming ports
     {
       action = "accept";
       src = [ "group:family" ];
-      dst = [ "desktop:47984,47989,47999,48010,48100,48200" ];
+      dst = [ "diana:47984,47989,47999,48010,48100,48200" ];
     }
   ];
 
   hosts = {
-    inherit (vars.net.hosts) lab vps;
+    inherit (vars.net.hosts) apollo jupiter diana;
   };
 }

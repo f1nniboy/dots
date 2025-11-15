@@ -82,7 +82,7 @@ in
               pkce.enabled = true;
             };
             policy = {
-              path = config.sops.templates.headscale-acl-config.path;
+              inherit (config.sops.templates.headscale-acl-config) path;
             };
             server_url = "https://${serviceDomain}";
           };

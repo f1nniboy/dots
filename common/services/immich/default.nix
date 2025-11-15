@@ -9,6 +9,8 @@ let
       inherit lib config;
     }
   );
+
+  serviceDomain = custom.mkServiceDomain config "immich";
 in
 {
   options.custom.services.immich = {
@@ -31,8 +33,8 @@ in
         name = "Immich";
         redirectUris = [
           "app.immich:///oauth-callback"
-          "https://${custom.mkServiceDomain config "immich"}/auth/login"
-          "https://${custom.mkServiceDomain config "immich"}/user-settings"
+          "https://${serviceDomain}/auth/login"
+          "https://${serviceDomain}/user-settings"
         ];
         makeSecrets = cfg.enable;
       };
@@ -71,6 +73,10 @@ in
         templates.immich-config = {
           content = configContent;
           owner = "immich";
+          restartUnits = [
+            "immich-server.service"
+            "immich-machine-learning.service"
+          ];
         };
       };
 

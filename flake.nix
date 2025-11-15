@@ -93,7 +93,7 @@
           hostname,
         }:
         let
-          path = ./machines/${hostname};
+          path = ./hosts/${hostname};
         in
         {
           deployment = lib.mkMerge [
@@ -140,12 +140,12 @@
         };
 
         # personal
-        desktop = mkMachine { hostname = "desktop"; };
-        laptop = mkMachine { hostname = "laptop"; };
+        diana = mkMachine { hostname = "diana"; }; # desktop
+        pluto = mkMachine { hostname = "pluto"; }; # laptop
 
         # servers
-        vps = mkMachine { hostname = "vps"; };
-        lab = mkMachine { hostname = "lab"; };
+        jupiter = mkMachine { hostname = "jupiter"; }; # vps
+        apollo = mkMachine { hostname = "apollo"; }; # lab
       };
 
       nixosConfigurations = {
@@ -162,7 +162,7 @@
           };
           modules = [
             (nixpkgs + "/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix")
-            ./machines/iso/configuration.nix
+            ./hosts/iso/configuration.nix
           ];
         };
       };

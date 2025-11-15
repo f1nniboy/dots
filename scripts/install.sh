@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 set -euo pipefail
 
 declare -r RED='\033[0;31m'
@@ -66,7 +65,7 @@ main() {
 
     echo -e "\n${BOLD}next steps:${NC}"
     echo -e "${BOLD}-${NC} add the machine's public host key to ${BOLD}.sops.yaml${NC}"
-    echo -e "${BOLD}-${NC} install with: ${BOLD}sudo nixos-install --no-root-passwd --root /mnt --flake ${PWD}#${device_name}${NC}"
+    echo -e "${BOLD}-${NC} follow next step of instructions${NC}"
 }
 
 main "$@"
