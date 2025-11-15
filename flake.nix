@@ -78,6 +78,7 @@
       nixpkgs,
       colmena,
       nur,
+      systems,
       ...
     }@inputs:
     let
@@ -86,7 +87,12 @@
       lib = import ./common/lib { inherit inputs; };
       vars = import ./vars.nix;
 
+      eachSystem = nixpkgs.lib.genAttrs (import systems);
       system = "x86_64-linux";
+
+      pkgs = import nixpkgs {
+        inherit system;
+      };
 
       mkMachine =
         {
@@ -124,9 +130,7 @@
       colmenaHive = colmena.lib.makeHive self.outputs.colmena;
       colmena = {
         meta = {
-          nixpkgs = import nixpkgs {
-            inherit system;
-          };
+          nixpkgs = pkgs;
 
           specialArgs = {
             inherit
@@ -166,5 +170,9 @@
           ];
         };
       };
+
+      devShells = eachSystem (system: {
+        default = pkgs.callPackage ./shell.nix { inherit inputs pkgs; };
+      });
     };
 }

@@ -19,10 +19,10 @@
   ```
 
 ## 4. Copy SOPS public key
-- Copy generated SOPS public key for the device to `.sops.yaml` (on a host that already has NixOS installed)
+- Copy generated SOPS public key for the host to `.sops.yaml`
+  - on a host that already has NixOS installed
 - Run `just sops-update`
-- Push to repo
-- Pull new changes from repo on new host
+- Push to repo & pull new changes on new host
 
 ## 5. Generate hardware config
 - Generate hardware config using `nixos-generate-config --dir <...>`
@@ -39,7 +39,7 @@
 
 - Copy the closure to new host
   ```console
-  $ nix copy PATH --to ssh://me@HOS
+  $ nix copy PATH --to ssh://me@HOST
   ```
 
 - Install built closure on the new host
