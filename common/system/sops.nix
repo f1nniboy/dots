@@ -2,7 +2,6 @@
   config,
   inputs,
   lib,
-  pkgs,
   ...
 }:
 with lib;
@@ -47,8 +46,6 @@ in
   ];
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.sops ];
-
     sops = {
       defaultSopsFile = ./../../secrets/hosts/${config.networking.hostName}.yaml;
       age.sshKeyPaths = [ "/nix/secret/initrd/ssh_host_ed25519_key" ];
