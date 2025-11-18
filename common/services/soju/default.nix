@@ -14,11 +14,6 @@ in
   options.custom.services.soju = {
     enable = custom.enableOption;
 
-    subdomain = mkOption {
-      type = types.str;
-      default = "irc";
-    };
-
     ports = mkOption {
       type = types.submodule {
         options = {

@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  vars,
-  ...
-}:
+{ config, lib, ... }:
 with lib;
 let
   cfg = config.custom.presets.iso;
@@ -31,7 +26,7 @@ in
     users.users.nixos = {
       isNormalUser = true;
       extraGroups = [ "wheel" ];
-      openssh.authorizedKeys.keys = vars.ssh.authorizedKeys;
+      openssh.authorizedKeys.keys = config.custom.cfg.ssh.authorizedKeys;
     };
 
     security.sudo.wheelNeedsPassword = false;

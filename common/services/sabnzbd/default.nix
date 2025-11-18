@@ -15,11 +15,6 @@ in
   options.custom.services.sabnzbd = {
     enable = custom.enableOption;
 
-    subdomain = mkOption {
-      type = types.str;
-      default = "dl.media";
-    };
-
     port = mkOption {
       type = types.port;
       default = 8080;

@@ -12,11 +12,6 @@ in
   options.custom.services.jellyfin = {
     enable = custom.enableOption;
 
-    subdomain = mkOption {
-      type = types.str;
-      default = "media";
-    };
-
     id = mkOption {
       type = types.str;
     };

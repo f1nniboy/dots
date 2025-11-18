@@ -6,7 +6,7 @@
 }:
 with lib;
 let
-  cfg = config.custom.services.gow;
+  cfg = config.custom.services.wolf;
   ports = {
     https = 47984;
     http = 47989;
@@ -23,7 +23,7 @@ let
   };
 in
 {
-  options.custom.services.gow = {
+  options.custom.services.wolf = {
     enable = custom.enableOption;
   };
 
@@ -32,7 +32,7 @@ in
       project.name = "wolf";
 
       networks = {
-        gow.name = "gow";
+        wolf.name = "wolf";
       };
 
       services = {
@@ -69,7 +69,7 @@ in
           ports = [
             "${toString ports.manager}:3000"
           ];
-          networks = [ "gow" ];
+          networks = [ "wolf" ];
           environment = {
             NODE_ENV = "production";
           };
@@ -114,14 +114,21 @@ in
       '';
     };
 
-    custom.system = {
-      persistence.config = {
-        directories = [
-          {
-            directory = "/var/lib/wolf";
-            mode = "0700";
-          }
-        ];
+    custom = {
+      services = {
+        caddy.hosts = {
+          wolf.target = ":${toString ports.manager}";
+        };
+      };
+      system = {
+        persistence.config = {
+          directories = [
+            {
+              directory = "/var/lib/wolf";
+              mode = "0700";
+            }
+          ];
+        };
       };
     };
   };

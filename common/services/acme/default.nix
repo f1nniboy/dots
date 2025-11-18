@@ -25,34 +25,14 @@ in
     security.acme = {
       acceptTerms = true;
       defaults = {
-        dnsProvider = "porkbun";
-        environmentFile = config.sops.templates.acme-porkbun-secrets.path;
+        server = "https://${custom.mkServiceDomain config "step-ca"}/acme/acme/directory";
+        webroot = "/var/lib/acme/empty"; # doesn't matter, step-ca doesn't do any checks
         inherit (config.custom.system.user) email;
       };
       certs = cfg.domains;
     };
 
-    sops = {
-      templates.acme-porkbun-secrets = {
-        content = ''
-          PORKBUN_API_KEY=${custom.mkSecretPlaceholder config "porkbun/api-key" "acme"}
-          PORKBUN_API_SECRET_KEY=${custom.mkSecretPlaceholder config "porkbun/api-secret-key" "acme"}
-        '';
-        owner = "acme";
-      };
-    };
-
     custom.system = {
-      sops.secrets = [
-        {
-          path = "porkbun/api-key";
-          owner = "acme";
-        }
-        {
-          path = "porkbun/api-secret-key";
-          owner = "acme";
-        }
-      ];
       persistence.config = {
         directories = [
           {

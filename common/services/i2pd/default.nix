@@ -8,11 +8,6 @@ in
   options.custom.services.i2pd = {
     enable = custom.enableOption;
 
-    subdomain = mkOption {
-      type = types.str;
-      default = "i2p";
-    };
-
     port = mkOption {
       type = types.port;
       default = 14382;

@@ -6,10 +6,10 @@
     ./blog
     ./caddy
     ./convoyeur
+    ./coredns
     ./docker
     ./fileflows
     ./forgejo
-    ./gow
     ./headscale
     ./i2pd
     ./immich
@@ -23,7 +23,6 @@
     ./multi-scrobbler
     ./muse
     ./notesnook
-    ./ollama
     ./openssh
     ./open-webui
     ./p2pool
@@ -38,9 +37,11 @@
     ./sabnzbd
     ./samba
     ./soju
+    ./step-ca
     ./syncthing
     ./tailscale
     ./vaultwarden
+    ./wolf
     ./xmrig
   ];
 }

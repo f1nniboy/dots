@@ -21,11 +21,11 @@
         reusePassphrases = true;
         devices = {
           "cryptroot" = {
-            device = "/dev/nvme1n1p2";
+            device = "/dev/disk/by-uuid/ba4aa3b9-5926-4161-846c-3c32c50aaec1";
             allowDiscards = true;
           };
           "fun" = {
-            device = "/dev/nvme0n1";
+            device = "/dev/disk/by-uuid/61a8995e-7d0b-47da-b529-af5884a64859";
           };
         };
       };
@@ -38,7 +38,7 @@
       fsType = "tmpfs";
       options = [
         "defaults"
-        "size=4G"
+        "size=2G"
         "mode=0755"
       ];
     };

@@ -7,25 +7,27 @@
 with lib;
 let
   cfg = config.custom.services.caddy;
-  mkLogFile =
-    service:
-    "/var/log/caddy/access/${if service.subdomain != null then service.subdomain else "root"}.log";
+  global = config.custom.cfg;
 in
 {
   options.custom.services.caddy = {
     enable = custom.enableOption;
-    domain = mkOption {
-      type = types.str;
-    };
     hosts = mkOption {
       type = types.attrsOf (
         types.submodule (
           { name, ... }:
           {
             options = {
-              subdomain = mkOption {
-                type = types.str;
-                default = config.custom.services.${name}.subdomain;
+              sub = mkOption {
+                type = types.nullOr types.str;
+                default = global.services."${name}".sub;
+              };
+              ca = mkOption {
+                type = types.enum [
+                  "public"
+                  "self"
+                ];
+                default = "self";
               };
               target = mkOption {
                 type = types.str;
@@ -42,14 +44,10 @@ in
               };
               type = mkOption {
                 type = types.enum [
-                  "http"
+                  "proxy"
                   "root"
                 ];
-                default = "http";
-              };
-              enableLogging = mkOption {
-                type = types.bool;
-                default = false;
+                default = "proxy";
               };
             };
           }
@@ -71,62 +69,72 @@ in
         hash = "sha256-j/GODingW5BhfjQRajinivX/9zpiLGgyxvAjX0+amRU=";
       };
 
-      globalConfig = ''
-        acme_dns porkbun {
-          api_key {env.PORKBUN_API_KEY}
-          api_secret_key {env.PORKBUN_API_SECRET_KEY}
-        }
-      '';
-
       # snippet that can be imported to enable authelia in front of a service
       # ref: https://www.authelia.com/integration/proxies/caddy/#subdomain
       extraConfig = ''
         (auth) {
-            forward_auth https://auth.f1nn.space {
-                header_up Host {upstream_hostport}
-                uri /api/authz/forward-auth
-                copy_headers Remote-User Remote-Groups Remote-Email Remote-Name
-            }
+          forward_auth https://${custom.mkServiceDomain config "authelia"} {
+            header_up Host {upstream_hostport}
+            uri /api/authz/forward-auth
+            copy_headers Remote-User Remote-Groups Remote-Email Remote-Name
+          }
         }
       '';
 
-      virtualHosts = mapAttrs' (_: service: {
-        name = if service.subdomain != "root" then "${service.subdomain}.${cfg.domain}" else cfg.domain;
+      virtualHosts = mapAttrs' (name: host: {
+        name = custom.mkServiceDomain config name;
         value = {
           logFormat = ''
-            ${
-              if service.enableLogging then
-                ''
-                  output file ${mkLogFile service}
-                ''
-              else
-                ''
-                  output discard
-                ''
-            }
+            output discard
           '';
-          extraConfig = ''
-            ${concatStringsSep "\n" (map (snippet: "import ${snippet}") service.import)}
+          extraConfig =
+            let
+              configs = [
+                # imports
+                (concatStringsSep "\n" (map (snippet: "import ${snippet}") host.import))
 
-            ${
-              if service.type == "root" then
-                ''
+                # service type "root"
+                (optional (host.type == "root") ''
+                  root * ${toString host.target}
                   header {
                     -Last-Modified
                   }
-                  root * ${toString service.target}
                   file_server {
                     etag_file_extensions .etag
                   }
-                ''
-              else
-                ''
-                  reverse_proxy ${toString service.target}
-                ''
-            }
+                '')
 
-            ${if service.extra != null then service.extra else ""}
-          '';
+                # service type "proxy"
+                (optional (host.type == "proxy") ''
+                  reverse_proxy ${toString host.target}
+                '')
+
+                # lets encrypt certs
+                (optional (host.ca == "public") ''
+                  tls {
+                    dns porkbun {
+                      api_key {env.PORKBUN_API_KEY}
+                      api_secret_key {env.PORKBUN_API_SECRET_KEY}
+                    }
+                  }
+                '')
+
+                # self-signed certs
+                (optional (host.ca == "self") ''
+                  tls {
+                    ca https://${custom.mkServiceDomain config "step-ca"}/acme/acme/directory
+                  }
+                '')
+
+                # additional config
+                host.extra
+              ];
+
+              # flatten the list of lists and filter out empty strings
+              flattened = lib.flatten configs;
+              nonEmpty = lib.filter (s: s != "" && s != null) flattened;
+            in
+            lib.concatStringsSep "\n\n" nonEmpty;
         };
       }) cfg.hosts;
     };
@@ -149,10 +157,12 @@ in
           {
             path = "porkbun/api-key";
             owner = "caddy";
+            source = "common";
           }
           {
             path = "porkbun/api-secret-key";
             owner = "caddy";
+            source = "common";
           }
         ];
         persistence.config = {

@@ -8,12 +8,7 @@ with lib;
 let
   cfg = config.custom.apps.vesktop;
 
-  mkPlugin =
-    attrs:
-    {
-      enabled = true;
-    }
-    // attrs;
+  mkPlugin = attrs: { enabled = true; } // attrs;
 in
 {
   options.custom.apps.vesktop = {

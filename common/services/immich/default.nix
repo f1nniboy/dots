@@ -16,19 +16,14 @@ in
   options.custom.services.immich = {
     enable = custom.enableOption;
 
-    forOidc = mkOption {
+    forAuth = mkOption {
       type = types.bool;
       default = cfg.enable;
-    };
-
-    subdomain = mkOption {
-      type = types.str;
-      default = "photo";
     };
   };
 
   config = mkMerge [
-    (mkIf cfg.forOidc {
+    (mkIf cfg.forAuth {
       custom.services.authelia.clients.immich = {
         name = "Immich";
         redirectUris = [

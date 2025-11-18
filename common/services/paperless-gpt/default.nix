@@ -12,11 +12,6 @@ in
   options.custom.services.paperless-gpt = {
     enable = custom.enableOption;
 
-    subdomain = mkOption {
-      type = types.str;
-      default = "ai.${config.custom.services.paperless.subdomain}";
-    };
-
     port = mkOption {
       type = types.port;
       default = 8088;

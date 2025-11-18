@@ -13,14 +13,9 @@ in
   options.custom.services.miniflux = {
     enable = custom.enableOption;
 
-    forOidc = mkOption {
+    forAuth = mkOption {
       type = types.bool;
       default = cfg.enable;
-    };
-
-    subdomain = mkOption {
-      type = types.str;
-      default = "news";
     };
 
     port = mkOption {
@@ -30,7 +25,7 @@ in
   };
 
   config = mkMerge [
-    (mkIf cfg.forOidc {
+    (mkIf cfg.forAuth {
       custom.services.authelia.clients.miniflux = {
         name = "Miniflux";
         redirectUris = [

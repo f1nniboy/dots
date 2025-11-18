@@ -8,14 +8,9 @@ in
   options.custom.services.open-webui = {
     enable = custom.enableOption;
 
-    forOidc = mkOption {
+    forAuth = mkOption {
       type = types.bool;
       default = cfg.enable;
-    };
-
-    subdomain = mkOption {
-      type = types.str;
-      default = "chat";
     };
 
     port = mkOption {
@@ -30,7 +25,7 @@ in
     # The request is missing a required parameter, includes an invalid parameter value,
     # includes a parameter more than once, or is otherwise malformed. Clients must
     # include a 'code_challenge' when performing the authorize code flow, but it is missing.
-    (mkIf cfg.forOidc {
+    (mkIf cfg.forAuth {
       custom.services.authelia.clients.open-webui = {
         name = "Open WebUI";
         redirectUris = [

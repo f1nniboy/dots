@@ -2,15 +2,13 @@
   config,
   lib,
   pkgs,
-  vars,
   ...
 }:
 with lib;
 let
   cfg = config.custom.services.authelia;
 
-  name = "authelia-main";
-  dn = custom.domainToDn vars.net.domain;
+  dn = custom.domainToDn config.custom.cfg.domains.public;
   oidcConfigFile = pkgs.writeTextFile {
     name = "oidc-clients.yaml";
     text = import ./oidc-config.nix {
@@ -21,11 +19,6 @@ in
 {
   options.custom.services.authelia = {
     enable = custom.enableOption;
-
-    subdomain = mkOption {
-      type = types.str;
-      default = "auth";
-    };
 
     port = mkOption {
       type = types.port;
@@ -125,6 +118,11 @@ in
       );
       default = { };
     };
+
+    name = mkOption {
+      type = types.str;
+      default = "authelia-main";
+    };
   };
 
   config = mkMerge [
@@ -148,12 +146,12 @@ in
             # secrets to be used by authelia
             (mkIf cfg.enable {
               path = "oidc/${id}/secret-hash";
-              owner = name;
+              owner = cfg.name;
               source = "common";
             })
             (mkIf cfg.enable {
               path = "oidc/${id}/id";
-              owner = name;
+              owner = cfg.name;
               source = "common";
             })
           ];
@@ -162,12 +160,12 @@ in
         concatLists clientSecretLists;
     }
     (mkIf cfg.enable {
-      systemd.services.${name} =
+      systemd.services.${cfg.name} =
         let
           deps = [
             "lldap.service"
             "postgresql.service"
-            "redis-${name}.service"
+            "redis-${cfg.name}.service"
           ];
         in
         {
@@ -177,10 +175,10 @@ in
           serviceConfig.Environment = "X_AUTHELIA_CONFIG_FILTERS=template";
         };
 
-      users.users.${name} = {
+      users.users.${cfg.name} = {
         extraGroups = [
           "postgres"
-          "redis-${name}"
+          "redis-${cfg.name}"
         ];
       };
 
@@ -208,27 +206,34 @@ in
               };
               session = {
                 redis = {
-                  host = config.services.redis.servers.${name}.unixSocket;
+                  host = config.services.redis.servers.${cfg.name}.unixSocket;
                 };
                 cookies = [
+                  # public
                   {
-                    inherit (config.custom.services.caddy) domain;
+                    domain = config.custom.cfg.domains.public;
+                    authelia_url = "https://${custom.mkServiceDomain config "authelia-public"}";
+
+                    inactivity = "1M";
+                    expiration = "3M";
+                    remember_me = "1y";
+                  }
+
+                  # local
+                  {
+                    domain = config.custom.cfg.domains.local;
                     authelia_url = "https://${custom.mkServiceDomain config "authelia"}";
 
-                    # the period of time the user can be inactive for before the session is destroyed
                     inactivity = "1M";
-                    # the period of time before the cookie expires and the session is destroyed
                     expiration = "3M";
-                    # the period of time before the cookie expires and the session is destroyed,
-                    # when the remember me box is checked
                     remember_me = "1y";
                   }
                 ];
               };
               storage.postgres = {
                 address = "unix:///var/run/postgresql";
-                database = name;
-                username = name;
+                database = cfg.name;
+                username = cfg.name;
                 password = "";
               };
               notifier.filesystem = {
@@ -263,7 +268,7 @@ in
             settingsFiles = [ oidcConfigFile ];
             secrets =
               let
-                mkSecret = path: custom.mkSecretPath config "authelia/${path}" name;
+                mkSecret = path: custom.mkSecretPath config "authelia/${path}" cfg.name;
               in
               {
                 jwtSecretFile = mkSecret "jwt-secret";
@@ -278,38 +283,33 @@ in
 
       custom = {
         system = {
-          sops.secrets = [
-            {
-              path = "authelia/jwt-secret";
-              owner = name;
-            }
-            {
-              path = "authelia/storage-encryption-key";
-              owner = name;
-            }
-            {
-              path = "authelia/session-secret";
-              owner = name;
-            }
-            {
-              path = "authelia/hmac-secret";
-              owner = name;
-            }
-            {
-              path = "authelia/jwks";
-              owner = name;
-            }
-          ];
+          sops.secrets =
+            let
+              mkSecret = path: {
+                path = "authelia/${path}";
+                owner = cfg.name;
+              };
+            in
+            (map mkSecret [
+              "jwt-secret"
+              "storage-encryption-key"
+              "session-secret"
+              "hmac-secret"
+              "jwks"
+            ]);
         };
         services = {
           caddy.hosts = {
-            authelia = {
+            # TODO: kind of stupid solution
+            # https://github.com/authelia/authelia/discussions/7439 is not very helpful
+            authelia-public = {
               target = ":${toString cfg.port}";
-              enableLogging = true;
+              ca = "public";
             };
+            authelia.target = ":${toString cfg.port}";
           };
-          postgresql.users = [ name ];
-          redis.servers = [ name ];
+          postgresql.users = [ cfg.name ];
+          redis.servers = [ cfg.name ];
         };
       };
     })

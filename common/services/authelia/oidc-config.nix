@@ -16,7 +16,7 @@ let
   mkSecret =
     id: key:
     ''{{ secret "${
-      custom.mkSecretPath config "oidc/${id}/${key}" "authelia-main"
+      custom.mkSecretPath config "oidc/${id}/${key}" config.custom.services.authelia.name
     }" | mindent 10 "|" | msquote }}'';
 
   mkClient = id: c: ''

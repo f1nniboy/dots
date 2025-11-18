@@ -4,4 +4,4 @@
 ## Overview
 - My publicly accessible VPS
 - Hosts **Authelia** & **LLDAP** for authentication & OAuth
-- Houses my [blog](https://f1nn.space)
+- Houses my blog

@@ -11,8 +11,16 @@ rec {
   domainToDn =
     domain: concatMapStringsSep "," (part: "dc=${part}") (filter (p: p != "") (splitString "." domain));
 
+  mkServiceSub = config: name: config.custom.cfg.services."${name}".sub;
+
   mkServiceDomain =
-    config: name: "${config.custom.services.${name}.subdomain}.${config.custom.services.caddy.domain}";
+    config: name:
+    let
+      svc = config.custom.cfg.services."${name}";
+    in
+    "${if svc.sub != null then "${svc.sub}." else ""}${
+      if svc.public then config.custom.cfg.domains.public else config.custom.cfg.domains.local
+    }";
 
   mkSecretString = path: service: "${service}-${path}";
   mkSecretPlaceholder =

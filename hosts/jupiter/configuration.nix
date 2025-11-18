@@ -1,7 +1,4 @@
-{
-  vars,
-  ...
-}:
+{ ... }:
 {
   custom = {
     presets = {
@@ -12,8 +9,12 @@
       headscale.enable = true;
       tailscale = {
         enable = true;
-        tags = [ "server" ];
+        tags = [
+          "server"
+          "root"
+        ];
       };
+      coredns.enable = true;
 
       openssh.enable = true;
       postgresql.enable = true;
@@ -21,7 +22,10 @@
 
       caddy = {
         enable = true;
-        inherit (vars.net) domain;
+      };
+      step-ca = {
+        enable = true;
+        role = "server";
       };
 
       authelia.enable = true;
@@ -29,12 +33,13 @@
 
       blog.enable = true;
 
-      # make secrets of services using oidc accessible
-      immich.forOidc = true;
-      paperless.forOidc = true;
-      miniflux.forOidc = true;
-      forgejo.forOidc = true;
-      open-webui.forOidc = true;
+      # apply authelia configurations of each service
+      immich.forAuth = true;
+      paperless.forAuth = true;
+      miniflux.forAuth = true;
+      forgejo.forAuth = true;
+      open-webui.forAuth = true;
+      karakeep.forAuth = true;
     };
 
     system = {

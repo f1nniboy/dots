@@ -1,22 +1,12 @@
-{
-  config,
-  lib,
-  vars,
-  ...
-}:
+{ config, lib, ... }:
 with lib;
 let
   cfg = config.custom.services.radicale;
-  dn = custom.domainToDn vars.net.domain;
+  dn = custom.domainToDn config.custom.cfg.domains.public;
 in
 {
   options.custom.services.radicale = {
     enable = custom.enableOption;
-
-    subdomain = mkOption {
-      type = types.str;
-      default = "cal";
-    };
 
     port = mkOption {
       type = types.port;
@@ -33,7 +23,7 @@ in
         };
         auth = {
           type = "ldap";
-          ldap_uri = "ldap://${vars.net.services.lldap}:${toString config.custom.services.lldap.ports.ldap}";
+          ldap_uri = "ldap://jupiter";
           ldap_base = dn;
           ldap_reader_dn = "uid=bind:radicale,ou=people,${dn}";
           ldap_secret = "binduser";

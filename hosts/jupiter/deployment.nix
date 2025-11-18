@@ -1,5 +1,5 @@
 { vars, ... }:
 {
-  targetHost = vars.net.hosts.jupiter;
+  targetHost = vars.hosts.jupiter;
   tags = [ "server" ];
 }

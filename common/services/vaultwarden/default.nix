@@ -7,11 +7,6 @@ in
   options.custom.services.vaultwarden = {
     enable = custom.enableOption;
 
-    subdomain = mkOption {
-      type = types.str;
-      default = "vault";
-    };
-
     port = mkOption {
       type = types.port;
       default = 8222;

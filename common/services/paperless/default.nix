@@ -10,19 +10,14 @@ in
   options.custom.services.paperless = {
     enable = custom.enableOption;
 
-    forOidc = mkOption {
+    forAuth = mkOption {
       type = types.bool;
       default = cfg.enable;
-    };
-
-    subdomain = mkOption {
-      type = types.str;
-      default = "paper";
     };
   };
 
   config = mkMerge [
-    (mkIf cfg.forOidc {
+    (mkIf cfg.forAuth {
       custom.services.authelia.clients.paperless = {
         name = "Paperless";
         redirectUris = [
@@ -69,8 +64,16 @@ in
         };
       };
 
-      systemd.services.paperless-web.serviceConfig.EnvironmentFile =
-        config.sops.templates.paperless-secrets.path;
+      systemd.services = {
+        paperless-web = {
+          serviceConfig = {
+            EnvironmentFile = config.sops.templates.paperless-secrets.path;
+          };
+          environment = {
+            REQUESTS_CA_BUNDLE = config.custom.services.step-ca.certs.root;
+          };
+        };
+      };
 
       sops = {
         templates.paperless-secrets = {

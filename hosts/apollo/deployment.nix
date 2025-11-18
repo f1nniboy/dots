@@ -1,5 +1,5 @@
 { vars, ... }:
 {
-  targetHost = vars.net.hosts.apollo;
+  targetHost = vars.hosts.apollo;
   tags = [ "server" ];
 }

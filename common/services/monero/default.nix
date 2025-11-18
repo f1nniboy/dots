@@ -6,17 +6,6 @@ in
 {
   options.custom.services.monero = {
     enable = custom.enableOption;
-
-    subdomain = mkOption {
-      type = types.str;
-      default = "xmr";
-    };
-
-    whitelist = mkOption {
-      type = types.listOf types.str;
-      description = "IPs that can connect to the unrestricted node";
-      example = [ "123.123.123.123" ];
-    };
   };
 
   config = mkIf cfg.enable {
@@ -53,15 +42,7 @@ in
 
     custom.services = {
       caddy.hosts = {
-        monero = {
-          target = ":${toString config.services.monero.rpc.port}";
-
-          # only permit usage of monero node on specific devices
-          extra = ''
-            @blocked not remote_ip ${concatStringsSep " " cfg.whitelist}
-            respond @blocked 403
-          '';
-        };
+        monero.target = ":${toString config.services.monero.rpc.port}";
       };
     };
 

@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  vars,
   ...
 }:
 with lib;
@@ -12,11 +11,6 @@ in
   options.custom.services.lldap = {
     enable = custom.enableOption;
 
-    subdomain = mkOption {
-      type = types.str;
-      default = "ldap";
-    };
-
     ports = mkOption {
       type = types.submodule {
         options = {
@@ -26,7 +20,7 @@ in
           };
           ldap = mkOption {
             type = types.port;
-            default = 3890;
+            default = 389;
           };
         };
       };
@@ -51,6 +45,11 @@ in
       {
         after = deps;
         requires = deps;
+        serviceConfig = {
+          CapabilityBoundingSet = "cap_net_bind_service";
+          AmbientCapabilities = "cap_net_bind_service";
+          NoNewPrivileges = true;
+        };
       };
 
     services = {
@@ -65,7 +64,7 @@ in
             http_port = cfg.ports.http;
             database_url = "postgres://lldap?host=/var/run/postgresql";
             ldap_port = cfg.ports.ldap;
-            ldap_base_dn = custom.domainToDn vars.net.domain;
+            ldap_base_dn = custom.domainToDn config.custom.cfg.domains.public;
             ldap_user_pass_file = mkSecret "admin-password";
             force_ldap_user_pass_reset = "always";
             jwt_secret_file = mkSecret "jwt-secret";
@@ -95,7 +94,10 @@ in
       };
       services = {
         caddy.hosts = {
-          lldap.target = ":${toString cfg.ports.http}";
+          lldap = {
+            target = ":${toString cfg.ports.http}";
+            ca = "public";
+          };
         };
         postgresql.users = [ "lldap" ];
       };

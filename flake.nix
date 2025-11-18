@@ -49,16 +49,16 @@
       };
     };
 
+    namescale = {
+      url = "github:sinanmohd/namescale";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     impermanence.url = "github:nix-community/impermanence";
     flatpaks.url = "github:in-a-dil-emma/declarative-flatpak/latest";
 
     firefox-gnome-theme = {
       url = "github:rafaelmardojai/firefox-gnome-theme";
-      flake = false;
-    };
-
-    nix-mineral = {
-      url = "github:cynicsketch/nix-mineral";
       flake = false;
     };
 

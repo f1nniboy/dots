@@ -1,7 +1,4 @@
-{
-  vars,
-  ...
-}:
+{ ... }:
 {
   custom = {
     presets = {
@@ -32,10 +29,13 @@
 
       caddy = {
         enable = true;
-        inherit (vars.net) domain;
       };
       acme = {
         enable = true;
+      };
+      step-ca = {
+        enable = true;
+        role = "client";
       };
 
       postgresql.enable = true;
@@ -71,7 +71,7 @@
       miniflux.enable = true;
       notesnook.enable = true;
       radicale.enable = true;
-      #karakeep.enable = true;
+      karakeep.enable = true;
 
       paperless.enable = true;
       paperless-gpt.enable = true;
@@ -89,13 +89,7 @@
       soju.enable = true;
       convoyeur.enable = true;
 
-      monero = {
-        enable = true;
-        whitelist = with vars.net.hosts; [
-          diana
-          pluto
-        ];
-      };
+      monero.enable = true;
       p2pool = {
         enable = true;
         wallet = "43dp8mYf4Jq6tNiKnbPvJNhd8xAhWrCyuGksFqTvmJXkdeDHstSRCRdGWzjLo2nCMwdHSp3sL1QewER2rNoYM7Kn5xFbZmy";

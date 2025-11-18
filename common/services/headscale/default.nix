@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  vars,
-  ...
-}:
+{ config, lib, ... }:
 with lib;
 let
   cfg = config.custom.services.headscale;
@@ -11,7 +6,7 @@ let
 
   policyContent = builtins.toJSON (
     import ./acl-config.nix {
-      inherit config lib vars;
+      inherit config lib;
     }
   );
 in
@@ -19,14 +14,9 @@ in
   options.custom.services.headscale = {
     enable = custom.enableOption;
 
-    forOidc = mkOption {
+    forAuth = mkOption {
       type = types.bool;
       default = cfg.enable;
-    };
-
-    subdomain = mkOption {
-      type = types.str;
-      default = "net";
     };
 
     port = mkOption {
@@ -36,12 +26,17 @@ in
 
     nameservers = mkOption {
       type = types.listOf types.str;
-      default = [ "9.9.9.9" ];
+      default = [ "1.1.1.1" ];
+    };
+
+    netDomain = mkOption {
+      type = types.str;
+      default = config.custom.cfg.domains.local;
     };
   };
 
   config = mkMerge [
-    (mkIf cfg.forOidc {
+    (mkIf cfg.forAuth {
       custom.services.authelia.clients.headscale = {
         name = "Headscale";
         redirectUris = [
@@ -53,6 +48,17 @@ in
     (mkIf cfg.enable {
       users.users.headscale = {
         extraGroups = [ "postgres" ];
+      };
+
+      systemd.services = {
+        headscale =
+          let
+            deps = [ "${config.custom.services.authelia.name}.service" ];
+          in
+          {
+            after = deps;
+            wants = deps;
+          };
       };
 
       services = {
@@ -71,11 +77,16 @@ in
             };
             dns = {
               magic_dns = true;
-              base_domain = "net.local";
-              nameservers.global = cfg.nameservers;
+              base_domain = cfg.netDomain;
+              nameservers = {
+                global = cfg.nameservers;
+                split = {
+                  "${cfg.netDomain}" = [ config.custom.services.tailscale.ip ];
+                };
+              };
             };
             oidc = {
-              issuer = "https://${custom.mkServiceDomain config "authelia"}";
+              issuer = "https://${custom.mkServiceDomain config "authelia-public"}";
               # TODO: read from secrets
               client_id = "z1LAjliTV6kTSNH.lYCg3J1LOy3PU9pJvJscUbzw9xqSG9tr21vDJrfpnPzpPGJjf1wjxwZC";
               client_secret_path = custom.mkSecretPath config "oidc/headscale/secret" "headscale";
@@ -93,13 +104,19 @@ in
         templates.headscale-acl-config = {
           content = policyContent;
           owner = "headscale";
+          restartUnits = [
+            "headscale.service"
+          ];
         };
       };
 
       custom = {
         services = {
           caddy.hosts = {
-            headscale.target = ":${toString cfg.port}";
+            headscale = {
+              target = ":${toString cfg.port}";
+              ca = "public";
+            };
           };
           postgresql.users = [ "headscale" ];
         };

@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  vars,
-  ...
-}:
+{ config, lib, ... }:
 with lib;
 let
   cfg = config.custom.services.xmrig;
@@ -14,7 +9,7 @@ in
     host = mkOption {
       description = "host of P2Pool instance";
       type = types.str;
-      default = vars.net.services.p2pool;
+      default = custom.mkServiceDomain config "p2pool";
     };
     port = mkOption {
       type = types.port;

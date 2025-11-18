@@ -18,11 +18,6 @@ in
   options.custom.services.multi-scrobbler = {
     enable = custom.enableOption;
 
-    subdomain = mkOption {
-      type = types.str;
-      default = "scrobbler";
-    };
-
     port = mkOption {
       type = types.port;
       default = 9078;

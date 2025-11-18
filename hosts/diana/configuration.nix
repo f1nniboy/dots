@@ -16,6 +16,7 @@ in
       prismlauncher.enable = true;
       supertux.enable = true;
       supertuxkart.enable = true;
+      xonotic.enable = true;
       moonlight.enable = true;
 
       adb.enable = true;
@@ -28,6 +29,9 @@ in
     };
 
     services = {
+      tailscale = {
+        tags = [ "gaming" ];
+      };
       mullvad.enable = true;
 
       restic = {
@@ -54,7 +58,9 @@ in
 
       openssh.enable = true;
       docker.enable = true;
-      gow.enable = true;
+      wolf.enable = true;
+
+      caddy.enable = true;
 
       syncthing = {
         devices = {

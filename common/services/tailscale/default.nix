@@ -1,6 +1,5 @@
 {
   config,
-  vars,
   lib,
   pkgs,
   ...
@@ -14,9 +13,14 @@ in
   options.custom.services.tailscale = {
     enable = custom.enableOption;
 
+    ip = mkOption {
+      type = types.str;
+      default = config.custom.cfg.hosts."${config.networking.hostName}";
+    };
+
     loginServer = mkOption {
       type = types.str;
-      default = "https://net.${vars.net.domain}";
+      default = "https://${custom.mkServiceDomain config "headscale"}";
     };
 
     tags = mkOption {

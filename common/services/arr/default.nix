@@ -6,7 +6,6 @@
 with lib;
 let
   cfg = config.custom.services.arr;
-  baseSubdomain = config.custom.system.media.subdomain;
 in
 {
   options.custom.services.arr = {
@@ -116,29 +115,18 @@ in
       services = {
         caddy.hosts = {
           prowlarr = {
-            subdomain = "idx.${baseSubdomain}";
             target = ":${toString config.services.prowlarr.settings.server.port}";
             import = [ "auth" ];
           };
           radarr = {
-            subdomain = "mov.${baseSubdomain}";
             target = ":${toString config.services.radarr.settings.server.port}";
             import = [ "auth" ];
           };
           sonarr = {
-            subdomain = "tv.${baseSubdomain}";
             target = ":${toString config.services.sonarr.settings.server.port}";
             import = [ "auth" ];
           };
         };
-        authelia.rules = [
-          # required for nzb360 mobile app
-          {
-            domain = "*.${baseSubdomain}.${config.custom.services.caddy.domain}";
-            policy = "bypass";
-            resources = [ "/api.*" ];
-          }
-        ];
       };
 
       services.restic = {

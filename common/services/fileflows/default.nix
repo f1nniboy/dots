@@ -12,11 +12,6 @@ in
   options.custom.services.fileflows = {
     enable = custom.enableOption;
 
-    subdomain = mkOption {
-      type = types.str;
-      default = "flows.media";
-    };
-
     port = mkOption {
       type = types.port;
       default = 5000;
@@ -50,8 +45,7 @@ in
           inherit (config.custom.system.media) baseDir;
         in
         [
-          "${baseDir}/downloads/complete:/media/complete:rw"
-          "${baseDir}/downloads/converted:/media/converted:rw"
+          "${baseDir}/downloads:/media/downloads:rw"
           "${baseDir}/tmp:/temp:rw"
           "/var/lib/fileflows:/app/Data:rw"
         ];

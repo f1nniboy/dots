@@ -7,11 +7,6 @@ in
   options.custom.system.media = {
     enable = custom.enableOption;
 
-    subdomain = mkOption {
-      type = types.str;
-      default = "media";
-    };
-
     baseDir = mkOption {
       type = types.str;
       default = "/fun/media/htpc";

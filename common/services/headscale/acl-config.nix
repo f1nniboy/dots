@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  vars,
-  ...
-}:
+{ config, lib, ... }:
 with lib;
 let
   mkUserSecret = key: (custom.mkSecretPlaceholder config "tailscale/acl/users/${key}" "headscale");
@@ -14,44 +9,63 @@ let
   };
 in
 {
-  groups = {
-    "group:admin" = [ "finn@" ];
-    "group:family" = [
-      "finn@"
-      users.a
-      users.b
-    ];
-  };
+  groups =
+    let
+      inherit (config.custom.cfg.user) nick;
+    in
+    {
+      "group:admin" = [ "${nick}@" ];
+      "group:family" = [
+        "${nick}@"
+        users.a
+        users.b
+      ];
+    };
 
-  # configure what tags can be used by users (by group)
+  # configure what tags can be used by which users
   tagOwners = {
     "tag:server" = [ "group:admin" ];
+    "tag:gaming" = [ "group:admin" ];
+    "tag:root" = [ "group:admin" ];
   };
 
   acls = [
-    # admins can access all ports of all servers
+    # admins can access all servers by default
     {
       action = "accept";
       src = [ "group:admin" ];
       dst = [ "tag:server:*" ];
     }
 
-    # family can only access HTTP of server at home
+    # family can access HTTP of all servers
     {
       action = "accept";
       src = [ "group:family" ];
-      dst = [ "apollo:80,443" ];
+      dst = [ "tag:server:80,443" ];
     }
 
-    # family can access all Wolf streaming ports
+    # all devices can access DNS of the root server (which hosts headscale)
+    # to make `*.${domains.local}` domains work
+    {
+      action = "accept";
+      src = [ "*" ];
+      dst = [ "tag:root:53" ];
+    }
+
+    # family can access all Wolf streaming ports of gaming servers
     {
       action = "accept";
       src = [ "group:family" ];
-      dst = [ "diana:47984,47989,47999,48010,48100,48200" ];
+      dst = [ "tag:server:47984,47989,47999,48010,48100,48200" ];
+    }
+
+    # the root server (which runs the CA authority) can access HTTP ports on all devices
+    {
+      action = "accept";
+      src = [ "tag:root" ];
+      dst = [ "*:80,443" ];
     }
   ];
 
-  hosts = {
-    inherit (vars.net.hosts) apollo jupiter diana;
-  };
+  inherit (config.custom.cfg) hosts;
 }

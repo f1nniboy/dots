@@ -21,6 +21,13 @@ in
         mosh.enable = true;
       };
 
+      services = {
+        step-ca = {
+          enable = true;
+          role = mkDefault "client";
+        };
+      };
+
       system = {
         boot.enable = true;
         locale.enable = true;

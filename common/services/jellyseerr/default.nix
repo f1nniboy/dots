@@ -13,11 +13,6 @@ in
   options.custom.services.jellyseerr = {
     enable = custom.enableOption;
 
-    subdomain = mkOption {
-      type = types.str;
-      default = "search.media";
-    };
-
     port = mkOption {
       type = types.port;
       default = 5055;

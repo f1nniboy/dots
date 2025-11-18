@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  vars,
-  ...
-}:
+{ config, lib, ... }:
 with lib;
 let
   cfg = config.custom.system.ssh;
@@ -13,7 +8,7 @@ in
     enable = custom.enableOption;
     authorizedKeys = mkOption {
       type = types.listOf types.str;
-      default = vars.ssh.authorizedKeys;
+      default = config.custom.cfg.ssh.authorizedKeys;
     };
   };
 

@@ -7,6 +7,7 @@
 with lib;
 let
   cfg = config.custom.services.notesnook;
+  subdomain = custom.mkServiceSub config "notesnook";
 
   mkNotesnookDomain = sub: "https://${sub}.${custom.mkServiceDomain config "notesnook"}";
 
@@ -76,11 +77,6 @@ in
 {
   options.custom.services.notesnook = {
     enable = custom.enableOption;
-
-    subdomain = mkOption {
-      type = types.str;
-      default = "note";
-    };
 
     ports = mkOption {
       type = types.submodule {
@@ -312,23 +308,23 @@ in
       services = {
         caddy.hosts = {
           notesnook-api = {
-            subdomain = "api.${cfg.subdomain}";
+            sub = "api.${subdomain}";
             target = ":${toString cfg.ports.api}";
           };
           notesnook-auth = {
-            subdomain = "auth.${cfg.subdomain}";
+            sub = "auth.${subdomain}";
             target = ":${toString cfg.ports.auth}";
           };
           notesnook-mono = {
-            subdomain = "mono.${cfg.subdomain}";
+            sub = "mono.${subdomain}";
             target = ":${toString cfg.ports.mono}";
           };
           notesnook-sse = {
-            subdomain = "sse.${cfg.subdomain}";
+            sub = "sse.${subdomain}";
             target = ":${toString cfg.ports.sse}";
           };
           notesnook-s3 = {
-            subdomain = "files.${cfg.subdomain}";
+            sub = "files.${subdomain}";
             target = ":${toString cfg.ports.s3}";
           };
         };

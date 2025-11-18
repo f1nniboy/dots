@@ -1,6 +1,6 @@
 { vars, ... }:
 {
   allowLocalDeployment = true;
-  targetHost = vars.net.hosts.diana;
+  targetHost = vars.hosts.diana;
   targetUser = "me";
 }

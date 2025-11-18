@@ -11,7 +11,7 @@ let
   configFile = pkgs.writeTextFile {
     name = "data.json";
     text = import ./config.nix {
-      inherit vars;
+      inherit lib config vars;
     };
   };
 in

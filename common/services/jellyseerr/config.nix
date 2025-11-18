@@ -60,7 +60,7 @@ in
       minimumAvailability = "released";
       tags = [ ];
       isDefault = true;
-      externalUrl = "https://mov.media.${config.custom.services.caddy.domain}";
+      externalUrl = "https://${custom.mkServiceDomain config "radarr"}";
       syncEnabled = true;
       preventSearch = false;
       tagRequests = false;
@@ -82,7 +82,7 @@ in
       is4k = false;
       isDefault = true;
       enableSeasonFolders = true;
-      externalUrl = "https://tv.media.${config.custom.services.caddy.domain}";
+      externalUrl = "https://${custom.mkServiceDomain config "sonarr"}";
       syncEnabled = true;
       preventSearch = false;
       tagRequests = false;

@@ -1,6 +1,7 @@
 {
   imports = [
     ./apps
+    ./cfg
     ./desktop
     ./hardware
     ./packages

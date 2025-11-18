@@ -25,9 +25,11 @@ in
             settings = {
               # servers
               servers.bouncer = {
-                server = "irc.${vars.net.domain}";
+                server = custom.mkServiceDomain config "soju";
                 nickname = vars.user.nick;
                 port = 6697;
+                # TODO: https://halloy.chat/configuration/servers/index.html#root_cert_path doesn't work :(
+                dangerously_accept_invalid_certs = true;
                 sasl.plain = {
                   username = vars.user.nick;
                   password_file = custom.mkSecretPath config "soju/user/password" config.custom.system.user.name;

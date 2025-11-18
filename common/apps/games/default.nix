@@ -5,5 +5,6 @@
     ./sober.nix
     ./supertux.nix
     ./supertuxkart.nix
+    ./xonotic.nix
   ];
 }

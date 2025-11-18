@@ -1,5 +1,5 @@
 { vars, ... }:
 {
   allowLocalDeployment = true;
-  targetHost = vars.net.hosts.pluto;
+  targetHost = vars.hosts.pluto;
 }

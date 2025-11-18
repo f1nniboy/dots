@@ -14,14 +14,9 @@ in
   options.custom.services.forgejo = {
     enable = custom.enableOption;
 
-    forOidc = mkOption {
+    forAuth = mkOption {
       type = types.bool;
       default = cfg.enable;
-    };
-
-    subdomain = mkOption {
-      type = types.str;
-      default = "code";
     };
 
     port = mkOption {
@@ -31,7 +26,7 @@ in
   };
 
   config = mkMerge [
-    (mkIf cfg.forOidc {
+    (mkIf cfg.forAuth {
       custom.services.authelia.clients.forgejo = {
         name = "Forgejo";
         redirectUris = [
