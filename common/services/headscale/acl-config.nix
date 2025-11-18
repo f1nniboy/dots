@@ -56,7 +56,7 @@ in
     {
       action = "accept";
       src = [ "group:family" ];
-      dst = [ "tag:server:47984,47989,47999,48010,48100,48200" ];
+      dst = [ "tag:gaming:47984,47989,47999,48010,48100,48200" ];
     }
 
     # the root server (which runs the CA authority) can access HTTP ports on all devices
