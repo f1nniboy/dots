@@ -4,6 +4,7 @@
     ./dev.nix
     ./flatpak.nix
     ./fonts.nix
+    ./git.nix
     ./home.nix
     ./ld.nix
     ./locale.nix

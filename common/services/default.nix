@@ -5,11 +5,11 @@
     ./authelia
     ./blog
     ./caddy
+    ./cgit
     ./convoyeur
     ./coredns
     ./docker
     ./fileflows
-    ./forgejo
     ./headscale
     ./i2pd
     ./immich

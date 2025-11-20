@@ -32,10 +32,21 @@ in
     };
 
     custom = {
-      services.caddy.hosts = {
-        pinchflat = {
-          target = ":${toString config.services.pinchflat.port}";
-          import = [ "auth" ];
+      services = {
+        caddy.hosts = {
+          pinchflat = {
+            target = ":${toString config.services.pinchflat.port}";
+            import = [ "auth" ];
+          };
+        };
+        restic = {
+          paths = [
+            "/var/lib/pinchflat"
+          ];
+          exclude = [
+            "/var/lib/pinchflat/logs"
+            "/var/lib/pinchflat/tmp"
+          ];
         };
       };
 
@@ -47,16 +58,6 @@ in
             group = "media";
             mode = "0700";
           }
-        ];
-      };
-
-      services.restic = {
-        paths = [
-          "/var/lib/pinchflat"
-        ];
-        exclude = [
-          "/var/lib/pinchflat/logs"
-          "/var/lib/pinchflat/tmp"
         ];
       };
     };

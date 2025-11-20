@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, ... }:
 with lib;
 let
   cfg = config.custom.apps.moonlight;
@@ -14,10 +9,8 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.moonlight-qt ];
-
-    custom.system.persistence.userConfig = {
-      directories = [ ".config/Moonlight Game Streaming Project" ];
-    };
+    services.flatpak.packages = [
+      "flathub:app/com.moonlight_stream.Moonlight//stable"
+    ];
   };
 }

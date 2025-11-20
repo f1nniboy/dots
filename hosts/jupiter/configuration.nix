@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   custom = {
     presets = {
       base.enable = true;
@@ -37,7 +36,6 @@
       immich.forAuth = true;
       paperless.forAuth = true;
       miniflux.forAuth = true;
-      forgejo.forAuth = true;
       open-webui.forAuth = true;
       karakeep.forAuth = true;
     };

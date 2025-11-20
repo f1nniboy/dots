@@ -7,7 +7,10 @@
 
     colmena = {
       url = "github:zhaofengli/colmena";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        stable.follows = "nixpkgs";
+      };
     };
 
     flake-parts = {
@@ -49,11 +52,6 @@
       };
     };
 
-    namescale = {
-      url = "github:sinanmohd/namescale";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     impermanence.url = "github:nix-community/impermanence";
     flatpaks.url = "github:in-a-dil-emma/declarative-flatpak/latest";
 
@@ -63,12 +61,16 @@
     };
 
     blog = {
-      # TODO: change to github source
-      url = "path:/home/me/Projects/blog";
+      url = "git+https://code.net.lan/blog?ref=main";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         systems.follows = "systems";
       };
+    };
+
+    cgit-theme = {
+      url = "git+https://code.net.lan/cgit-theme?ref=main";
+      flake = false;
     };
   };
 

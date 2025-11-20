@@ -30,7 +30,7 @@ in
                 default = "self";
               };
               target = mkOption {
-                type = types.str;
+                type = types.nullOr types.str;
               };
               import = mkOption {
                 type = types.listOf types.str;
@@ -46,6 +46,7 @@ in
                 type = types.enum [
                   "proxy"
                   "root"
+                  "custom"
                 ];
                 default = "proxy";
               };

@@ -7,17 +7,25 @@ in
   options.custom.services.restic = {
     enable = custom.enableOption;
     repos = mkOption {
-      default = {
-        borgbase = true;
-      };
       type = types.submodule {
-        options = {
-          borgbase = custom.enableOption;
-        };
+        options =
+          let
+            mkRepoOption =
+              def:
+              mkOption {
+                type = types.bool;
+                default = true;
+              };
+          in
+          {
+            borgbase = mkRepoOption true;
+          };
       };
+      default = { };
     };
     paths = mkOption {
       type = types.listOf types.str;
+      default = [ ];
     };
     exclude = mkOption {
       type = types.listOf types.str;
@@ -39,29 +47,39 @@ in
           "--keep-monthly 3"
           "--keep-yearly 1"
         ];
+
+        mkRepo =
+          name: enabled:
+          if enabled then
+            mkIf cfg.repos."${name}" {
+              initialize = true;
+              repositoryFile = custom.mkSecretPath config "restic/${name}/url" "root";
+              passwordFile = custom.mkSecretPath config "restic/${name}/password" "root";
+              timerConfig.OnCalendar = cfg.frequency;
+              inherit (cfg) paths exclude;
+              inherit pruneOpts;
+            }
+          else
+            { };
       in
-      {
-        borgbase = mkIf cfg.repos.borgbase {
-          initialize = true;
-          repositoryFile = custom.mkSecretPath config "restic/borgbase/url" "root";
-          passwordFile = custom.mkSecretPath config "restic/borgbase/password" "root";
-          timerConfig.OnCalendar = cfg.frequency;
-          inherit (cfg) paths exclude;
-          inherit pruneOpts;
-        };
-      };
+      mapAttrs mkRepo cfg.repos;
 
     custom.system = {
-      sops.secrets = mkMerge [
-        (mkIf cfg.repos.borgbase [
-          {
-            path = "restic/borgbase/url";
-          }
-          {
-            path = "restic/borgbase/password";
-          }
-        ])
-      ];
+      sops.secrets =
+        let
+          mkRepoSecrets =
+            name: enabled:
+            if enabled then
+              [
+                { path = "restic/${name}/url"; }
+                { path = "restic/${name}/password"; }
+              ]
+            else
+              [ ];
+
+          secrets = mapAttrsToList mkRepoSecrets cfg.repos;
+        in
+        mkMerge secrets;
     };
   };
 }

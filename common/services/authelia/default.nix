@@ -290,13 +290,13 @@ in
                 owner = cfg.name;
               };
             in
-            (map mkSecret [
+            map mkSecret [
               "jwt-secret"
               "storage-encryption-key"
               "session-secret"
               "hmac-secret"
               "jwks"
-            ]);
+            ];
         };
         services = {
           caddy.hosts = {

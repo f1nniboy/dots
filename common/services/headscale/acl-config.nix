@@ -24,8 +24,13 @@ in
 
   # configure what tags can be used by which users
   tagOwners = {
+    # machines designated as servers
     "tag:server" = [ "group:admin" ];
+
+    # the machine running Wolf (game streaming)
     "tag:gaming" = [ "group:admin" ];
+
+    # the server running all core services, like headscale & dns
     "tag:root" = [ "group:admin" ];
   };
 
@@ -52,7 +57,7 @@ in
       dst = [ "tag:root:53" ];
     }
 
-    # family can access all Wolf streaming ports of gaming servers
+    # family can access all Wolf ports of gaming servers
     {
       action = "accept";
       src = [ "group:family" ];
@@ -60,6 +65,7 @@ in
     }
 
     # the root server (which runs the CA authority) can access HTTP ports on all devices
+    # required to create certificates
     {
       action = "accept";
       src = [ "tag:root" ];

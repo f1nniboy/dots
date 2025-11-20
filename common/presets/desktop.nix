@@ -17,7 +17,7 @@ in
       apps = {
         # gui
         firefox.enable = true;
-        epiphany.enable = true;
+        #epiphany.enable = true;
         ptyxis.enable = true;
         halloy.enable = true;
         vesktop.enable = true;
@@ -28,9 +28,6 @@ in
         bitwarden.enable = true;
         gimp.enable = true;
         spicetify.enable = true;
-
-        # cli
-        git.enable = true;
       };
 
       services = {
@@ -48,6 +45,7 @@ in
         fonts.enable = true;
         home.enable = true;
         ld.enable = true;
+        git.user.enable = true;
       };
 
       hardware = {

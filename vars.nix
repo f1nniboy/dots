@@ -29,7 +29,7 @@ rec {
     # expose these services at `${sub}.${domains.local}`
     ## apollo (set as default in common/config.nix)
     vaultwarden.sub = "vault";
-    forgejo.sub = "code";
+    cgit.sub = "code";
     i2pd.sub = "i2p";
     miniflux.sub = "news";
     immich.sub = "photo";

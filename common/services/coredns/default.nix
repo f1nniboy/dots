@@ -11,7 +11,7 @@ let
   # map a service to a simple /etc/hosts entry, or `null` if the service is public
   serviceToHostEntry =
     _: svc:
-    if svc.public == true || svc.sub == null then
+    if svc.public || svc.sub == null then
       null
     else
       let
@@ -22,7 +22,7 @@ let
 
   entries =
     # extract all non-null generated lines
-    lib.filter (x: x != null) (lib.mapAttrsToList serviceToHostEntry config.custom.cfg.services);
+    filter (x: x != null) (mapAttrsToList serviceToHostEntry config.custom.cfg.services);
 
   hostsFile = pkgs.writeTextFile {
     name = "hosts";

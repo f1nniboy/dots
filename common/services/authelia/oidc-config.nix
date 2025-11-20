@@ -11,7 +11,7 @@ let
     items:
     if items == [ ] then "[]" else builtins.concatStringsSep "\n" (map (i: "          - ${i}") items);
 
-  mkYamlBoolean = item: if item then "true" else "false";
+  mkYamlBoolean = item: toString item;
 
   mkSecret =
     id: key:

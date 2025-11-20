@@ -38,11 +38,26 @@ in
           let
             mkDir = path: "/var/lib/paperless-gpt/${path}:/app/${path}";
           in
-          [
-            (mkDir "prompts")
-            (mkDir "config")
-            (mkDir "db")
+          map mkDir [
+            "prompts"
+            "config"
+            "db"
           ];
+        environment =
+          let
+            serviceUrl = "https://${custom.mkServiceDomain config "paperless"}";
+          in
+          {
+            LISTEN_INTERFACE = "127.0.0.1:${toString cfg.port}";
+            PAPERLESS_BASE_URL = serviceUrl;
+            PAPERLESS_PUBLIC_URL = serviceUrl;
+            MANUAL_TAG = "ai";
+            AUTO_TAG = "ai-auto";
+
+            LLM_LANGUAGE = "German/Deutsch";
+            LLM_PROVIDER = "openai";
+            LLM_MODEL = "gpt-4o";
+          };
         environmentFiles = [
           config.sops.templates.paperless-gpt-env.path
         ];
@@ -52,25 +67,10 @@ in
 
     sops = {
       templates.paperless-gpt-env = {
-        content =
-          let
-            serviceUrl = "https://${custom.mkServiceDomain config "paperless"}";
-          in
-          ''
-            LISTEN_INTERFACE=:${toString cfg.port}
-            PAPERLESS_BASE_URL=${serviceUrl}
-            PAPERLESS_PUBLIC_URL=${serviceUrl}
-
-            PAPERLESS_API_TOKEN=${custom.mkSecretPlaceholder config "paperless/api-token" "paperless-gpt"}
-            OPENAI_API_KEY=${custom.mkSecretPlaceholder config "paperless-gpt/openai-api-key" "paperless-gpt"}
-
-            MANUAL_TAG=ai
-            AUTO_TAG=ai-auto
-
-            LLM_LANGUAGE=German/Deutsch
-            LLM_PROVIDER=openai
-            LLM_MODEL=gpt-4o
-          '';
+        content = ''
+          PAPERLESS_API_TOKEN=${custom.mkSecretPlaceholder config "paperless/api-token" "paperless-gpt"}
+          OPENAI_API_KEY=${custom.mkSecretPlaceholder config "paperless-gpt/openai-api-key" "paperless-gpt"}
+        '';
         owner = "paperless-gpt";
       };
     };

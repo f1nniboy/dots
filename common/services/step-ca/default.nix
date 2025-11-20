@@ -57,8 +57,8 @@ in
 
       services.step-ca = {
         enable = true;
-        address = "0.0.0.0";
-        port = cfg.port;
+        address = "127.0.0.1";
+        inherit (cfg) port;
         intermediatePasswordFile = custom.mkSecretPath config "step-ca/intermediate/password" "step-ca";
         settings = {
           dnsNames = [ serviceDomain ];

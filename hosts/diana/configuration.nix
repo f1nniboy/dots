@@ -32,7 +32,6 @@ in
       tailscale = {
         tags = [ "gaming" ];
       };
-      mullvad.enable = true;
 
       restic = {
         enable = true;
@@ -56,7 +55,6 @@ in
         cpuUsage = 40;
       };
 
-      openssh.enable = true;
       docker.enable = true;
       wolf.enable = true;
 

@@ -67,7 +67,7 @@ in
           image = custom.mkDockerImage vars "ghcr.io/games-on-whales/wolfmanager/wolfmanager";
           depends_on = [ "backend" ];
           ports = [
-            "${toString ports.manager}:3000"
+            "127.0.0.1:${toString ports.manager}:3000"
           ];
           networks = [ "wolf" ];
           environment = {

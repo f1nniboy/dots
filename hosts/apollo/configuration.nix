@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   custom = {
     presets = {
       base.enable = true;
@@ -9,7 +8,6 @@
       # cli
       neovim.enable = true;
       yazi.enable = true;
-      git.enable = true;
     };
 
     services = {
@@ -72,6 +70,7 @@
       notesnook.enable = true;
       radicale.enable = true;
       karakeep.enable = true;
+      cgit.enable = true;
 
       paperless.enable = true;
       paperless-gpt.enable = true;
@@ -83,8 +82,6 @@
       #open-webui.enable = true;
 
       i2pd.enable = true;
-
-      forgejo.enable = true;
 
       soju.enable = true;
       convoyeur.enable = true;
@@ -99,6 +96,7 @@
     system = {
       remoteUnlock.enable = true;
       media.enable = true;
+      git.server.enable = true;
     };
 
     hardware = {
