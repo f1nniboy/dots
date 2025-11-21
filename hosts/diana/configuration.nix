@@ -55,6 +55,8 @@ in
         cpuUsage = 40;
       };
 
+      ollama.enable = true;
+
       docker.enable = true;
       wolf.enable = true;
 

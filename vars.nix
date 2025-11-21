@@ -65,6 +65,10 @@ rec {
       sub = "wolf";
       host = "diana";
     };
+    ollama = {
+      sub = "ollama";
+      host = "diana";
+    };
 
     # expose these services at `${sub}.${domains.public}`
     ## jupiter

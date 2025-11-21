@@ -16,6 +16,7 @@ in
           enable = custom.enableOption;
         };
       };
+      default = { };
     };
 
     server = mkOption {
@@ -29,6 +30,7 @@ in
           };
         };
       };
+      default = { };
     };
   };
 

@@ -23,6 +23,7 @@
     ./multi-scrobbler
     ./muse
     ./notesnook
+    ./ollama
     ./openssh
     ./open-webui
     ./p2pool
