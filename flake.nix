@@ -5,6 +5,9 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     systems.url = "github:nix-systems/default";
 
+    # TODO: wait for https://github.com/NixOS/nixpkgs/issues/461605
+    nixpkgs-463538.url = "github:NixOS/nixpkgs?ref=pull/463538/head";
+
     colmena = {
       url = "github:zhaofengli/colmena";
       inputs = {
@@ -61,7 +64,8 @@
     };
 
     blog = {
-      url = "git+https://code.net.lan/blog?ref=main";
+      #url = "git+https://code.net.lan/blog?ref=main";
+      url = "/home/me/Projects/blog";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         systems.follows = "systems";
@@ -142,6 +146,14 @@
               vars
               system
               ;
+
+            # open-webui
+            nixpkgs-463538 = import inputs.nixpkgs-463538 {
+              config = {
+                allowUnfree = true;
+              };
+              inherit system;
+            };
           };
         };
 
@@ -173,7 +185,7 @@
         };
       };
 
-      devShells = eachSystem (system: {
+      devShells = eachSystem (_: {
         default = pkgs.callPackage ./shell.nix { inherit inputs pkgs; };
       });
     };

@@ -30,6 +30,7 @@ in
 
       system = {
         boot.enable = true;
+        firewall.enable = true;
         locale.enable = true;
         nix.enable = true;
         packages.enable = true;

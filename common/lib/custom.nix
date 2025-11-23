@@ -34,5 +34,5 @@ rec {
     config: name:
     "${toString config.users.users."${name}".uid}:${toString config.users.groups."${name}".gid}";
 
-  mkDockerImage = vars: name: "${name}:${vars.docker.images."${name}"}";
+  mkDockerImage = config: name: "${name}:${config.custom.cfg.docker.images."${name}"}";
 }

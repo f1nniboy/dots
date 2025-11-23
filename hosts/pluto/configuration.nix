@@ -17,7 +17,6 @@
 
     services = {
       openssh.enable = true;
-      mullvad.enable = true;
 
       syncthing = {
         devices = {

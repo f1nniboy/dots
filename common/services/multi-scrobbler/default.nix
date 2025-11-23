@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  vars,
   ...
 }:
 with lib;
@@ -38,7 +37,7 @@ in
 
     virtualisation.oci-containers.containers = {
       "multi-scrobbler" = {
-        image = custom.mkDockerImage vars "foxxmd/multi-scrobbler";
+        image = custom.mkDockerImage config "foxxmd/multi-scrobbler";
         volumes = [
           "/var/lib/multi-scrobbler:/config"
           "/var/lib/multi-scrobbler/config.json:/config/config.json"

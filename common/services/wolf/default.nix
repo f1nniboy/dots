@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  vars,
   ...
 }:
 with lib;
@@ -30,15 +29,12 @@ in
   config = mkIf cfg.enable {
     virtualisation.arion.projects."wolf".settings = {
       project.name = "wolf";
-
-      networks = {
-        wolf.name = "wolf";
-      };
+      enableDefaultNetwork = false;
 
       services = {
         backend.service = {
           container_name = "wolf-backend";
-          image = custom.mkDockerImage vars "ghcr.io/games-on-whales/wolf";
+          image = custom.mkDockerImage config "ghcr.io/games-on-whales/wolf";
           volumes = [
             "${paths.backend}:/etc/wolf:rw"
             "/var/run/wolf:/var/run/wolf"
@@ -64,12 +60,11 @@ in
         };
         manager.service = {
           container_name = "wolf-manager";
-          image = custom.mkDockerImage vars "ghcr.io/games-on-whales/wolfmanager/wolfmanager";
+          image = custom.mkDockerImage config "ghcr.io/games-on-whales/wolfmanager/wolfmanager";
           depends_on = [ "backend" ];
           ports = [
             "127.0.0.1:${toString ports.manager}:3000"
           ];
-          networks = [ "wolf" ];
           environment = {
             NODE_ENV = "production";
           };

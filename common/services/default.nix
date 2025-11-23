@@ -24,8 +24,8 @@
     ./muse
     ./notesnook
     ./ollama
-    ./openssh
     ./open-webui
+    ./openssh
     ./p2pool
     ./paperless
     ./paperless-gpt

@@ -78,8 +78,7 @@ _: {
       muse.enable = true;
       multi-scrobbler.enable = true;
 
-      # TODO: wait for https://github.com/NixOS/nixpkgs/issues/461605
-      #open-webui.enable = true;
+      open-webui.enable = true;
 
       i2pd.enable = true;
 

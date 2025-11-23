@@ -56,7 +56,7 @@ in
         argument = config.sops.templates.jellyseerr-config.path;
         user = "jellyseerr";
         group = "media";
-        mode = "0700";
+        mode = "0600";
       };
     };
 

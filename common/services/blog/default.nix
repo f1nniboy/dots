@@ -20,13 +20,12 @@ in
         caddy.hosts = {
           blog = {
             type = "root";
-            sub = null;
             target = toString inputs.blog.packages.${system}.default;
             ca = "public";
             extra = ''
               # cache static assets
               @static {
-                path *.css *.js *.png *.jpg *.jpeg *.gif *.ico *.svg *.woff *.woff2 *.ttf *.eot
+                path *.css *.webp *.ico *.svg *.woff2
               }
               header @static Cache-Control "public, max-age=31536000, immutable"
 

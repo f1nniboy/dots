@@ -89,7 +89,7 @@ in
       tmpfiles.settings."10-sabnzbd-config"."/var/lib/sabnzbd/sabnzbd.ini"."C+" = {
         user = "sabnzbd";
         group = "media";
-        mode = "0700";
+        mode = "0600";
         argument = config.sops.templates.sabnzbd-config.path;
       };
     };

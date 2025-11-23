@@ -10,6 +10,5 @@ in
 
   config = mkIf cfg.enable {
     security.sudo.wheelNeedsPassword = false;
-    networking.firewall.enable = true;
   };
 }

@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  nixpkgs-463538,
+  ...
+}:
 with lib;
 let
   cfg = config.custom.services.open-webui;
@@ -54,6 +59,7 @@ in
       services.open-webui = {
         enable = true;
         inherit (cfg) port;
+        package = nixpkgs-463538.open-webui;
         environment = {
           # TODO: "Failed to initialize the database connection: Postgres driver not installed!"
           # i will just use the sqlite db for now

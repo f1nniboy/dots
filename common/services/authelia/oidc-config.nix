@@ -11,8 +11,6 @@ let
     items:
     if items == [ ] then "[]" else builtins.concatStringsSep "\n" (map (i: "          - ${i}") items);
 
-  mkYamlBoolean = item: toString item;
-
   mkSecret =
     id: key:
     ''{{ secret "${
@@ -23,9 +21,9 @@ let
           - client_name: ${c.name}
             client_id: ${mkSecret id "id"}
             client_secret: ${mkSecret id "secret-hash"}
-            public: ${mkYamlBoolean c.public}
+            public: ${toString c.public}
             authorization_policy: ${c.policy}
-            require_pkce: ${mkYamlBoolean c.requirePkce}
+            require_pkce: ${toString c.requirePkce}
             pkce_challenge_method: S256
             scopes:
     ${mkYamlList c.scopes}

@@ -30,7 +30,10 @@ in
 
     services = {
       tailscale = {
-        tags = [ "gaming" ];
+        tags = [
+          "gaming"
+          "ollama"
+        ];
       };
 
       restic = {

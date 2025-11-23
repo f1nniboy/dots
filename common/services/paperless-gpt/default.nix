@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  vars,
   ...
 }:
 with lib;
@@ -32,7 +31,7 @@ in
 
     virtualisation.oci-containers.containers = {
       "paperless-gpt" = {
-        image = custom.mkDockerImage vars "icereed/paperless-gpt";
+        image = custom.mkDockerImage config "ghcr.io/icereed/paperless-gpt";
         user = custom.mkDockerUser config "paperless-gpt";
         volumes =
           let
@@ -49,14 +48,19 @@ in
           in
           {
             LISTEN_INTERFACE = "127.0.0.1:${toString cfg.port}";
+
             PAPERLESS_BASE_URL = serviceUrl;
             PAPERLESS_PUBLIC_URL = serviceUrl;
+
             MANUAL_TAG = "ai";
             AUTO_TAG = "ai-auto";
+            LLM_LANGUAGE = "German";
 
-            LLM_LANGUAGE = "German/Deutsch";
-            LLM_PROVIDER = "openai";
-            LLM_MODEL = "gpt-4o";
+            LLM_PROVIDER = "ollama";
+            LLM_MODEL = "mistral-nemo:latest";
+            OLLAMA_HOST = "http://${custom.mkServiceDomain config "ollama"}";
+
+            SSL_CERT_FILE = "${config.custom.services.step-ca.certs.root}";
           };
         environmentFiles = [
           config.sops.templates.paperless-gpt-env.path

@@ -104,7 +104,7 @@ rec {
       "foxxmd/multi-scrobbler" = "latest";
       "dovah/muse" = "latest";
       "mongo" = "latest";
-      "icereed/paperless-gpt" = "latest";
+      "ghcr.io/icereed/paperless-gpt" = "unreleased";
 
       "ghcr.io/games-on-whales/wolf" = "wolf-ui";
       "ghcr.io/games-on-whales/wolfmanager/wolfmanager" = "latest";

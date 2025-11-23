@@ -14,7 +14,7 @@ in
               def:
               mkOption {
                 type = types.bool;
-                default = true;
+                default = def;
               };
           in
           {

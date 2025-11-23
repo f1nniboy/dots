@@ -32,6 +32,9 @@ in
 
     # the server running all core services, like headscale & dns
     "tag:root" = [ "group:admin" ];
+
+    # machines running ollama
+    "tag:ollama" = [ "group:admin" ];
   };
 
   acls = [
@@ -70,6 +73,13 @@ in
       action = "accept";
       src = [ "tag:root" ];
       dst = [ "*:80,443" ];
+    }
+
+    # server at home can access all machines running ollama
+    {
+      action = "accept";
+      src = [ "apollo" ];
+      dst = [ "tag:ollama:80,443,11434" ];
     }
   ];
 

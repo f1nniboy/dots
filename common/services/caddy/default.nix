@@ -50,6 +50,10 @@ in
                 ];
                 default = "proxy";
               };
+              httpOnly = mkOption {
+                type = types.bool;
+                default = false;
+              };
             };
           }
         )
@@ -83,7 +87,7 @@ in
       '';
 
       virtualHosts = mapAttrs' (name: host: {
-        name = custom.mkServiceDomain config name;
+        name = "${if host.httpOnly then "http://" else ""}${custom.mkServiceDomain config name}";
         value = {
           logFormat = ''
             output discard

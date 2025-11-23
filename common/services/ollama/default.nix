@@ -35,6 +35,7 @@ in
       package = mkForce pkgs.ollama-vulkan;
       user = "ollama";
       group = "ollama";
+      host = "0.0.0.0";
       environmentVariables = {
         # TODO: wait for https://github.com/NixOS/nixpkgs/pull/463430
         OLLAMA_VULKAN = "1";
@@ -46,7 +47,13 @@ in
     custom = {
       services = {
         caddy.hosts = {
-          ollama.target = ":${toString cfg.port}";
+          ollama = {
+            target = ":${toString cfg.port}";
+            # clients (paperless-gpt, open-webui) interfacing
+            # with ollama don't like self-signed certificates
+            # TODO: fix in the future
+            httpOnly = true;
+          };
         };
       };
       system.persistence.config = {

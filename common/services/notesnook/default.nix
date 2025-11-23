@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  vars,
   ...
 }:
 with lib;
@@ -114,7 +113,7 @@ in
       services = {
         db.service = {
           container_name = "notesnook-db";
-          image = custom.mkDockerImage vars "mongo";
+          image = custom.mkDockerImage config "mongo";
           networks = [ "notesnook" ];
           volumes = [ "/var/lib/notesnook/db:/data/db" ];
           command = "--replSet rs0 --bind_ip_all";
@@ -132,7 +131,7 @@ in
 
         s3.service = {
           container_name = "notesnook-s3";
-          image = custom.mkDockerImage vars "minio/minio";
+          image = custom.mkDockerImage config "minio/minio";
           ports = [ "${toString cfg.ports.s3}:9000" ];
           networks = [ "notesnook" ];
           volumes = [ "/var/lib/notesnook/s3:/data/s3" ];
@@ -158,7 +157,7 @@ in
         };
 
         setup-s3.service = {
-          image = custom.mkDockerImage vars "minio/mc";
+          image = custom.mkDockerImage config "minio/mc";
           networks = [ "notesnook" ];
           depends_on = [ "s3" ];
           entrypoint = "/bin/bash";
@@ -176,7 +175,7 @@ in
 
         auth.service = {
           container_name = "notesnook-auth";
-          image = custom.mkDockerImage vars "streetwriters/identity";
+          image = custom.mkDockerImage config "streetwriters/identity";
           ports = [ "${toString cfg.ports.auth}:8264" ];
           networks = [ "notesnook" ];
           env_file = [ config.sops.templates.notesnook-secrets.path ];
@@ -198,7 +197,7 @@ in
 
         api.service = {
           container_name = "notesnook-api";
-          image = custom.mkDockerImage vars "streetwriters/notesnook-sync";
+          image = custom.mkDockerImage config "streetwriters/notesnook-sync";
           ports = [ "${toString cfg.ports.api}:5264" ];
           networks = [ "notesnook" ];
           env_file = [ config.sops.templates.notesnook-secrets.path ];
@@ -224,7 +223,7 @@ in
 
         sse.service = {
           container_name = "notesnook-sse";
-          image = custom.mkDockerImage vars "streetwriters/sse";
+          image = custom.mkDockerImage config "streetwriters/sse";
           ports = [ "${toString cfg.ports.sse}:7264" ];
           networks = [ "notesnook" ];
           env_file = [ config.sops.templates.notesnook-secrets.path ];
@@ -249,7 +248,7 @@ in
 
         mono.service = {
           container_name = "notesnook-mono";
-          image = custom.mkDockerImage vars "streetwriters/monograph";
+          image = custom.mkDockerImage config "streetwriters/monograph";
           ports = [ "${toString cfg.ports.mono}:3000" ];
           networks = [ "notesnook" ];
           environment = env.mono;

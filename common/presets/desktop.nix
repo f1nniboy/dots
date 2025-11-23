@@ -33,10 +33,8 @@ in
       services = {
         printing.enable = true;
         tailscale.enable = true;
-
-        syncthing = {
-          enable = true;
-        };
+        mullvad.enable = true;
+        syncthing.enable = true;
       };
 
       system = {
@@ -46,6 +44,7 @@ in
         home.enable = true;
         ld.enable = true;
         git.user.enable = true;
+        firewall.backend = "nftables";
       };
 
       hardware = {

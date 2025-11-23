@@ -126,7 +126,7 @@ in
   };
 
   config = mkMerge [
-    # regardless of authelia being enabled, create the requested secrets
+    # regardless of authelia being enabled, create the requested secrets for oidc clients
     {
       custom.system.sops.secrets =
         let
@@ -195,6 +195,9 @@ in
                 password_change.disable = true;
                 password_reset.disable = true;
                 ldap = {
+                  # we rely on lldap running on the same host on authelia here,
+                  # as we would have a circular dependency otherwise
+                  # without headscale, the lldap service domain is not guaranteed to be available
                   address = "ldap://localhost:${toString config.custom.services.lldap.ports.ldap}";
                   implementation = "lldap";
                   base_dn = dn;
