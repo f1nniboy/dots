@@ -41,8 +41,8 @@ in
     # admins can access all servers by default
     {
       action = "accept";
-      src = [ "group:admin" ];
-      dst = [ "tag:server:*" ];
+      src = [ "*" ];
+      dst = [ "*:*" ];
     }
 
     # family can access HTTP of all servers

@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 let
   cfg = config.custom.services.headscale;
@@ -9,6 +14,19 @@ let
       inherit config lib;
     }
   );
+
+  headscale-wireguard-only = pkgs.headscale.overrideAttrs (oldAttrs: {
+    pname = "headscale";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "iridated";
+      repo = "headscale";
+      rev = "wireguard-only-peers";
+      hash = "sha256-b2E6Q1ZKNCewBwUhPM2YU85VFnMvx6EjeFNXcWt2wg4=";
+    };
+
+    vendorHash = "sha256-VOi4PGZ8I+2MiwtzxpKc/4smsL5KcH/pHVkjJfAFPJ0=";
+  });
 in
 {
   options.custom.services.headscale = {
@@ -26,7 +44,7 @@ in
 
     nameservers = mkOption {
       type = types.listOf types.str;
-      default = [ "1.1.1.1" ];
+      default = [ "194.242.2.2" ];
     };
 
     netDomain = mkOption {
@@ -64,6 +82,7 @@ in
       services = {
         headscale = {
           enable = true;
+          package = headscale-wireguard-only;
           address = "0.0.0.0";
           inherit (cfg) port;
           settings = {
