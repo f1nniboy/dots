@@ -19,7 +19,6 @@
     ./lldap
     ./miniflux
     ./monero
-    ./mullvad
     ./multi-scrobbler
     ./muse
     ./notesnook

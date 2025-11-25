@@ -33,7 +33,6 @@ in
       services = {
         printing.enable = true;
         tailscale.enable = true;
-        mullvad.enable = true;
         syncthing.enable = true;
       };
 

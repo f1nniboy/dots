@@ -14,7 +14,6 @@
     ./monero
     ./moonlight
     ./mosh
-    ./mullvad-browser
     ./notesnook
     ./obs
     ./openrgb
