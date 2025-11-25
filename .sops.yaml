@@ -28,4 +28,4 @@ creation_rules:
     key_groups:
       - age:
           - *pluto
-          #- *diana TODO: change on laptop
+          - *diana
